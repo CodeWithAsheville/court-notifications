@@ -3,7 +3,6 @@ name: "\U0001F680 Feature Request"
 about: "I have a suggestion (and may want to implement it \U0001F642)!"
 title: "[DATE]: [FEATURE NAME]"
 labels: feature request, needs triage
-projects: Court Notifications
 ---
 
 ## Feature Request
