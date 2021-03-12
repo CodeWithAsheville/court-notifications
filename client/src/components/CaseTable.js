@@ -14,15 +14,14 @@ export default function CaseTable({ cases, dispatch }) {
     <table className="usa-table usa-table--stacked">
       <thead>
         <tr>
-          <th scope="col">Court</th>
           <th scope="col">Defendant</th>
+          <th scope="col">Court</th>
           <th scope="col">Date of Birth</th>
           <th scope="col">Court Date</th>
           <th scope="col">Court Room</th>
           <th scope="col">Session</th>
           <th scope="col">File Number</th>
-          <th scope="col">Details</th>
-          <th scope="col">Citation Number</th>
+          <th scope="col">Copy File Number</th>
         </tr>
       </thead>
       <tbody>{caseRows}</tbody>
