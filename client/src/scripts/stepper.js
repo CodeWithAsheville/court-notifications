@@ -14,6 +14,4 @@ function Stepper() {
   };
 }
 
-const singleton = new Stepper();
-
-export default singleton;
+export default new Stepper();

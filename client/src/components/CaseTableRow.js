@@ -1,22 +1,12 @@
-import stepper from "../stepper";
+import stepper from "../scripts/stepper";
+import copyToClipboard from '../scripts/copyToClipboard'
 
-export default function CaseTableRow({ courtCase, index, dispatch }) {
-  function copyToClipboard() {
-    const value = courtCase.caseNumber;
-    const type = "text/plain";
-    const blob = new Blob([value], { type });
-    let data = [new window.ClipboardItem({ [type]: blob })];
+export default function CaseTableRow({ courtCase }) {
+  function copyAndScroll(text) {
+    const success = copyToClipboard(text)
 
-    navigator.clipboard.write(data).then(console.log, console.log);
-
-    stepper.scrollToStep(3);
+    if (success) stepper.scrollToStep(3);
   }
-
-  const copyTextCellStyles = {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-  };
 
   return (
     <tr>
@@ -32,9 +22,9 @@ export default function CaseTableRow({ courtCase, index, dispatch }) {
       <td data-label="Copy File Number">
         <button
           className="usa-button usa-button--unstyled"
-          onClick={copyToClipboard}
+          onClick={() => copyAndScroll(courtCase.caseNumber)}
         >
-          <i className="fas fa-copy"></i>&nbsp;Copy
+          <i className="fas fa-copy"></i>Copy
         </button>
       </td>
     </tr>
