@@ -2,6 +2,7 @@
 name: "\U0001F41B Bug Report"
 about: "If something isn't working as expected \U0001F914."
 title: "[DATE]: [FEATURE NAME]"
+projects: Court Notifications
 labels: bug, needs triage
 assignees: colinalford
 ---
