@@ -24,7 +24,7 @@ export default function CaseTableRow({ courtCase }) {
           className="usa-button usa-button--unstyled"
           onClick={() => copyAndScroll(courtCase.caseNumber)}
         >
-          <i className="fas fa-copy"></i>Copy
+          <i className="fas fa-copy"></i>&nbsp;Copy
         </button>
       </td>
     </tr>
