@@ -13,6 +13,7 @@ A clear and concise description of what the problem is. Ex. I have an issue when
 
 **Describe the solution you'd like**
 A clear and concise description of what you want to happen. Add any considered drawbacks.
+- [] Please summarize your request into todos
 
 **Describe alternatives you've considered**
 A clear and concise description of any alternative solutions or features you've considered.
