@@ -1,4 +1,4 @@
-import stepper from '../stepper'
+import stepper from '../scripts/stepper'
 
 export default function SearchForm({ state, dispatch }) {
   function updateName($event, param) {
