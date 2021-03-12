@@ -28,23 +28,15 @@ export default function CaseTableRow({ courtCase, index, dispatch }) {
       <td data-label="Court Date">{courtCase.courtDate}</td>
       <td data-label="Court Room">{courtCase.courtRoom}</td>
       <td data-label="Session">{courtCase.session}</td>
-      <td data-label="File Number" style={{width: '100px'}}>
-        <div style={copyTextCellStyles}>
-          <button
-            className="usa-button usa-button--unstyled"
-            onClick={copyToClipboard}
-          >
-            {courtCase.caseNumber}
-            <i className="fas fa-copy"></i>
-          </button>
-        </div>
+      <td data-label="File Number">{courtCase.caseNumber}</td>
+      <td data-label="Copy File Number">
+        <button
+          className="usa-button usa-button--unstyled"
+          onClick={copyToClipboard}
+        >
+          <i className="fas fa-copy"></i>&nbsp;Copy
+        </button>
       </td>
-      <td data-label="Details">
-        <a href={courtCase.linkToCaseDetails} target="_blank">
-          Details
-        </a>
-      </td>
-      <td data-label="Citation Number">{courtCase.citationNumber}</td>
     </tr>
   );
 }
