@@ -1,18 +1,20 @@
+---
+name: "#Issue Number [Description of Changes]"
+about: "I'm ready to check in some code to fix an issue!"
+title: "[DATE]: [FEATURE NAME]"
+reviewers: colinalford
+---
+
 <!-- Add the issue number from Github that this issues closes immediately following the hash to link to an issue -->
 Closes #<Insert Issue # Here>
 
-* **Please check if the PR fulfills these requirements**
-- [ ] The commit message follows our guidelines
-- [ ] Tests for the changes have been added (for bug fixes / features)
-- [ ] Docs have been added / updated (for bug fixes / features)
+**Please check if the PR fulfills these requirements**
+- [ ] The title contains the issue number if fulfills and a concise description of the changes
+- [ ] These changes are related to an open issue
 
 
-* **What is the new behavior (if this is a feature change)?**
-
-
-
-* **Does this PR introduce a breaking change?** (What changes might users need to make in their application due to this PR?)
+**What changes are you introducing?**
 
 
 
-* **Other information**:
+**Screenshots or Video**:
