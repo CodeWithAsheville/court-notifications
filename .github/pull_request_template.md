@@ -2,7 +2,7 @@
 name: "#Issue Number [Description of Changes]"
 about: "I'm ready to check in some code to fix an issue!"
 title: "[DATE]: [FEATURE NAME]"
-reviewers: colinalford
+assignee: colinalford
 ---
 
 <!-- Add the issue number from Github that this issues closes immediately following the hash to link to an issue -->
