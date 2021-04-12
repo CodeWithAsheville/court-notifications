@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import "./CaseTableRow.scss";
-import copyToClipboard from "../../scripts/copyToClipboard";
+import copy from 'copy-to-clipboard'
 import {
   updateStoredCourtCase,
   openCourtNotificationSite,
@@ -13,7 +13,7 @@ export default function CaseTableRow({ state, courtCase, dispatch }) {
   const [pulsing, setPulsing] = useState(false);
 
   function copyAndScroll(text) {
-    if (!copyToClipboard(text)) return;
+    if (!copy(text)) return;
 
     setPulsing(true);
     setTooltipText(`Copied! Opening sign up site...`);
@@ -49,6 +49,7 @@ export default function CaseTableRow({ state, courtCase, dispatch }) {
       <td data-label="Copy File Number & Sign Up">
         <div className="tooltip">
           <button
+            data-clipboard-text={`${courtCase.caseNumber}`}
             className="usa-button usa-button--unstyled"
             onClick={() => copyAndScroll(courtCase.caseNumber)}
           >
