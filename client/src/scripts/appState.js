@@ -1,6 +1,14 @@
 // Grab a reference to localStorage when the app boots
 const localStorage = window.localStorage;
 
+function trimmedName(state) {
+  const firstName = state.firstName && state.firstName.trim()
+  const lastName = state.lastName && state.lastName.trim()
+  const middleName = state.middleName && state.middleName.trim()
+
+  return { firstName, middleName, lastName }
+}
+
 /**
  * Helper function to fetch stored case data from local
  * storage by a name string for a given person
@@ -81,11 +89,13 @@ export function updateStoredCourtCase(state, courtCase) {
  * @returns {string}
  */
 export function getCSVFullName(state) {
+  const { firstName, middleName, lastName } = trimmedName(state)
+  
   // I'm doing this so I don't have to think about
   // a trailing comma or null state when I combine the names
-  const middleName = state.middleName ? `,${state.middleName}` : "";
+  const middle = middleName ? `,${middleName}` : "";
 
-  return `${state.lastName},${state.firstName}${middleName}`;
+  return `${lastName},${firstName}${middle}`;
 }
 
 /**
@@ -103,7 +113,7 @@ export async function getCaseData(state) {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(state),
+    body: JSON.stringify({...state, ...trimmedName(state)}),
   });
 
   const newCases = await response.json();
