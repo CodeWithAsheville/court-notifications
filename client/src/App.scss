@@ -1,9 +1,18 @@
-iframe#notifications-lookup {
-  min-height: 600px;
-  width: 100%;
-  margin: 20px 0;
+.usa-process-list {
+  max-width: 900px;
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: 2em;
+
+  .usa-process-list__item {
+    width: 100%;
+    max-width: 100%;
+  }
 }
 
-.lookup-form {
-  padding: 10px;
+@media (max-width: 900px) {
+  .usa-process-list {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
 }
