@@ -48,12 +48,11 @@ export default function copyTextToClipboard(text) {
   let success
 
   try {
-    var successful = document.execCommand("copy");
-    var msg = successful ? "successful" : "unsuccessful";
     success = true
   } catch (err) {
     document.body.removeChild(textArea);
     success = false
+    console.log(err)
   }
 
   document.body.removeChild(textArea);

@@ -1,0 +1,17 @@
+.case-row:nth-child(even) {
+  td {
+    background-color: #d9e8f6;
+  }
+}
+
+.empty {
+  padding: 2em;
+  margin-top: 2em;
+  text-align: center;
+  border: 0.5rem solid #d9e8f6;
+  font-weight: 700;
+}
+
+.usa-table.usa-table--stacked {
+  width: 100%;
+}

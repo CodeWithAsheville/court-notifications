@@ -1,24 +1,26 @@
-import stepper from '../scripts/stepper'
+import "./SearchForm.scss"
+
+import stepper from "../../scripts/stepper";
+import { getCaseData } from "../../scripts/appState";
+
+function createNameUpdater(dispatch) {
+  return function updateName($event, param) {
+    dispatch({ type: "update-name", value: { [param]: $event.target.value } });
+  };
+}
 
 export default function SearchForm({ state, dispatch }) {
-  function updateName($event, param) {
-    dispatch({ type: "update-name", value: { [param]: $event.target.value } });
-  }
+  const updateName = createNameUpdater(dispatch);
 
   async function reloadCaseLookUp() {
-    const response = await fetch("/api/court-search", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(state),
+    const cases = await getCaseData(state);
+
+    dispatch({
+      type: "reload-cases",
+      value: cases,
     });
 
-    const body = await response.json();
-
-    dispatch({ type: "reload-cases", value: body });
-
-    stepper.scrollToStep(2)
+    stepper.scrollToStep(2);
   }
 
   return (
@@ -38,7 +40,7 @@ export default function SearchForm({ state, dispatch }) {
       </div>
       <div>
         <label className="usa-label" htmlFor="input-type-text">
-          Middle Name Or Initial
+          Middle Name Or Initial (Optional)
         </label>
         <input
           className="usa-input"
