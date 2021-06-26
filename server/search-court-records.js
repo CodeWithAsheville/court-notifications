@@ -1,4 +1,4 @@
-const http = require("http");
+const https = require("https");
 const { JSDOM } = require("jsdom");
 const { CourtCase } = require("./court-case")
 
@@ -26,13 +26,13 @@ function computeSearchUrl(state) {
 
   if (state.middleName) queryParams += `%2C${state.middleName}`
 
-  return `http://www1.aoc.state.nc.us/www/calendars.Criminal.do?county=100&court=BTH+&${queryParams}&start=0&navindex=0&fromcrimquery=yes&submit=Search`;
+  return `https://www1.aoc.state.nc.us/www/calendars.Criminal.do?county=100&court=BTH+&${queryParams}&start=0&navindex=0&fromcrimquery=yes&submit=Search`;
 }
 
 function searchCourtRecords(body, callback, onError) {
   const url = computeSearchUrl(body)
 
-  http
+  https
     .get(url, function (res) {
       let content = "";
 
