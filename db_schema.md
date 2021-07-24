@@ -6,7 +6,6 @@
 |-----------|-------|--------------------|-----|
 |id         |integer|Unique subscriber ID|     |
 |phone      |text   |Phone number        |Require form ###-###-####|
-|sub_date   |date   |Initial subscription date||
 |next_notify|date   |Date of next court notification||
 
 ## defendants
@@ -23,6 +22,7 @@
 |-------------|-------|--------------|-----|
 |subscriber_id|integer|Subscriber ID |     |
 |defendant_id |integer|Defendant ID  |     |
+|sub_date   |date   |Initial subscription date||
 
 
 ## cases
