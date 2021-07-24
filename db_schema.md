@@ -15,6 +15,7 @@
 |first_name |text   |First name          |     |
 |middle_name|text   |Middle name         |     |
 |last_name  |text   |Last name           |     |
+|suffix     |text   |Suffix (e.g., Jr.)  |     |
 |birth_date |text   |Month/day of birth  |Must be in form ##/##|
 
 ## subscriptions
