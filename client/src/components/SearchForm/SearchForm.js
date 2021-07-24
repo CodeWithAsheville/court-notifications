@@ -14,7 +14,6 @@ export default function SearchForm({ state, dispatch }) {
 
   async function reloadCaseLookUp() {
     const cases = await getCaseData(state);
-
     dispatch({
       type: "reload-cases",
       value: cases,

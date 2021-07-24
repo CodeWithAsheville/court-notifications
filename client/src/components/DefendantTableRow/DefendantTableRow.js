@@ -1,13 +1,13 @@
 import { useState } from "react";
 
-import "./CaseTableRow.scss";
+import "./DefendantTableRow.scss";
 import copy from "copy-to-clipboard";
 import {
   updateStoredCourtCase,
   openCourtNotificationSite,
 } from "../../scripts/appState";
 
-export default function CaseTableRow({ state, courtCase, dispatch }) {
+export default function DefendantTableRow({ state, courtCase, dispatch }) {
   const initialTooltipText = "Copy File Number & Sign Up";
   const [tooltipText, setTooltipText] = useState(initialTooltipText);
   const [pulsing, setPulsing] = useState(false);
@@ -43,9 +43,10 @@ export default function CaseTableRow({ state, courtCase, dispatch }) {
 
   return (
     <tr className="case-row">
-      <td data-label="Court Date">{courtCase.courtDate}</td>
-      <td data-label="File Number">{courtCase.caseNumber}</td>
-      <td data-label="Case Details Link"><a href={courtCase.linkToCaseDetails} target="_blank" rel="noreferrer">View case details</a></td>
+      <td data-label="Select"><button onClick={() => selectDefendant(courtCase)}>Select</button></td>
+      <td data-label="Defendant">{courtCase.defendant}</td>
+      <td data-label="Date of Birth">{courtCase.dob}</td>
+      <td data-label="Number of Cases">{courtCase.cases.length}</td>
     </tr>
   );
 }

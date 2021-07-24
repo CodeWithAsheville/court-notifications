@@ -5,6 +5,8 @@ const axios = require('axios');
 const axiosCookieJarSupport = require('axios-cookiejar-support').default;
 const tough = require('tough-cookie');
 
+const maxPages = 50;
+
 function createCaseFromHtml(tr) {
   const mapped = [];
 
@@ -79,13 +81,23 @@ async function getCasesPage(axiosInstance, url, cases, onError) {
   return nextPage
 }
 
+function sortByDefendant(a, b) {
+  if (a.defendant < b.defendant) {
+    return -1;
+  }
+  if (a.defendant < b.defendant) {
+    return 1;
+  }
+  return 0;
+}
+
 async function searchCourtRecords(body, callback, onError) {  
   const axiosInstance = axios.create();
   axiosCookieJarSupport(axiosInstance);
   axiosInstance.defaults.jar = new tough.CookieJar(); // Make sure we're using cookies
 
   let url = computeSearchUrl(body, 0, 0, 'Search');
-  const cases = []
+  var cases = []
 
   let nextPage = await getCasesPage(axiosInstance, url, cases, onError, false)
 
@@ -96,8 +108,43 @@ async function searchCourtRecords(body, callback, onError) {
     nextPage = await getCasesPage(axiosInstance, url, cases, onError)
     keepOn = nextPage.keepOn;
     count = count + 1;
-    if (count > 3) keepOn = false;
+    if (count > maxPages) keepOn = false;
   }
+  console.log(cases[0])
+  console.log('Total pages = ' + count + ', case count ' + cases.length);
+  defendants = {};
+  cases.forEach((item) => {
+    defendantID = item.defendant+'.'+item.dob;
+    if (!(defendantID in defendants)) {
+      defendants[defendantID] = [];
+    }
+    defendants[defendantID].push(item);
+  });
+  cases = [];
+  for (item in defendants) {
+    const caselist = defendants[item];
+    const first = caselist[0];
+
+    let d = {
+      defendant: first.defendant,
+      dob: first.dob,
+      cases: caselist.map(c => {
+        const detailsUrl = new URL(c.linkToCaseDetails);
+        detailsUrl.searchParams.delete("prev");
+        return {
+          court: c.court,
+          courtDate: c.courtDate,
+          courtRoom: c.courtRoom,
+          session: c.session,
+          caseNumber: c.caseNumber,
+          linkToCaseDetails: detailsUrl.toString(),
+          citationNumber: c.citationNumber,
+        };
+      })
+    };
+    cases.push(d);
+  }
+  cases = cases.sort(sortByDefendant);
   callback(cases);
 }
 
