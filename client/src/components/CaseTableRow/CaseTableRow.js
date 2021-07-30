@@ -45,7 +45,8 @@ export default function CaseTableRow({ state, courtCase, dispatch }) {
     <tr className="case-row">
       <td data-label="Court Date">{courtCase.courtDate}</td>
       <td data-label="File Number">{courtCase.caseNumber}</td>
-      <td data-label="Case Details Link"><a href={courtCase.linkToCaseDetails} target="_blank" rel="noreferrer">View case details</a></td>
+      <td data-label="Court">{courtCase.court}</td>
+      <td data-label="Room">{courtCase.courtRoom}</td>
     </tr>
   );
 }

@@ -18,6 +18,10 @@ export default function SearchForm({ state, dispatch }) {
       type: "reload-cases",
       value: cases,
     });
+    dispatch({
+      type: "select-defendant",
+      value: null,
+    });
 
     stepper.scrollToStep(2);
   }

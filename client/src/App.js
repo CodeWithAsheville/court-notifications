@@ -2,6 +2,7 @@ import { useReducer, useRef } from "react";
 
 import "./App.scss";
 import SearchForm from "./components/SearchForm/SearchForm";
+import SignupForm from "./components/SignupForm/SignupForm";
 import ResultsTable from "./components/ResultsTable/ResultsTable";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer";
@@ -13,6 +14,9 @@ const initialState = {
   middleName: "",
   cases: [],
   selectedDefendant: null,
+  selectedCase: null,
+  phone_number: "",
+  phone_error: "",
   searchError: false
 };
 
@@ -23,6 +27,16 @@ function reducer(state, action) {
         ...state,
         ...action.value,
       };
+    case "update-phone":
+      return {
+        ...state,
+        ...action.value,
+      };
+    case "phone-error":
+      return {
+        ...state,
+        ...action.value,
+      }
     case "reload-cases":
       return {
         ...state,
@@ -33,9 +47,29 @@ function reducer(state, action) {
         ...state,
         selectedDefendant: action.value,
       };
-    default:
+    case "select-case":
+      return {
+        ...state,
+        selectedCase: action.value,
+      };
+      default:
       return state;
   }
+}
+
+function getSignupForm(state, step3, dispatch) {
+  if (state.selectedDefendant) return (
+    <li className="usa-process-list__item">
+    <h4 className="usa-process-list__heading" ref={step3}>
+        Sign up for notifications
+      </h4>
+      <p>
+        Enter phone number and such.
+      </p>
+      <SignupForm state={state} dispatch={dispatch} />
+  </li>
+  );
+  return "";
 }
 
 function App() {
@@ -46,6 +80,7 @@ function App() {
   const step3 = useRef(null);
 
   stepper.setSteps([step1, step2, step3]);
+  const signup = getSignupForm(state, step3, dispatch);
 
   return (
     <div className="App">
@@ -67,14 +102,7 @@ function App() {
           </h4>
           <ResultsTable state={state} dispatch={dispatch} />
         </li>
-        <li className="usa-process-list__item">
-          <h4 className="usa-process-list__heading" ref={step3}>
-              Sign up for notifications
-            </h4>
-            <p>
-              Enter phone number and such.
-            </p>
-        </li>
+        {signup}
       </ol>
       <Footer/>
     </div>

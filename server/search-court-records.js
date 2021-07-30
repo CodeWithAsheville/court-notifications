@@ -110,8 +110,6 @@ async function searchCourtRecords(body, callback, onError) {
     count = count + 1;
     if (count > maxPages) keepOn = false;
   }
-  console.log(cases[0])
-  console.log('Total pages = ' + count + ', case count ' + cases.length);
   defendants = {};
   cases.forEach((item) => {
     defendantID = item.defendant+'.'+item.dob;

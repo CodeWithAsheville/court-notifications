@@ -1,5 +1,6 @@
 const express = require("express");
 const { searchCourtRecords } = require("./server/search-court-records");
+const { addSubscriber } = require("./server/add-subscriber");
 const path = require("path");
 
 const app = express();
@@ -18,6 +19,10 @@ app.use(express.urlencoded({ extended: true }));
 
 app.post("/api/court-search", (req, res) => {
   searchCourtRecords(req.body, (cases) => res.json(cases), console.log);
+});
+
+app.post("/api/subscribe-to-defendant", (req, res) => {
+  addSubscriber(req.body, (signUpResult) => res.json(signUpResult), console.log);
 });
 
 if (process.env.NODE_ENV === "production") {

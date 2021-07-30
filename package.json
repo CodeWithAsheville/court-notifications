@@ -15,6 +15,7 @@
     "copy-to-clipboard": "^3.3.1",
     "express": "^4.16.4",
     "jsdom": "^16.4.0",
+    "knex": "^0.95.8",
     "tough-cookie": "^4.0.0"
   },
   "devDependencies": {
