@@ -3,6 +3,12 @@ A project through Code for Asheville to help streamline the process to sign up f
 
 Supposedly online at [https://code-4-avl-court-notifications.herokuapp.com/](https://code-4-avl-court-notifications.herokuapp.com/), but probably crashed already.
 
+Notes on DB:
+`
+   pg_ctl -D /opt/homebrew/var/postgres start
+   pg_ctl -D /opt/homebrew/var/postgres stop
+`
+
 ## Contributing
 
 When contributing to this repository, please first discuss the change you wish to make via issue,
