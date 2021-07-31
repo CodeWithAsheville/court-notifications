@@ -13,7 +13,8 @@
 ## defendants
 | Column    | Type  | Description        |Notes|
 |-----------|-------|--------------------|-----|
-|id         |integer|Unique defendant ID |     |
+|id         |integer|Unique defendant ID|     |
+|long_id    |text   |Unique long defendant ID | This is a string consisting of name + DOB |
 |first_name |text   |First name          |     |
 |middle_name|text   |Middle name         |     |
 |last_name  |text   |Last name           |     |
@@ -27,7 +28,6 @@
 |-------------|-------|--------------|-----|
 |subscriber_id|integer|Subscriber ID |     |
 |defendant_id |integer|Defendant ID  |     |
-|sub_date   |date   |Initial subscription date||
 |created_at|date|||
 |updated_at|date|||
 
@@ -35,6 +35,7 @@
 ## cases
 | Column     | Type  | Description        |Notes|
 |------------|-------|--------------------|-----|
+|id         |integer|Unique case ID|     |
 |defendant_id|integer|Defendant ID        |     |
 |case_number |text   |Case number         |Same as "file number"|
 |court_date  |date   |Court date          ||

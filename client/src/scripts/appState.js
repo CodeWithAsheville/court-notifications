@@ -127,6 +127,9 @@ export async function getCaseData(state) {
 
 export async function subscribeToDefendant(state) {
   console.log('I am in the subscribeToDefendant function');
+  const filteredCases = state.cases.filter(item => {
+    return (item.defendant+'.'+item.dob === state.selectedDefendant);
+  });
   const response = await fetch("/api/subscribe-to-defendant", {
     method: "POST",
     headers: {
@@ -135,9 +138,7 @@ export async function subscribeToDefendant(state) {
     body: JSON.stringify({
       selectedDefendant: state.selectedDefendant,
       phone_number: state.phone_number,
-      cases: state.cases.filter(item => {
-        return (item.defendant+'.'+item.dob === state.selectedDefendant);
-      }),
+      details: filteredCases[0],
     })
   });
   return response.json();

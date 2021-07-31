@@ -5,7 +5,6 @@ import { subscribeToDefendant } from "../../scripts/appState";
 
 function createPhoneUpdater(dispatch) {
   return function updatePhone($event, param) {
-    const raw = $event.target.value;
     dispatch({ type: "update-phone", value: { [param]: $event.target.value } });
   };
 }

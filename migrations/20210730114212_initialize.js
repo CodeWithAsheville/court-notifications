@@ -1,39 +1,23 @@
 
+// See https://dev.to/morz/knex-psql-updating-timestamps-like-a-pro-2fg6
+
 exports.up = function(knex) {
-  return knex.schema.createTable('subscribers', function (table) {
-    table.increments();
-    table.string('phone');
-    table.datetime('next_notify')
-    table.timestamps();
-  })
-  .createTable('defendants', function (table) {
-    table.increments();
-    table.string('first_name');
-    table.string('middle_name');
-    table.string('last_name');
-    table.string('suffix');
-    table.string('birth_date');
-    table.timestamps();
-  })
-  .createTable('subscriptions', function (table) {
-    table.integer('subscriber_id');
-    table.integer('defendant_id');
-    table.timestamps();
-  })
-  .createTable('cases', function(table) {
-    table.integer('defendant_id');
-    table.string('case_number');
-    table.datetime('court_date');
-    table.string('court');
-    table.string('room');
-    table.string('session');
-    table.timestamps();
-  });
+  return knex.raw(`
+    CREATE OR REPLACE FUNCTION update_timestamp() RETURNS TRIGGER
+    LANGUAGE plpgsql
+    AS
+    $$
+    BEGIN
+        NEW.updated_at = CURRENT_TIMESTAMP;
+        RETURN NEW;
+    END;
+    $$;
+  `);
 };
 
 exports.down = function(knex) {
-  return knex.schema.dropTable('subscribers')
-  .dropTable('defendants')
-  .dropTable('subscriptions')
-  .dropTable('cases');
+  return knex.raw(`
+    DROP FUNCTION IF EXISTS update_timestamp() CASCADE;
+  `);
 };
+
