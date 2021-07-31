@@ -13,10 +13,6 @@ export default function SignupForm({ state, dispatch }) {
   async function doSubscription() {
     let doit = false;
     let tphone = state.phone_number;
-    let phone = null;
-    let area_code = "828"
-    let prefix = "";
-    let suffix = "";
     dispatch({ type: "phone-error", value: {phone_error: ""}})
 
     if (tphone) {
