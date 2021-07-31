@@ -1,6 +1,6 @@
 const express = require("express");
 const { searchCourtRecords } = require("./server/search-court-records");
-const { addSubscriber } = require("./server/add-subscriber");
+const { registerSubscription } = require("./server/register-subscription");
 const path = require("path");
 
 const app = express();
@@ -22,7 +22,7 @@ app.post("/api/court-search", (req, res) => {
 });
 
 app.post("/api/subscribe-to-defendant", (req, res) => {
-  addSubscriber(req.body, (signUpResult) => res.json(signUpResult), console.log);
+  registerSubscription(req.body, (signUpResult) => res.json(signUpResult), console.log);
 });
 
 if (process.env.NODE_ENV === "production") {

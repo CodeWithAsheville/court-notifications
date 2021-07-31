@@ -13,13 +13,13 @@ export default function SignupForm({ state, dispatch }) {
   async function doSubscription() {
     let doit = false;
     let tphone = state.phone_number;
-    dispatch({ type: "phone-error", value: {phone_error: ""}})
+    dispatch({ type: "phone-message", value: {phone_message: ""}})
 
     if (tphone) {
       tphone = tphone.replace(/\D/g,'');
     }
     if (tphone && tphone.length !== 10) {
-      dispatch({ type: "phone-error", value: {phone_error: "Not a valid 10-digit phone number"}})
+      dispatch({ type: "phone-message", value: {phone_message: "Not a valid 10-digit phone number"}})
     }
     else {
       doit = true;
@@ -27,33 +27,50 @@ export default function SignupForm({ state, dispatch }) {
 
     if (doit) { 
       const result = await subscribeToDefendant(state);
-      dispatch({ type: "phone-error", value: {phone_error: result.message}});
+      dispatch({ type: "phone-message", value: {phone_message: result.message}});
     }
   }
   let phoneErrorText = "";
   if (state.phone_error && state.phone_error.length > 0) {
-    phoneErrorText = (<div>&nbsp;&nbsp;&nbsp;{state.phone_error}</div>);
+    phoneErrorText = (<div>&nbsp;&nbsp;&nbsp;{state.phone_message}</div>);
+  }
+
+  function unSelectDefendant() {
+    dispatch({
+      type: "select-defendant",
+      value: null,
+    });
+    dispatch({ type: "phone-message", value: {phone_message: ""}})
   }
 
   return (
-    <form className="usa-form lookup-form">
-      <div>
-        <label className="usa-label" htmlFor="input-type-text">
-          Cell Phone Number
-        </label>
-        <input
-          className="usa-input"
-          id="input-type-text"
-          name="input-type-text"
-          type="text"
-          value={state.phone_number}
-          onChange={(e) => updatePhone(e, "phone_number")}
-        />
+    <div>
+      <div width='100%'>
+        <button type="button" className="usa-button--secondary" style={{float:"right"}}
+                onClick={() => unSelectDefendant()}>
+          Return to all defendants
+        </button>
       </div>
-      {phoneErrorText}
-      <button type="button" className="usa-button" onClick={doSubscription}>
-        Sign Up For Notifications
-      </button>
-    </form>
+
+      <form className="usa-form lookup-form">
+        <div>
+          <label className="usa-label" htmlFor="input-type-text">
+            Cell Phone Number
+          </label>
+          <input
+            className="usa-input"
+            id="input-type-text"
+            name="input-type-text"
+            type="text"
+            value={state.phone_number}
+            onChange={(e) => updatePhone(e, "phone_number")}
+          />
+        </div>
+        {phoneErrorText}
+        <button type="button" className="usa-button" onClick={doSubscription}>
+          Sign Up For Notifications
+        </button>
+      </form>
+    </div>
   );
 }

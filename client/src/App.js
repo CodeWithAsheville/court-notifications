@@ -16,7 +16,7 @@ const initialState = {
   selectedDefendant: null,
   selectedCase: null,
   phone_number: "",
-  phone_error: "",
+  phone_message: "",
   searchError: false
 };
 
@@ -32,7 +32,7 @@ function reducer(state, action) {
         ...state,
         ...action.value,
       };
-    case "phone-error":
+    case "phone-message":
       return {
         ...state,
         ...action.value,
@@ -47,37 +47,9 @@ function reducer(state, action) {
         ...state,
         selectedDefendant: action.value,
       };
-    case "select-case":
-      return {
-        ...state,
-        selectedCase: action.value,
-      };
-      default:
+    default:
       return state;
   }
-}
-
-function getSignupForm(state, dispatch) {
-
-  function unSelectDefendant() {
-    dispatch({
-      type: "select-defendant",
-      value: null,
-    });
-  }
-
-  if (state.selectedDefendant) {
-    return (
-      <div>
-        <div width='100%'>
-          <div style={{float:"right"}}><button type="button" className="usa-button--secondary" onClick={() => unSelectDefendant()}>Return to all defendants</button></div>
-        </div>
-
-        <SignupForm state={state} dispatch={dispatch} />
-      </div>
-    );
-  }
-  return "";
 }
 
 function App() {
@@ -85,13 +57,13 @@ function App() {
 
   const step1 = useRef(null);
   const step2 = useRef(null);
-
   stepper.setSteps([step1, step2]);
-  const signup = getSignupForm(state, dispatch);
 
+  let signupForm = "";
   let headerText = "Select a Defendant and Sign Up";
   if (state.selectedDefendant) {
     headerText = "Sign Up for Case Notifications for " + state.cases[0].defendant;
+    signupForm =  <SignupForm state={state} dispatch={dispatch} />;
   }
   return (
     <div className="App">
@@ -111,7 +83,7 @@ function App() {
           <h4 className="usa-process-list__heading" ref={step2}>
             {headerText}
           </h4>
-          {signup}
+          {signupForm}
           <ResultsTable state={state} dispatch={dispatch} />
         </li>
       </ol> 
