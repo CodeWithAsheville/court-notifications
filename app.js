@@ -1,6 +1,8 @@
 const express = require("express");
 const { searchCourtRecords } = require("./server/search-court-records");
 const { registerSubscription } = require("./server/register-subscription");
+const { purgeSubscriptions } = require("./server/purge-subscriptions");
+
 const path = require("path");
 
 const app = express();
@@ -25,6 +27,9 @@ app.post("/api/subscribe-to-defendant", (req, res) => {
   registerSubscription(req.body, (signUpResult) => res.json(signUpResult), console.log);
 });
 
+app.post("/api/purge-subscriptions", (req, res) => {
+  purgeSubscriptions(req.body, (purgeResult) => res.json(purgeResult), console.log);
+});
 if (process.env.NODE_ENV === "production") {
   // Serve any static files
   app.use(express.static(path.join(__dirname, "client/build")));
