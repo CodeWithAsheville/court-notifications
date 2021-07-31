@@ -1,31 +1,11 @@
 import CaseTableRow from "../CaseTableRow/CaseTableRow";
 import DefendantTableRow from "../DefendantTableRow/DefendantTableRow";
-import stepper from "../../scripts/stepper"
 
 import './ResultsTable.scss'
-
-function computeFullSearchUrl(name) {
-  return `https://www1.aoc.state.nc.us/www/calendars.Criminal.do?county=100&court=BTH+&defendant=${name}&start=0&navindex=0&fromcrimquery=yes&submit=Search`;
-}
 
 export default function ResultsTable({ state, dispatch }) {
   let caseRows = null;
   let caseTable = null;
-
-  function unSelectDefendant() {
-    dispatch({
-      type: "select-defendant",
-      value: null,
-    });
-  }
-
-  function prepareSignUp(courtCase) {
-    dispatch({
-      type: "select-case",
-      value: courtCase,
-    });
-    stepper.scrollToStep(3);
-  }
 
   if (state.selectedDefendant !== null) {
 
@@ -56,16 +36,16 @@ export default function ResultsTable({ state, dispatch }) {
         <tbody>{caseRows}</tbody>
       </table>
     );
+    function computeFullSearchUrl(name) {
+      return `https://www1.aoc.state.nc.us/www/calendars.Criminal.do?county=100&court=BTH+&defendant=${name}&start=0&navindex=0&fromcrimquery=yes&submit=Search`;
+    }
+    const df = cases[0].defendant;
     return (
       <div>
-        <p>Below is a list of your cases. For details on charges, you may view on the <a href={computeFullSearchUrl(cases[0].defendant)} target="_blank" rel="noreferrer">NC Courts site</a> by clicking on the individual file number links.</p>
-        <div width='100%'>
-          <div style={{float:"right"}}><button onClick={() => unSelectDefendant()}>Return to all defendants</button></div>
-          <div style={{float:"left"}}><button onClick={() => prepareSignUp(cases[0])}>Sign up for notifications</button></div>
-        </div>
-        <br/>
         <p>
-          <b>Cases for {cases[0].defendant} </b>&nbsp;&nbsp;&nbsp;
+          <b>Cases for {df} </b>&nbsp;&nbsp;&nbsp;
+          <br/>
+          You may view details on charges on the <a href={computeFullSearchUrl(df)} target="_blank" rel="noreferrer">NC Courts site</a>.
         </p>
         {populatedTable}
       </div>

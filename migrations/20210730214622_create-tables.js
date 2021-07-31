@@ -43,7 +43,6 @@ exports.up = async function(knex) {
       FOR EACH ROW
       EXECUTE PROCEDURE update_timestamp();
     `
-    console.log(cmd)
     await knex.raw(cmd);
   }
 };

@@ -1,6 +1,4 @@
 import "./SignupForm.scss"
-
-import stepper from "../../scripts/stepper";
 import { subscribeToDefendant } from "../../scripts/appState";
 
 function createPhoneUpdater(dispatch) {
@@ -24,32 +22,21 @@ export default function SignupForm({ state, dispatch }) {
     if (tphone) {
       tphone = tphone.replace(/\D/g,'');
     }
-    if (tphone && tphone.length !== 7 && tphone.length !== 10) {
-      dispatch({ type: "phone-error", value: {phone_error: "Not a valid phone number"}})
-    }
-    else if (tphone.length === 7) {
-      prefix = tphone.slice(0,3);
-      suffix = tphone.slice(-4);
-      doit = true;
-      dispatch({ type: "phone-error", value: {phone_error: "Assuming 828 area code"}}) 
+    if (tphone && tphone.length !== 10) {
+      dispatch({ type: "phone-error", value: {phone_error: "Not a valid 10-digit phone number"}})
     }
     else {
-      area_code = tphone.slice(0,3);
-      prefix = tphone.slice(3,6);
-      suffix = tphone.slice(-4);
       doit = true;
     }
 
-    phone = area_code+'-'+prefix+'-'+suffix;
-    console.log('Area code: ' + area_code + ", prefix: " + prefix + ', suffix: ' + suffix);
-    console.log('Phone: ' + phone);
-    console.log(state.phone_error);
     if (doit) { 
       const result = await subscribeToDefendant(state);
-      console.log(result);
-      //TODO Do something with the result in the state.
-      stepper.scrollToStep(3);
+      dispatch({ type: "phone-error", value: {phone_error: result.message}});
     }
+  }
+  let phoneErrorText = "";
+  if (state.phone_error && state.phone_error.length > 0) {
+    phoneErrorText = (<div>&nbsp;&nbsp;&nbsp;{state.phone_error}</div>);
   }
 
   return (
@@ -67,9 +54,9 @@ export default function SignupForm({ state, dispatch }) {
           onChange={(e) => updatePhone(e, "phone_number")}
         />
       </div>
-      <div>&nbsp;&nbsp;&nbsp;{state.phone_error}</div>
+      {phoneErrorText}
       <button type="button" className="usa-button" onClick={doSubscription}>
-        Submit
+        Sign Up For Notifications
       </button>
     </form>
   );

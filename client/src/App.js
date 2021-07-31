@@ -57,18 +57,26 @@ function reducer(state, action) {
   }
 }
 
-function getSignupForm(state, step3, dispatch) {
-  if (state.selectedDefendant) return (
-    <li className="usa-process-list__item">
-    <h4 className="usa-process-list__heading" ref={step3}>
-        Sign up for notifications
-      </h4>
-      <p>
-        Enter phone number and such.
-      </p>
-      <SignupForm state={state} dispatch={dispatch} />
-  </li>
-  );
+function getSignupForm(state, dispatch) {
+
+  function unSelectDefendant() {
+    dispatch({
+      type: "select-defendant",
+      value: null,
+    });
+  }
+
+  if (state.selectedDefendant) {
+    return (
+      <div>
+        <div width='100%'>
+          <div style={{float:"right"}}><button type="button" className="usa-button--secondary" onClick={() => unSelectDefendant()}>Return to all defendants</button></div>
+        </div>
+
+        <SignupForm state={state} dispatch={dispatch} />
+      </div>
+    );
+  }
   return "";
 }
 
@@ -77,11 +85,14 @@ function App() {
 
   const step1 = useRef(null);
   const step2 = useRef(null);
-  const step3 = useRef(null);
 
-  stepper.setSteps([step1, step2, step3]);
-  const signup = getSignupForm(state, step3, dispatch);
+  stepper.setSteps([step1, step2]);
+  const signup = getSignupForm(state, dispatch);
 
+  let headerText = "Select a Defendant and Sign Up";
+  if (state.selectedDefendant) {
+    headerText = "Sign Up for Case Notifications for " + state.cases[0].defendant;
+  }
   return (
     <div className="App">
       <Header />
@@ -98,12 +109,12 @@ function App() {
         </li>
         <li className="usa-process-list__item">
           <h4 className="usa-process-list__heading" ref={step2}>
-            Select a Defendant and Sign Up
+            {headerText}
           </h4>
+          {signup}
           <ResultsTable state={state} dispatch={dispatch} />
         </li>
-        {signup}
-      </ol>
+      </ol> 
       <Footer/>
     </div>
   );

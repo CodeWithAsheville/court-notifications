@@ -16,16 +16,19 @@ async function addCases(defendantId, casesIn) {
       session: itm.session,
     }
   });
+  try {
+    // We could compare existing cases in DB to new ones, but ... why?
+    let retVal = await knex('cases')
+      .where('defendant_id', cases[0].defendant_id)
+      .del();
 
-  // We could compare existing cases in DB to new ones, but ... why?
-  let retVal = await knex('cases')
-    .where('defendant_id', cases[0].defendant_id)
-    .del();
-
-  retVal = await knex('cases')
-    .insert(cases)
-    .returning('id');
-
+    retVal = await knex('cases')
+      .insert(cases)
+      .returning('id');
+  }
+  catch (e) {
+    throw 'Error adding or updating cases for subscription';
+  }
   return nextDate;
 }
 
@@ -49,7 +52,7 @@ async function addDefendant(defendant) {
     })
     .catch(function(ex) {
       // you can find errors here.
-      console.log('DAMN! ' + ex)
+      throw 'Error adding or updating defendant';
     });
 
     return defendantId;
@@ -58,11 +61,12 @@ async function addDefendant(defendant) {
 async function addSubscriber(body, callback, onError) {  
   const selectedDefendant = body.selectedDefendant;
   const phone = body.phone_number.replace(/\D/g,'');
-
   const details = body.details;
+  let returnMessage = 'Successfully subscribed';
   cases = details.cases;
+  if (cases == null || cases.length == 0) throw 'No cases selected';
 
-  if (cases && cases.length > 0) {
+  try {
     const defendant = {
       long_id: selectedDefendant,
       last_name: '',
@@ -83,53 +87,79 @@ async function addSubscriber(body, callback, onError) {
         }
       }
     }
+
     let defendantId = await addDefendant(defendant);
+
     const nextDate = await addCases(defendantId, cases);
     const next_notify = (nextDate.getMonth()+1) + '/' + nextDate.getDate() + '/' + nextDate.getFullYear();
     let subscriberId = null;
     let retVal;
-    let subscribers = await knex('subscribers')
-      .select()
-      .where('phone', phone);
+    let subscribers = null;
+    try {
+      subscribers = await knex('subscribers')
+        .select()
+        .where('phone', phone);
+    } 
+    catch (e) {
+      throw 'Error in subscriber lookup';
+    }
     if (subscribers.length > 0) {
       if (subscribers.length > 1) throw new Error('Ugh - duplicates for this phone');
       subscriberId = subscribers[0].id;
       const currentNext = new Date(subscribers[0].next_notify);
       if (nextDate != currentNext) {
         // Need to update the date
-        knex('subscribers')
+        try {
+          knex('subscribers')
           .where('id', subscriberId)
           .update({
             next_notify,
-          })
+          });
+        }
+        catch (e) {
+          throw 'Error updating next court date';
+        }
       }
     }
     else {
-      retVal = await knex('subscribers')
-        .insert({
-          phone,
-          next_notify,
-        })
-        .returning('id');
-      subscriberId = retVal[0];
+      try {
+        retVal = await knex('subscribers')
+          .insert({
+            phone,
+            next_notify,
+          })
+          .returning('id');
+        subscriberId = retVal[0];
+      }
+      catch (e) {
+        throw 'Error adding subscriber';
+      }
     }
     // Now record the subscription
-    retVal = await knex('subscriptions')
+    try {
+      retVal = await knex('subscriptions')
       .select()
       .where({
         subscriber_id: subscriberId,
         defendant_id: defendantId
       });
       if (retVal.length === 0) {
-      retVal = await knex('subscriptions')
-        .insert({
-          subscriber_id: subscriberId,
-          defendant_id: defendantId
-        })
-        .returning('created_at');
+        retVal = await knex('subscriptions')
+          .insert({
+            subscriber_id: subscriberId,
+            defendant_id: defendantId
+          })
+          .returning('created_at');
+      }
+    }
+    catch (e) {
+      throw 'Error adding subscription';
     }
   }
-  callback(cases);
+  catch (e) {
+    returnMessage = (typeof e === 'string') ? e : e.message;
+  }
+  callback({message: returnMessage});
 }
 module.exports = {
   addSubscriber
