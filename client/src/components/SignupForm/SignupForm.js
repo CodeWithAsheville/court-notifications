@@ -27,13 +27,10 @@ export default function SignupForm({ state, dispatch }) {
 
     if (doit) { 
       const result = await subscribeToDefendant(state);
-      console.log('we have the result ' + JSON.stringify(result.message));
       dispatch({ type: "phone-message", value: {phone_message: result.message}});
     }
   }
   let phoneMessageText = "";
-  console.log('state: ' + state.phone_message + ' - ' + state.phone_message.length);
-  console.log(JSON.stringify(state.phone_message));
   if (state.phone_message.length > 0) {
     phoneMessageText = (<div>&nbsp;&nbsp;&nbsp;{state.phone_message}</div>);
   }

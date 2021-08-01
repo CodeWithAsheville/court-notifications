@@ -15,6 +15,7 @@ exports.up = async function(knex) {
     table.string('last_name');
     table.string('suffix');
     table.string('birth_date');
+    table.integer('updates').defaultTo(0);
     table.timestamps(false, true);
   })
   .createTable('subscriptions', function (table) {

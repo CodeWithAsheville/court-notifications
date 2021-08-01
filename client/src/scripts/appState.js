@@ -126,7 +126,6 @@ export async function getCaseData(state) {
 }
 
 export async function subscribeToDefendant(state) {
-  console.log('I am in the subscribeToDefendant function');
   const filteredCases = state.cases.filter(item => {
     return (item.defendant+'.'+item.dob === state.selectedDefendant);
   });
