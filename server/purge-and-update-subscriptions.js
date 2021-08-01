@@ -1,4 +1,3 @@
-const e = require('express');
 const knexConfig = require('../knexfile');
 var env         = 'development';
 var knex        = require('knex')(knexConfig[env]);
@@ -32,7 +31,7 @@ async function test(purgeDate, updateDays) {
   console.log('Updates per hour = ' + updatesPerHour);
 
 }
-async function purgeSubscriptions(body, callback, onError) {  
+async function purgeAndUpdateSubscriptions(body, callback, onError) {  
   let returnMessage = 'Successfully subscribed';
 
   try {
@@ -45,6 +44,6 @@ async function purgeSubscriptions(body, callback, onError) {
   callback({message: returnMessage});
 }
 module.exports = {
-  purgeSubscriptions,
+  purgeAndUpdateSubscriptions,
   test,
 }
