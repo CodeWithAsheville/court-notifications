@@ -27,12 +27,15 @@ export default function SignupForm({ state, dispatch }) {
 
     if (doit) { 
       const result = await subscribeToDefendant(state);
+      console.log('we have the result ' + JSON.stringify(result.message));
       dispatch({ type: "phone-message", value: {phone_message: result.message}});
     }
   }
-  let phoneErrorText = "";
-  if (state.phone_error && state.phone_error.length > 0) {
-    phoneErrorText = (<div>&nbsp;&nbsp;&nbsp;{state.phone_message}</div>);
+  let phoneMessageText = "";
+  console.log('state: ' + state.phone_message + ' - ' + state.phone_message.length);
+  console.log(JSON.stringify(state.phone_message));
+  if (state.phone_message.length > 0) {
+    phoneMessageText = (<div>&nbsp;&nbsp;&nbsp;{state.phone_message}</div>);
   }
 
   function unSelectDefendant() {
@@ -66,7 +69,7 @@ export default function SignupForm({ state, dispatch }) {
             onChange={(e) => updatePhone(e, "phone_number")}
           />
         </div>
-        {phoneErrorText}
+        {phoneMessageText}
         <button type="button" className="usa-button" onClick={doSubscription}>
           Sign Up For Notifications
         </button>

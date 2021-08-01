@@ -33,6 +33,7 @@ function reducer(state, action) {
         ...action.value,
       };
     case "phone-message":
+      console.log('In phone-message: ' + JSON.stringify(action.value));
       return {
         ...state,
         ...action.value,
