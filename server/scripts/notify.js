@@ -1,6 +1,5 @@
 const knexConfig = require('../knexfile');
-var env         = 'development';
-var knex        = require('knex')(knexConfig[env]);
+var knex        = require('knex')(knexConfig);
 
 async function readyToNotify(notificationDays) {
   let dateClause = 'court_date - CURRENT_DATE = ' + notificationDays

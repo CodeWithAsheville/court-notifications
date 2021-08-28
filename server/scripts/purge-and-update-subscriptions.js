@@ -1,6 +1,5 @@
 const knexConfig = require('../../knexfile');
-var env         = 'development';
-var knex        = require('knex')(knexConfig[env]);
+var knex        = require('knex')(knexConfig);
 
 async function purgeAndUpdateSubscriptions(purgeDate, updateDays) {
   // Do a rolling delete of expired cases, then anything that depends only on them.

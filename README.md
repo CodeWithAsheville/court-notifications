@@ -3,6 +3,40 @@ A project through Code for Asheville to help streamline the process to sign up f
 
 Supposedly online at [https://code-4-avl-court-notifications.herokuapp.com/](https://code-4-avl-court-notifications.herokuapp.com/), but probably crashed already.
 
+## Getting Started
+
+[TODO] Add environment notes (postgres version, nvm, etc)
+
+First, setup your environment variables before attempting to run the app
+
+```
+cp .env .env.sample
+```
+
+You will need to modify several variables, including the password and username that match your local database, the Twilio account sid, auth token and phone number for your personal Twilio account (see below), and your personal number for local testing.
+
+```
+npm install
+npm install -g knex
+createdb court-notifications
+knex migrate:latest
+npm run dev
+```
+
+
+
+## Setting Up Twilio For Local Testing
+You will need your own account for dev testing. Create a Twilio account and generate a phone number. Ensure you add these values to your local .env file.
+
+The gist is that you'll need to expose your localhost via ngrok, and setup your Twilio number to respond to incoming messages via webhook. Twilio posts to the `/sms` endpoint in `app.js`, which allows you to handle their incoming webhooks.
+
+Follow the instructions [here](https://www.twilio.com/docs/sms/tutorials/how-to-receive-and-reply-node-js#generating-twiml-in-your-web-application)
+
+Download and install [ngrok](https://www.twilio.com/blog/2015/09/6-awesome-reasons-to-use-ngrok-when-testing-webhooks.html)
+
+## Setting up Twilio in Production
+Once you have created a Twilio account, you will need to add the Twilio environment variables (see .env file) as environment variables in your hosting provider.
+
 ## Planning Notes
 
 If we want to run on Lambda, check out [this article](https://aws.amazon.com/blogs/compute/going-serverless-migrating-an-express-application-to-amazon-api-gateway-and-aws-lambda/).
