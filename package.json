@@ -19,8 +19,7 @@
     "knex": "^0.95.8",
     "pg": "^8.7.1",
     "tough-cookie": "^4.0.0",
-    "twilio": "^3.67.1",
-    "winston": "^3.3.3"
+    "twilio": "^3.67.1"
   },
   "devDependencies": {
     "concurrently": "^4.0.1"
