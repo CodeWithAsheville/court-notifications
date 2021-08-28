@@ -13,21 +13,15 @@ async function readyToNotify(notificationDays) {
   })
 }
 
-async function notify(body, callback, onError) {  
-  let returnMessage = 'Successfully subscribed';
+// readyToNotify(18)
 
-  try {
-    // code here
-  }
-  catch (e) {
-    returnMessage = (typeof e === 'string') ? e : e.message;
-  }
 
-  callback({message: returnMessage});
-}
-module.exports = {
-  notify
-}
+// 
+(async() => {
+  console.log('Call updateDefendants');
+  await updateDefendants('2021-08-09', -1);
+  console.log('Done with update');
+  process.exit();
+})();
 
-readyToNotify(18)
 
