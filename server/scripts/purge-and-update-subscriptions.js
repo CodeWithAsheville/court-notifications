@@ -1,4 +1,4 @@
-const knexConfig = require('../knexfile');
+const knexConfig = require('../../knexfile');
 var env         = 'development';
 var knex        = require('knex')(knexConfig[env]);
 
