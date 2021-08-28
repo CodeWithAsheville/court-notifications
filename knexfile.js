@@ -1,53 +1,26 @@
 // Update with your config settings.
 
+const user = process.env.DB_USER
+const password = process.env.DB_PASSWORD
+const host = process.env.DB_HOST
+const database = process.env.DATABASE_NAME
+const min = parseInt(process.env.DB_POOL_MIN, 10)
+const max = parseInt(process.env.DB_POOL_MAX, 10)
+const tableName = process.env.DB_MIGRATIONS_TABLE
+
 module.exports = {
-
-  development: {
-    client: 'postgresql',
-    connection: {
-      database: 'court-notifications',
-      user:     'cnuser',
-      password: 'nccourts'
-    },
-    pool: {
-      min: 2,
-      max: 10
-    },
-    migrations: {
-      tableName: 'knex_migrations'
-    }
+  client: 'postgresql',
+  connection: {
+    host,
+    database,
+    user,
+    password
   },
-
-  staging: {
-    client: 'postgresql',
-    connection: {
-      database: 'my_db',
-      user:     'username',
-      password: 'password'
-    },
-    pool: {
-      min: 2,
-      max: 10
-    },
-    migrations: {
-      tableName: 'knex_migrations'
-    }
+  pool: {
+    min,
+    max
   },
-
-  production: {
-    client: 'postgresql',
-    connection: {
-      database: 'my_db',
-      user:     'username',
-      password: 'password'
-    },
-    pool: {
-      min: 2,
-      max: 10
-    },
-    migrations: {
-      tableName: 'knex_migrations'
-    }
+  migrations: {
+    tableName
   }
-
 };
