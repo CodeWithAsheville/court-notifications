@@ -143,7 +143,10 @@ async function searchCourtRecords(body, callback, onError) {
     cases.push(d);
   }
   cases = cases.sort(sortByDefendant);
-  callback(cases);
+  if (callback !== null) {
+    callback(cases);
+  }
+  return cases;
 }
 
 module.exports = {

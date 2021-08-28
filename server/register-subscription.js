@@ -165,5 +165,6 @@ async function registerSubscription(body, callback, onError) {
   callback({message: returnMessage});
 }
 module.exports = {
-  registerSubscription
+  registerSubscription,
+  addCases
 }
