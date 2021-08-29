@@ -1,4 +1,7 @@
+require('dotenv').config({ path: '../../.env' })
 const knexConfig = require('../../knexfile');
+console.log(knexConfig)
+
 var knex        = require('knex')(knexConfig);
 
 function getPreviousDate(days) {

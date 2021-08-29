@@ -1,3 +1,4 @@
+require('dotenv').config({ path: '../../.env' })
 const knexConfig = require('../../knexfile');
 var knex        = require('knex')(knexConfig);
 var Mustache = require('mustache');
