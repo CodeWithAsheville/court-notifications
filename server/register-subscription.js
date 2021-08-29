@@ -1,6 +1,5 @@
 const knexConfig = require('../knexfile');
-var env         = 'development';
-var knex        = require('knex')(knexConfig[env]);
+var knex        = require('knex')(knexConfig);
 
 function initializeDefendant(body) {
   const selectedDefendant = body.selectedDefendant;
