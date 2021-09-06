@@ -3,14 +3,14 @@ A project through Code for Asheville to help streamline the process to sign up f
 
 Supposedly online at [https://code-4-avl-court-notifications.herokuapp.com/](https://code-4-avl-court-notifications.herokuapp.com/), but probably crashed already.
 
-## Getting Started
+## Getting Started with Local Development
 
 [TODO] Add environment notes (postgres version, nvm, etc)
 
 First, setup your environment variables before attempting to run the app
 
 ```
-cp .env .env.sample
+cp .env.sample .env
 ```
 
 You will need to modify several variables, including the password and username that match your local database, the Twilio account sid, auth token and phone number for your personal Twilio account (see below), and your personal number for local testing.
@@ -23,9 +23,7 @@ knex migrate:latest
 npm run dev
 ```
 
-
-
-## Setting Up Twilio For Local Testing
+### Setting Up Twilio For Local Testing
 You will need your own account for dev testing. Create a Twilio account and generate a phone number. Ensure you add these values to your local .env file.
 
 The gist is that you'll need to expose your localhost via ngrok, and setup your Twilio number to respond to incoming messages via webhook. Twilio posts to the `/sms` endpoint in `app.js`, which allows you to handle their incoming webhooks.
@@ -34,7 +32,24 @@ Follow the instructions [here](https://www.twilio.com/docs/sms/tutorials/how-to-
 
 Download and install [ngrok](https://www.twilio.com/blog/2015/09/6-awesome-reasons-to-use-ngrok-when-testing-webhooks.html)
 
-## Setting up Twilio in Production
+## Heroku Production Setup
+
+### Create the Application
+
+In the Heroku console, create a new app. In the _Deploy_ tab, select Github as the deployment method, connect to Github, select the court-notifications repository, and click _Connect_. In the next section, select the branch to be used for automatic deployment. For production it will be _main_.
+
+### Add a Database
+
+In the _Resources_ tab, search for and add the _Heroku Postgres_ add-on. Go to the add-on's _Settings_ tab and click _View Credentials_ to obtain the database host, name, user and password. You will need them to set the appropriate environment variables in the application.
+
+First, though, you will need to set the database-related environment variables (DB_USER, DB_PASSWORD, DB_HOST, DATABASE_NAME, DB_POOL_MIN, DB_POOL_MAX, DB_MIGRATIONS_TABLE) in order to initialize the database. Make sure that you have _knexjs_ installed and run:
+```
+knex migrate:latest
+```
+This will create all the tables in the new Postgres database.
+
+
+### Setting up Twilio in Production
 Once you have created a Twilio account, you will need to add the Twilio environment variables (see .env file) as environment variables in your hosting provider.
 
 ## Planning Notes
