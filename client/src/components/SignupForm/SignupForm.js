@@ -17,12 +17,14 @@ export default function SignupForm({ state, dispatch }) {
 
     if (tphone) {
       tphone = tphone.replace(/\D/g,'');
-    }
-    if (tphone && tphone.length !== 10) {
-      dispatch({ type: "phone-message", value: {phone_message: "Not a valid 10-digit phone number"}})
-    }
-    else {
-      doit = true;
+      if (tphone && tphone.length !== 10) {
+        dispatch({ type: "phone-message", value: {phone_message: "Not a valid 10-digit phone number"}})
+      }
+      else {
+        doit = true;
+      }  
+    } else {
+      dispatch({ type: "phone-message", value: {phone_message: "Phone number cannot be blank"}})
     }
 
     if (doit) { 
