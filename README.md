@@ -42,11 +42,17 @@ In the Heroku console, create a new app. In the _Deploy_ tab, select Github as t
 
 In the _Resources_ tab, search for and add the _Heroku Postgres_ add-on. Go to the add-on's _Settings_ tab and click _View Credentials_ to obtain the database host, name, user and password. You will need them to set the appropriate environment variables in the application.
 
-First, though, you will need to set the database-related environment variables (DB_USER, DB_PASSWORD, DB_HOST, DATABASE_NAME, DB_POOL_MIN, DB_POOL_MAX, DB_MIGRATIONS_TABLE) in order to initialize the database. Make sure that you have _knexjs_ installed and run:
+First, though, you will need to initialize the database. Set the database-related environment variables (DB_USER, DB_PASSWORD, DB_HOST, DATABASE_NAME, DB_POOL_MIN, DB_POOL_MAX, DB_MIGRATIONS_TABLE) and make sure that you have _knexjs_ installed, then run:
 ```
 knex migrate:latest
 ```
 This will create all the tables in the new Postgres database.
+
+### Set Environment Variables
+In the _Settings_ tab of the application, click _Reveal Config Vars_. Initially the only variable will be the ```DATABASE_URL``` set automatically when you install the Postgres add-on. 
+
+Add all of the environment variables listed in the _.env.sample_ file, making sure that you change _NODE_ENV_ to ```production``` (this is required for the node server to serve static pages).
+
 
 
 ### Setting up Twilio in Production
