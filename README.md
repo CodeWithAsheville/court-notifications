@@ -51,7 +51,23 @@ This will create all the tables in the new Postgres database.
 ### Set Environment Variables
 In the _Settings_ tab of the application, click _Reveal Config Vars_. Initially the only variable will be the ```DATABASE_URL``` set automatically when you install the Postgres add-on. 
 
-Add all of the environment variables listed in the _.env.sample_ file, making sure that you change _NODE_ENV_ to ```production``` (this is required for the node server to serve static pages).
+Add all of the environment variables listed in the _.env.sample_ file, making sure that you change ```NODE_ENV``` to ```production``` (this is required for the node server to serve static pages).
+
+### Deploy
+The application has been set to redeploy when changes are committed to the selected branch of the repository, but you will need to do it manually the first time. Go to the _Settings_ tab, scroll to the bottom, and press _Deploy Branch_ under _Manual Deploy_. This will take a few minutes.
+
+### Set Up Scheduled Jobs
+In the _Resources_ tab of the application, search for and add the _Heroku Scheduler_ add-on. Go to the add-on and click _Add Job_ to add a scheduled task. You will need to create three jobs:
+- Purge expired jobs and generate a list of defendents due for updates
+  - Command: ```node server/scripts/purge-and-update-subscriptions.js```
+  - Schedule: Once per day
+- Update defendant cases. Cases are drawn from a table populated by the previous command and run a few at a time (the value of _updates_per_call_ in the _cn_configuration_ table).
+  - Command ```node server/scripts/update_defendants.js```
+  - Schedule: Once every 10 minutes
+- Send notifications. Notifications are configured in the _notify_configuration_ table. A configuration consists of the number of days prior to the court date that the notifications hould be sent and the text of the notification (i.e., you may send distinct reminders 7 days, 3 days and 1 day before the date, for example). The notification text may contain variables enclosed in {{_variable_name_}}. Allowed variables are name and date. Case information will be added automatically.
+  - Command ```node server/scripts/notify.js```
+  - Schedule: Once per day _after_ purge
+
 
 
 
