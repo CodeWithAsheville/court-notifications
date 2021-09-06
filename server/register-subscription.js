@@ -144,6 +144,7 @@ async function addSubscription(subscriberId, defendantId) {
 
 async function registerSubscription(body, callback, onError) {  
   let returnMessage = 'Successfully subscribed';
+  let returnCode = 200;
 
   try {
     const phone = body.phone_number.replace(/\D/g,'');
@@ -159,9 +160,10 @@ async function registerSubscription(body, callback, onError) {
   }
   catch (e) {
     returnMessage = (typeof e === 'string') ? e : e.message;
+    returnCode = 500;
   }
 
-  callback({message: returnMessage});
+  callback({message: returnMessage, code: returnCode });
 }
 module.exports = {
   registerSubscription,

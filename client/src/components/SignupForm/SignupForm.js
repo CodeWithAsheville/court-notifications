@@ -29,7 +29,9 @@ export default function SignupForm({ state, dispatch }) {
 
     if (doit) { 
       const result = await subscribeToDefendant(state);
+      console.log(result)
       dispatch({ type: "phone-message", value: {phone_message: result.message}});
+      dispatch({ type: "signupSuccess", value: true })
     }
   }
   let phoneMessageText = "";
@@ -37,12 +39,30 @@ export default function SignupForm({ state, dispatch }) {
     phoneMessageText = (<div>&nbsp;&nbsp;&nbsp;{state.phone_message}</div>);
   }
 
+  let inputBox = (
+    <div>
+      <label className="usa-label" htmlFor="input-type-text">
+        Cell Phone Number
+      </label>
+      <input
+        className="usa-input"
+        id="input-type-text"
+        name="input-type-text"
+        type="text"
+        value={state.phone_number}
+        onChange={(e) => updatePhone(e, "phone_number")}
+      />
+    </div>
+  );
+  if (state.signupSuccess) inputBox = "";
+  console.log('Signup success is " + state.signupSuccess');
   function unSelectDefendant() {
     dispatch({
       type: "select-defendant",
       value: null,
     });
     dispatch({ type: "phone-message", value: {phone_message: ""}})
+    dispatch({ type: "signupSuccess", value: false })
   }
 
   return (
@@ -55,19 +75,7 @@ export default function SignupForm({ state, dispatch }) {
       </div>
 
       <form className="usa-form lookup-form">
-        <div>
-          <label className="usa-label" htmlFor="input-type-text">
-            Cell Phone Number
-          </label>
-          <input
-            className="usa-input"
-            id="input-type-text"
-            name="input-type-text"
-            type="text"
-            value={state.phone_number}
-            onChange={(e) => updatePhone(e, "phone_number")}
-          />
-        </div>
+        {inputBox}
         {phoneMessageText}
         <button type="button" className="usa-button" onClick={doSubscription}>
           Sign Up For Notifications
