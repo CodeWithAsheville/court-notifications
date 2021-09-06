@@ -54,8 +54,16 @@ export default function SignupForm({ state, dispatch }) {
       />
     </div>
   );
-  if (state.signupSuccess) inputBox = "";
-  console.log('Signup success is " + state.signupSuccess');
+  let signupButton = (
+    <button type="button" className="usa-button" onClick={doSubscription}>
+      Sign Up For Notifications
+    </button>
+  );
+  if (state.signupSuccess) {
+    inputBox = "";
+    signupButton = "";
+  }
+
   function unSelectDefendant() {
     dispatch({
       type: "select-defendant",
@@ -77,9 +85,7 @@ export default function SignupForm({ state, dispatch }) {
       <form className="usa-form lookup-form">
         {inputBox}
         {phoneMessageText}
-        <button type="button" className="usa-button" onClick={doSubscription}>
-          Sign Up For Notifications
-        </button>
+        {signupButton}
       </form>
     </div>
   );
