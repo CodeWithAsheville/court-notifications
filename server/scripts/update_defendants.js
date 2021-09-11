@@ -1,6 +1,7 @@
+require('dotenv').config({ path: '../../.env' })
 const knexConfig = require('../../knexfile');
 var env         = 'development';
-var knex        = require('knex')(knexConfig[env]);
+var knex        = require('knex')(knexConfig);
 const { searchCourtRecords } = require('../search-court-records');
 const { addCases } = require('../register-subscription');
 
@@ -22,15 +23,11 @@ async function updateDefendants(purgeDate, updateDays) {
   const defendants = await knex('defendants').select('*').where('id', 'in', defendantIds);
   for (let i = 0; i<defendants.length; ++i) {
     const d = defendants[i];
-    console.log('Do a defendant ')
-    console.log(d)
     const matches = await searchCourtRecords({lastName: d.last_name, firstName: d.first_name, middleName: d.middle_name}, null, console.log);
     let match = matches.filter(itm => (itm.defendant + '.' + itm.dob) === d.long_id);
     if (match.length > 0) {
       const cases = match[0].cases
       await addCases(d.id, cases);
-
-      console.log(cases)
     }
   }
 }

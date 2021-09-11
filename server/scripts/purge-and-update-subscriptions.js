@@ -1,8 +1,29 @@
+require('dotenv').config({ path: '../../.env' })
 const knexConfig = require('../../knexfile');
+console.log(knexConfig)
+
 var knex        = require('knex')(knexConfig);
 
-async function purgeAndUpdateSubscriptions(purgeDate, updateDays) {
+function getPreviousDate(days) {
+  const d = new Date();
+  d.setDate(d.getDate()-days);
+  const dString = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+  return dString;
+}
+
+async function getConfigurationIntValue(name, defaultValue = 0) {
+  let value = defaultValue;
+  let result = await knex('cn_configuration').select('value').where('name', '=', name);
+  if (result.length > 0) value = parseInt(result[0].value)
+  return value;
+}
+
+async function purgeAndUpdateSubscriptions() {
   // Do a rolling delete of expired cases, then anything that depends only on them.
+  const daysBeforePurge = await getConfigurationIntValue('days_before_purge', 1);
+  const daysBeforeUpdate = await getConfigurationIntValue('days_before_update', 7);
+  const purgeDate = getPreviousDate(daysBeforePurge);
+
   await knex('cases').delete().where('court_date', '<', purgeDate);
   await knex('defendants').delete().whereNotExists(function() {
     this.select('*').from('cases').whereRaw('cases.defendant_id = defendants.id');
@@ -15,19 +36,13 @@ async function purgeAndUpdateSubscriptions(purgeDate, updateDays) {
   });
 
   // Now we need to prepare to update information on remaining subscribers
-  const d = new Date();
-  d.setDate(d.getDate()-updateDays);
-  const dString = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+  const updateDate = getPreviousDate(daysBeforeUpdate);
 
   const defendantsToUpdate = await knex('defendants').select('id as defendant_id')
-    .where('updated_at', '<', dString);
+    .where('updated_at', '<', updateDate);
+
   await knex('records_to_update').delete(); // Delete all 
   await knex('records_to_update').insert(defendantsToUpdate);
-
-  // Now set up a job to update over time
-  const count = defendantsToUpdate.length;
-  const updatesPerHour = Math.ceil((count)/23);
-  console.log('Updates per hour = ' + updatesPerHour);
 }
 
 // Purge all court cases in the past and everything that 
@@ -36,7 +51,7 @@ async function purgeAndUpdateSubscriptions(purgeDate, updateDays) {
 // script
 (async() => {
   console.log('Call purge-and-update-subscriptions');
-  await purgeAndUpdateSubscriptions('2021-08-09', -1);
+  await purgeAndUpdateSubscriptions();
   console.log('Done with purge');
   process.exit();
 })();

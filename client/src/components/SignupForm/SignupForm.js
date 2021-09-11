@@ -17,22 +17,51 @@ export default function SignupForm({ state, dispatch }) {
 
     if (tphone) {
       tphone = tphone.replace(/\D/g,'');
-    }
-    if (tphone && tphone.length !== 10) {
-      dispatch({ type: "phone-message", value: {phone_message: "Not a valid 10-digit phone number"}})
-    }
-    else {
-      doit = true;
+      if (tphone.length !== 10) {
+        dispatch({ type: "phone-message", value: {phone_message: "Not a valid 10-digit phone number"}})
+      }
+      else {
+        doit = true;
+      }  
+    } else {
+      dispatch({ type: "phone-message", value: {phone_message: "Phone number cannot be blank"}})
     }
 
     if (doit) { 
       const result = await subscribeToDefendant(state);
+      console.log(result)
       dispatch({ type: "phone-message", value: {phone_message: result.message}});
+      dispatch({ type: "signupSuccess", value: true })
     }
   }
   let phoneMessageText = "";
   if (state.phone_message.length > 0) {
     phoneMessageText = (<div>&nbsp;&nbsp;&nbsp;{state.phone_message}</div>);
+  }
+
+  let inputBox = (
+    <div>
+      <label className="usa-label" htmlFor="input-type-text">
+        Cell Phone Number
+      </label>
+      <input
+        className="usa-input"
+        id="input-type-text"
+        name="input-type-text"
+        type="text"
+        value={state.phone_number}
+        onChange={(e) => updatePhone(e, "phone_number")}
+      />
+    </div>
+  );
+  let signupButton = (
+    <button type="button" className="usa-button" onClick={doSubscription}>
+      Sign Up For Notifications
+    </button>
+  );
+  if (state.signupSuccess) {
+    inputBox = "";
+    signupButton = "";
   }
 
   function unSelectDefendant() {
@@ -41,6 +70,7 @@ export default function SignupForm({ state, dispatch }) {
       value: null,
     });
     dispatch({ type: "phone-message", value: {phone_message: ""}})
+    dispatch({ type: "signupSuccess", value: false })
   }
 
   return (
@@ -53,23 +83,9 @@ export default function SignupForm({ state, dispatch }) {
       </div>
 
       <form className="usa-form lookup-form">
-        <div>
-          <label className="usa-label" htmlFor="input-type-text">
-            Cell Phone Number
-          </label>
-          <input
-            className="usa-input"
-            id="input-type-text"
-            name="input-type-text"
-            type="text"
-            value={state.phone_number}
-            onChange={(e) => updatePhone(e, "phone_number")}
-          />
-        </div>
+        {inputBox}
         {phoneMessageText}
-        <button type="button" className="usa-button" onClick={doSubscription}>
-          Sign Up For Notifications
-        </button>
+        {signupButton}
       </form>
     </div>
   );
