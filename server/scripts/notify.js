@@ -1,4 +1,6 @@
-const knexConfig = require('../knexfile');
+require('dotenv').config({ path: '../../.env'})
+
+const knexConfig = require('../../knexfile');
 var knex        = require('knex')(knexConfig);
 
 async function readyToNotify(notificationDays) {
