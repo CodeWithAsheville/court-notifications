@@ -3,14 +3,14 @@ A project through Code for Asheville to help streamline the process to sign up f
 
 Supposedly online at [https://code-4-avl-court-notifications.herokuapp.com/](https://code-4-avl-court-notifications.herokuapp.com/), but probably crashed already.
 
-## Getting Started
+## Getting Started with Local Development
 
 [TODO] Add environment notes (postgres version, nvm, etc)
 
 First, setup your environment variables before attempting to run the app
 
 ```
-cp .env .env.sample
+cp .env.sample .env
 ```
 
 You will need to modify several variables, including the password and username that match your local database, the Twilio account sid, auth token and phone number for your personal Twilio account (see below), and your personal number for local testing.
@@ -23,9 +23,7 @@ knex migrate:latest
 npm run dev
 ```
 
-
-
-## Setting Up Twilio For Local Testing
+### Setting Up Twilio For Local Testing
 You will need your own account for dev testing. Create a Twilio account and generate a phone number. Ensure you add these values to your local .env file.
 
 The gist is that you'll need to expose your localhost via ngrok, and setup your Twilio number to respond to incoming messages via webhook. Twilio posts to the `/sms` endpoint in `app.js`, which allows you to handle their incoming webhooks.
@@ -34,7 +32,46 @@ Follow the instructions [here](https://www.twilio.com/docs/sms/tutorials/how-to-
 
 Download and install [ngrok](https://www.twilio.com/blog/2015/09/6-awesome-reasons-to-use-ngrok-when-testing-webhooks.html)
 
-## Setting up Twilio in Production
+## Heroku Production Setup
+
+### Create the Application
+
+In the Heroku console, create a new app. In the _Deploy_ tab, select Github as the deployment method, connect to Github, select the court-notifications repository, and click _Connect_. In the next section, select the branch to be used for automatic deployment. For production it will be _main_.
+
+### Add a Database
+
+In the _Resources_ tab, search for and add the _Heroku Postgres_ add-on. Go to the add-on's _Settings_ tab and click _View Credentials_ to obtain the database host, name, user and password. You will need them to set the appropriate environment variables in the application.
+
+First, though, you will need to initialize the database. Set the database-related environment variables (DB_USER, DB_PASSWORD, DB_HOST, DATABASE_NAME, DB_POOL_MIN, DB_POOL_MAX, DB_MIGRATIONS_TABLE) and make sure that you have _knexjs_ installed, then run:
+```
+knex migrate:latest
+```
+This will create all the tables in the new Postgres database.
+
+### Set Environment Variables
+In the _Settings_ tab of the application, click _Reveal Config Vars_. Initially the only variable will be the ```DATABASE_URL``` set automatically when you install the Postgres add-on. 
+
+Add all of the environment variables listed in the _.env.sample_ file, making sure that you change ```NODE_ENV``` to ```production``` (this is required for the node server to serve static pages).
+
+### Deploy
+The application has been set to redeploy when changes are committed to the selected branch of the repository, but you will need to do it manually the first time. Go to the _Settings_ tab, scroll to the bottom, and press _Deploy Branch_ under _Manual Deploy_. This will take a few minutes.
+
+### Set Up Scheduled Jobs
+In the _Resources_ tab of the application, search for and add the _Heroku Scheduler_ add-on. Go to the add-on and click _Add Job_ to add a scheduled task. You will need to create three jobs:
+- Purge expired jobs and generate a list of defendents due for updates
+  - Command: ```node server/scripts/purge-and-update-subscriptions.js```
+  - Schedule: Once per day
+- Update defendant cases. Cases are drawn from a table populated by the previous command and run a few at a time (the value of _updates_per_call_ in the _cn_configuration_ table).
+  - Command ```node server/scripts/update_defendants.js```
+  - Schedule: Once every 10 minutes
+- Send notifications. Notifications are configured in the _notify_configuration_ table. A configuration consists of the number of days prior to the court date that the notifications hould be sent and the text of the notification (i.e., you may send distinct reminders 7 days, 3 days and 1 day before the date, for example). The notification text may contain variables enclosed in {{_variable_name_}}. Allowed variables are name and date. Case information will be added automatically.
+  - Command ```node server/scripts/notify.js```
+  - Schedule: Once per day _after_ purge
+
+
+
+
+### Setting up Twilio in Production
 Once you have created a Twilio account, you will need to add the Twilio environment variables (see .env file) as environment variables in your hosting provider.
 
 ## Planning Notes

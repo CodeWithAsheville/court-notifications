@@ -17,6 +17,7 @@ const initialState = {
   selectedCase: null,
   phone_number: "",
   phone_message: "",
+  signupSuccess: false,
   searchError: false
 };
 
@@ -36,7 +37,12 @@ function reducer(state, action) {
       return {
         ...state,
         ...action.value,
-      }
+      };
+    case "signupSuccess":
+      return {
+        ...state,
+        signupSuccess: action.value,
+      };
     case "reload-cases":
       return {
         ...state,
