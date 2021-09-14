@@ -11,18 +11,22 @@ function createNameUpdater(dispatch) {
 
 export default function SearchForm({ state, dispatch }) {
   const updateName = createNameUpdater(dispatch);
-
+  // Reset things
   async function reloadCaseLookUp() {
+    dispatch({
+      type: "select-defendant",
+      value: null,
+    });
+    dispatch({ type: "phone-message", value: {phone_message: ""}})
+    dispatch({ type: "signupSuccess", value: false })
+
+    // Do the search
     const cases = await getCaseData(state);
     dispatch({
       type: "reload-cases",
       value: cases,
     });
-    dispatch({
-      type: "select-defendant",
-      value: null,
-    });
-
+  
     stepper.scrollToStep(2);
   }
 
