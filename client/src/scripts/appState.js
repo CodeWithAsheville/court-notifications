@@ -124,3 +124,21 @@ export async function getCaseData(state) {
 
   return mergedCases;
 }
+
+export async function subscribeToDefendant(state) {
+  const filteredCases = state.cases.filter(item => {
+    return (item.defendant+'.'+item.dob === state.selectedDefendant);
+  });
+  const response = await fetch("/api/subscribe-to-defendant", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      selectedDefendant: state.selectedDefendant,
+      phone_number: state.phone_number,
+      details: filteredCases[0],
+    })
+  });
+  return response.json();
+}

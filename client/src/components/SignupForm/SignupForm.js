@@ -1,0 +1,92 @@
+import "./SignupForm.scss"
+import { subscribeToDefendant } from "../../scripts/appState";
+
+function createPhoneUpdater(dispatch) {
+  return function updatePhone($event, param) {
+    dispatch({ type: "update-phone", value: { [param]: $event.target.value } });
+  };
+}
+
+export default function SignupForm({ state, dispatch }) {
+  const updatePhone = createPhoneUpdater(dispatch);
+
+  async function doSubscription() {
+    let doit = false;
+    let tphone = state.phone_number;
+    dispatch({ type: "phone-message", value: {phone_message: ""}})
+
+    if (tphone) {
+      tphone = tphone.replace(/\D/g,'');
+      if (tphone.length !== 10) {
+        dispatch({ type: "phone-message", value: {phone_message: "Not a valid 10-digit phone number"}})
+      }
+      else {
+        doit = true;
+      }  
+    } else {
+      dispatch({ type: "phone-message", value: {phone_message: "Phone number cannot be blank"}})
+    }
+
+    if (doit) { 
+      const result = await subscribeToDefendant(state);
+      console.log(result)
+      dispatch({ type: "phone-message", value: {phone_message: result.message}});
+      dispatch({ type: "signupSuccess", value: true })
+    }
+  }
+  let phoneMessageText = "";
+  if (state.phone_message.length > 0) {
+    phoneMessageText = (<div>&nbsp;&nbsp;&nbsp;{state.phone_message}</div>);
+  }
+
+  let inputBox = (
+    <div>
+      <label className="usa-label" htmlFor="input-type-text">
+        Cell Phone Number
+      </label>
+      <input
+        className="usa-input"
+        id="input-type-text"
+        name="input-type-text"
+        type="text"
+        value={state.phone_number}
+        onChange={(e) => updatePhone(e, "phone_number")}
+      />
+    </div>
+  );
+  let signupButton = (
+    <button type="button" className="usa-button" onClick={doSubscription}>
+      Sign Up For Notifications
+    </button>
+  );
+  if (state.signupSuccess) {
+    inputBox = "";
+    signupButton = "";
+  }
+
+  function unSelectDefendant() {
+    dispatch({
+      type: "select-defendant",
+      value: null,
+    });
+    dispatch({ type: "phone-message", value: {phone_message: ""}})
+    dispatch({ type: "signupSuccess", value: false })
+  }
+
+  return (
+    <div>
+      <div width='100%'>
+        <button type="button" className="usa-button--secondary" style={{float:"right"}}
+                onClick={() => unSelectDefendant()}>
+          Return to all defendants
+        </button>
+      </div>
+
+      <form className="usa-form lookup-form">
+        {inputBox}
+        {phoneMessageText}
+        {signupButton}
+      </form>
+    </div>
+  );
+}
