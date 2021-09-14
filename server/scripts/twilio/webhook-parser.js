@@ -97,7 +97,7 @@ function parseWebhook(req, res) {
   const verb = identifyVerbs(req.body.Body)
 
   if (verb === undefined) {
-    respondToUser(res, 'The Robots are coming!! Head for the hills!')
+    respondToUser(res, 'Unknown request. Text STOP to unsubscribe.')
   } else {
     console.log(actions, verb, actions[verb])
     return actions[verb](req, res)
