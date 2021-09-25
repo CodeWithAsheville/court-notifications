@@ -18,7 +18,9 @@ const initialState = {
   phone_number: "",
   phone_message: "",
   signupSuccess: false,
-  searchError: false
+  searchError: false,
+  searchErrorMessage: "",
+  searchSubmitted: false,
 };
 
 function reducer(state, action) {
@@ -27,6 +29,11 @@ function reducer(state, action) {
       return {
         ...state,
         ...action.value,
+        ...{
+          searchError: false,
+          searchErrorMessage: false,
+          searchSubmitted: false,
+        },
       };
     case "update-phone":
       return {
@@ -53,6 +60,15 @@ function reducer(state, action) {
         ...state,
         selectedDefendant: action.value,
       };
+    case "submit-search":
+      return {
+        ...state,
+        searchError: state.lastName ? false : true,
+        searchErrorMessage: state.lastName
+          ? ""
+          : "You must give a last name to search",
+        searchSubmitted: true,
+      };
     default:
       return state;
   }
@@ -68,8 +84,9 @@ function App() {
   let signupForm = "";
   let headerText = "Select a Defendant and Sign Up";
   if (state.selectedDefendant) {
-    headerText = "Sign Up for Case Notifications for " + state.cases[0].defendant;
-    signupForm =  <SignupForm state={state} dispatch={dispatch} />;
+    headerText =
+      "Sign Up for Case Notifications for " + state.cases[0].defendant;
+    signupForm = <SignupForm state={state} dispatch={dispatch} />;
   }
   return (
     <div className="App">
@@ -80,8 +97,8 @@ function App() {
             Search For Your Cases
           </h4>
           <p className="margin-top-05">
-            Enter your first, middle and last name to search for your court cases.
-            They will appear in a table below.
+            Enter your first, middle and last name to search for your court
+            cases. They will appear in a table below.
           </p>
           <SearchForm state={state} dispatch={dispatch} />
         </li>
@@ -92,8 +109,8 @@ function App() {
           {signupForm}
           <ResultsTable state={state} dispatch={dispatch} />
         </li>
-      </ol> 
-      <Footer/>
+      </ol>
+      <Footer />
     </div>
   );
 }
