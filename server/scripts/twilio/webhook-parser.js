@@ -46,7 +46,7 @@ const actions = require('./actions')
 const respondToUser = require('./respond-to-user')
 
 const verbs = {
-  unsubscribe: ['stop', 'unsubscribe', 'cancel']
+  unsubscribe: ['stop', 'stopall', 'unsubscribe', 'cancel', 'end', 'quit']
 }
 
 /**
