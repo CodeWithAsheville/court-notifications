@@ -1,4 +1,45 @@
-.lookup-form {
+.signup-form {
   padding: 10px;
   padding-top: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  max-width: 100%;
+
+  .usa-button {
+    height: 40px;
+    margin-left: 1em;
+  }
+
+  .usa-error-message {
+    margin-left: -10px;
+  }
+}
+
+.btn-back-arrow {
+  background: transparent;
+  color: #005ea2;
+  padding-left: 0;
+}
+
+.btn-back-arrow:hover {
+  background: transparent;
+  color: rgba(0, 45, 77, 1)
+}
+
+.fa.fa-chevron-left {
+  margin-right: 0.6em;
+}
+
+@media (max-width: 600px) {
+  .signup-form {
+    flex-direction: column;
+    align-items: normal;
+    justify-content: flex-start;
+
+    .usa-button {
+      width: 100%;
+      margin-left: 0;
+    }
+  }
 }
