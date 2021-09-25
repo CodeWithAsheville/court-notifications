@@ -50,12 +50,15 @@ export default function SignupForm({ state, dispatch }) {
   }
 
   let inputBox = (
-    <div>
-      <label className="usa-label" htmlFor="input-type-text">
+    <div className={`usa-form-group ${phoneMessageText ? 'usa-form-group--error': ''}`}>
+      <label className={`usa-label ${phoneMessageText ? 'usa-label--error' : ''}`} htmlFor="input-type-text">
         Cell Phone Number
       </label>
+      <span className="usa-error-message" id="input-error-message">
+        {phoneMessageText}
+      </span>
       <input
-        className="usa-input"
+        className={`usa-input ${phoneMessageText ? 'usa-input-error' : ''}`}
         id="input-type-text"
         name="input-type-text"
         type="text"
@@ -92,13 +95,12 @@ export default function SignupForm({ state, dispatch }) {
         className="usa-button btn-back-arrow"
         onClick={() => unSelectDefendant()}
       >
-        <i class="fa fa-chevron-left"></i>
+        <i className="fa fa-chevron-left"></i>
         Return to all defendants
       </button>
 
-      <form className="usa-form lookup-form">
+      <form className="usa-form lookup-form signup-form">
         {inputBox}
-        {phoneMessageText}
         {signupButton}
       </form>
     </div>
