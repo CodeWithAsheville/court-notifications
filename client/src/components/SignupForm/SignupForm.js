@@ -1,4 +1,4 @@
-import "./SignupForm.scss"
+import "./SignupForm.scss";
 import { subscribeToDefendant } from "../../scripts/appState";
 
 function createPhoneUpdater(dispatch) {
@@ -13,30 +13,40 @@ export default function SignupForm({ state, dispatch }) {
   async function doSubscription() {
     let doit = false;
     let tphone = state.phone_number;
-    dispatch({ type: "phone-message", value: {phone_message: ""}})
+    dispatch({ type: "phone-message", value: { phone_message: "" } });
 
     if (tphone) {
-      tphone = tphone.replace(/\D/g,'');
+      tphone = tphone.replace(/\D/g, "");
       if (tphone.length !== 10) {
-        dispatch({ type: "phone-message", value: {phone_message: "Not a valid 10-digit phone number"}})
-      }
-      else {
+        dispatch({
+          type: "phone-message",
+          value: { phone_message: "Not a valid 10-digit phone number" },
+        });
+      } else {
         doit = true;
-      }  
+      }
     } else {
-      dispatch({ type: "phone-message", value: {phone_message: "Phone number cannot be blank"}})
+      dispatch({
+        type: "phone-message",
+        value: { phone_message: "Phone number cannot be blank" },
+      });
     }
 
-    if (doit) { 
+    if (doit) {
       const result = await subscribeToDefendant(state);
-      console.log(result)
-      dispatch({ type: "phone-message", value: {phone_message: result.message}});
-      dispatch({ type: "signupSuccess", value: true })
+      console.log(result);
+      dispatch({
+        type: "phone-message",
+        value: { phone_message: result.message },
+      });
+      dispatch({ type: "signupSuccess", value: true });
     }
   }
+
   let phoneMessageText = "";
+
   if (state.phone_message.length > 0) {
-    phoneMessageText = (<div>&nbsp;&nbsp;&nbsp;{state.phone_message}</div>);
+    phoneMessageText = <div>&nbsp;&nbsp;&nbsp;{state.phone_message}</div>;
   }
 
   let inputBox = (
@@ -54,11 +64,13 @@ export default function SignupForm({ state, dispatch }) {
       />
     </div>
   );
+
   let signupButton = (
     <button type="button" className="usa-button" onClick={doSubscription}>
       Sign Up For Notifications
     </button>
   );
+
   if (state.signupSuccess) {
     inputBox = "";
     signupButton = "";
@@ -69,18 +81,20 @@ export default function SignupForm({ state, dispatch }) {
       type: "select-defendant",
       value: null,
     });
-    dispatch({ type: "phone-message", value: {phone_message: ""}})
-    dispatch({ type: "signupSuccess", value: false })
+    dispatch({ type: "phone-message", value: { phone_message: "" } });
+    dispatch({ type: "signupSuccess", value: false });
   }
 
   return (
     <div>
-      <div width='100%'>
-        <button type="button" className="usa-button--secondary" style={{float:"right"}}
-                onClick={() => unSelectDefendant()}>
-          Return to all defendants
-        </button>
-      </div>
+      <button
+        type="button"
+        className="usa-button btn-back-arrow"
+        onClick={() => unSelectDefendant()}
+      >
+        <i class="fa fa-chevron-left"></i>
+        Return to all defendants
+      </button>
 
       <form className="usa-form lookup-form">
         {inputBox}
