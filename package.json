@@ -9,6 +9,7 @@
     "heroku-postbuild": "cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.4",
     "axios": "^0.21.1",
     "axios-cookiejar-support": "^1.0.1",
     "body-parser": "^1.18.3",
