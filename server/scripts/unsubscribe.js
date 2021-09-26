@@ -1,3 +1,4 @@
+const knexConfig = require('../../knexfile');
 const knex = require('knex')(knexConfig);
 
 async function unsubscribe(phone) {
@@ -18,4 +19,8 @@ async function unsubscribe(phone) {
       }
     });
   });
+}
+
+module.exports = {
+  unsubscribe
 }
