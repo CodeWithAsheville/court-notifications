@@ -46,6 +46,7 @@ export default function SignupForm({ state, dispatch }) {
   let phoneMessageText = "";
 
   if (state.phone_message.length > 0) {
+    console.log('Phone message ' + state.phone_message);
     phoneMessageText = <div>&nbsp;&nbsp;&nbsp;{state.phone_message}</div>;
   }
 
@@ -75,8 +76,11 @@ export default function SignupForm({ state, dispatch }) {
   );
 
   if (state.signupSuccess) {
-    inputBox = "";
-    signupButton = "";
+    inputBox = (
+      <div><span className="usa-error-message" id="input-error-message">
+        {phoneMessageText}
+      </span></div>);
+      signupButton = "";
   }
 
   function unSelectDefendant() {
