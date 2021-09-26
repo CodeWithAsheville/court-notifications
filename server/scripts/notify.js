@@ -72,13 +72,12 @@ async function notifications() {
   
       // And send out the notifications
       for (k = 0; k < subscribers.length; ++k) {
-        console.log('Sending a message');
         const s = subscribers[k];
         await client.messages
         .create({
            body: d.text,
            from: '+14156635480',
-           to: '+17812966267'
+           to: subscribers.phone
          })
         .then(message => console.log(message));
       }
