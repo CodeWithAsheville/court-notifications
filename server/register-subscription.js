@@ -1,6 +1,7 @@
 const knexConfig = require('../knexfile');
 var knex        = require('knex')(knexConfig);
 var Mustache = require('mustache');
+var unsubscribe = require('./scripts/unsubscribe');
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
@@ -187,8 +188,9 @@ async function registerSubscription(body, callback, onError) {
       console.log('Error code is ' + e.code);
       if (e.code === 21610) {
         console.log('Need to send START!');
+        unsubscribe(phone);
       }
-      throw 'Subscription has been recorded but you must text START to ' + process.env.TWILIO_PHONE_NUMBER + ' to actually receive!'
+      throw 'You have previously unsubscribed from all messages from this service. You must text START to ' + process.env.TWILIO_PHONE_NUMBER + ' and then subscribe here again.'
     }
   }
   catch (e) {
