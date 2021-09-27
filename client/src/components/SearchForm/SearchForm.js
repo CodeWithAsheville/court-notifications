@@ -16,7 +16,6 @@ export default function SearchForm({ state, dispatch }) {
   // Reset things
   async function reloadCaseLookUp() {
     dispatch({ type: "submit-search", value: true });
-
     if (state.lastName) {
       dispatch({
         type: "select-defendant",
@@ -27,6 +26,8 @@ export default function SearchForm({ state, dispatch }) {
 
       // Do the search
       const cases = await getCaseData(state);
+      dispatch({ type: "search-returned", value: true });
+
       dispatch({
         type: "reload-cases",
         value: cases,
