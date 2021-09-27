@@ -21,6 +21,7 @@ const initialState = {
   searchError: false,
   searchErrorMessage: "",
   searchSubmitted: false,
+  searchReturned: false,
 };
 
 function reducer(state, action) {
@@ -69,6 +70,11 @@ function reducer(state, action) {
           : "You must give a last name to search",
         searchSubmitted: true,
       };
+    case "search-returned":
+      return {
+        ...state,
+        searchReturned: true,
+      };
     default:
       return state;
   }
@@ -83,6 +89,18 @@ function App() {
 
   let signupForm = "";
   let headerText = "Select a Defendant and Sign Up";
+  let resultsItem = "";
+  if (state.searchReturned) {
+    resultsItem = (
+      <li className="usa-process-list__item">
+      <h4 className="usa-process-list__heading" ref={step2}>
+        {headerText}
+      </h4>
+      {signupForm}
+      <ResultsTable state={state} dispatch={dispatch} />
+    </li>
+    );
+  }
   if (state.selectedDefendant) {
     let defendantName = state.cases.filter(item => item.defendant+'.'+item.dob === state.selectedDefendant)[0].defendant;
     headerText =
@@ -103,13 +121,7 @@ function App() {
           </p>
           <SearchForm state={state} dispatch={dispatch} />
         </li>
-        <li className="usa-process-list__item">
-          <h4 className="usa-process-list__heading" ref={step2}>
-            {headerText}
-          </h4>
-          {signupForm}
-          <ResultsTable state={state} dispatch={dispatch} />
-        </li>
+        {resultsItem}
       </ol>
       <Footer />
     </div>
