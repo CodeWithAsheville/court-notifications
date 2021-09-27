@@ -84,8 +84,9 @@ function App() {
   let signupForm = "";
   let headerText = "Select a Defendant and Sign Up";
   if (state.selectedDefendant) {
+    let defendantName = state.cases.filter(item => item.defendant+'.'+item.dob === state.selectedDefendant)[0].defendant;
     headerText =
-      "Sign Up for Case Notifications for " + state.cases[0].defendant;
+      "Sign Up for Case Notifications for " + defendantName;
     signupForm = <SignupForm state={state} dispatch={dispatch} />;
   }
   return (
