@@ -36,7 +36,20 @@ export default function SearchForm({ state, dispatch }) {
       stepper.scrollToStep(2);
     }
   }
-
+  let searchInProgressText = "";
+  if (state.searchInProgress) {
+    searchInProgressText = (
+      <div><span>... Search in progress ...</span></div>
+    );
+  }
+  let searchButton = (
+    <div>
+      <button disabled = {state.searchInProgress} type="button" className="usa-button" onClick={reloadCaseLookUp}>
+        Submit
+      </button>
+      {searchInProgressText}
+    </div>
+  );
   return (
     <form className="usa-form lookup-form">
       <div className="usa-form-group">
@@ -88,9 +101,7 @@ export default function SearchForm({ state, dispatch }) {
           onChange={(e) => updateName(e, "lastName")}
         />
       </div>
-      <button type="button" className="usa-button" onClick={reloadCaseLookUp}>
-        Submit
-      </button>
+      {searchButton}
     </form>
   );
 }
