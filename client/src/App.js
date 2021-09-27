@@ -21,6 +21,7 @@ const initialState = {
   searchError: false,
   searchErrorMessage: "",
   searchSubmitted: false,
+  searchInProgress: false,
   searchReturned: false,
 };
 
@@ -62,6 +63,8 @@ function reducer(state, action) {
         selectedDefendant: action.value,
       };
     case "submit-search":
+      let val = false;
+      if (state.lastName) val = true;
       return {
         ...state,
         searchError: state.lastName ? false : true,
@@ -69,11 +72,13 @@ function reducer(state, action) {
           ? ""
           : "You must give a last name to search",
         searchSubmitted: true,
+        searchInProgress: val,
       };
     case "search-returned":
       return {
         ...state,
         searchReturned: true,
+        searchInProgress: false,
       };
     default:
       return state;
