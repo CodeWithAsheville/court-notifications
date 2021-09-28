@@ -95,6 +95,14 @@ function App() {
   let signupForm = "";
   let headerText = "Select a Defendant and Sign Up";
   let resultsItem = "";
+
+  if (state.selectedDefendant) {
+    let defendantName = state.cases.filter(item => item.defendant+'.'+item.dob === state.selectedDefendant)[0].defendant;
+    headerText =
+      "Sign Up for Case Notifications for " + defendantName;
+    signupForm = <SignupForm state={state} dispatch={dispatch} />;
+  }
+
   if (state.searchReturned) {
     resultsItem = (
       <li className="usa-process-list__item">
@@ -105,12 +113,6 @@ function App() {
       <ResultsTable state={state} dispatch={dispatch} />
     </li>
     );
-  }
-  if (state.selectedDefendant) {
-    let defendantName = state.cases.filter(item => item.defendant+'.'+item.dob === state.selectedDefendant)[0].defendant;
-    headerText =
-      "Sign Up for Case Notifications for " + defendantName;
-    signupForm = <SignupForm state={state} dispatch={dispatch} />;
   }
   return (
     <div className="App">
