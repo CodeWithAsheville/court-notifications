@@ -189,8 +189,9 @@ async function registerSubscription(body, callback, onError) {
       if (e.code === 21610) {
         console.log('Need to send START!');
         unsubscribe(phone);
+        throw 'You have previously unsubscribed from all messages from this service. You must text START to ' + process.env.TWILIO_PHONE_NUMBER + ' and then subscribe here again.'
       }
-      throw 'You have previously unsubscribed from all messages from this service. You must text START to ' + process.env.TWILIO_PHONE_NUMBER + ' and then subscribe here again.'
+      throw 'There was an unknown error texting you.'
     }
   }
   catch (e) {
