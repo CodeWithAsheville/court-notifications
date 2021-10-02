@@ -6,6 +6,7 @@ var Mustache = require('mustache');
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
+const fromTwilioPhone = process.env.TWILIO_PHONE_NUMBER;
 
 const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
@@ -82,7 +83,7 @@ async function notifications() {
         await client.messages
         .create({
            body: d.text,
-           from: '+14156635480',
+           from: fromTwilioPhone,
            to: subscribers.phone
          })
         .then(message => console.log(message));
