@@ -18,7 +18,9 @@ async function notifications() {
   const client = require('twilio')(accountSid, authToken);
 
   const notificationSets = await knex('notify_configuration').select('*');
+  console.log('Notification set length = ' + notificationSets.length);
   for (i = 0; i < notificationSets.length; ++ i) {
+    console.log('Doing notifications for days_before = ' + notificationSets[i].days_before);
     const notificationDays = notificationSets[i].days_before;
     const notificationText = notificationSets[i].text;
     let dateClause = 'court_date - CURRENT_DATE = ' + notificationDays
@@ -26,10 +28,13 @@ async function notifications() {
       .select('cases.defendant_id', 'cases.case_number', 'cases.court_date', 'cases.room', 'cases.session', 'defendants.first_name', 'defendants.middle_name', 'defendants.last_name', 'defendants.suffix')
       .leftOuterJoin('defendants', 'cases.defendant_id', 'defendants.id')
       .whereRaw(dateClause)
+
     // First, get all the defendants and their cases and set up the text for them
     const defendantHash = {};
     const nameTemplate = '{{fname}} {{mname}} {{lname}} {{suffix}}'
     results.forEach(d => {
+      console.log('Got a result');
+      console.log(d);
       const name = {
         fname: d.first_name,
         mname: d.middle_name ? d.middle_name : '',
@@ -61,6 +66,7 @@ async function notifications() {
       defendants.push({ id: dID, text: txt })
       console.log(txt)
     }
+    console.log('Total defendants = ' + defendants.length);
     // Now  loop through defendants, get subscriptions, and notify
     for (j = 0; j < defendants.length; ++j) {
       d = defendants[j];
@@ -90,9 +96,9 @@ async function notifications() {
 
 // 
 (async() => {
-  console.log('Call updateDefendants');
+  console.log('Call notifications');
   await notifications();
-  console.log('Done with update');
+  console.log('Done with notifications');
   process.exit();
 })();
 
