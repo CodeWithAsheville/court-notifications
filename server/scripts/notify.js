@@ -80,12 +80,14 @@ async function notifications() {
       // And send out the notifications
       for (k = 0; k < subscribers.length; ++k) {
         const s = subscribers[k];
+        const msgObject = {
+          body: d.text,
+          from: fromTwilioPhone,
+          to: subscribers.phone
+        };
+        console.log(msgObject);
         await client.messages
-        .create({
-           body: d.text,
-           from: fromTwilioPhone,
-           to: subscribers.phone
-         })
+        .create(msgObject)
         .then(message => console.log(message));
       }
     }
