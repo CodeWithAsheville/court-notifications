@@ -34,8 +34,6 @@ async function notifications() {
     const defendantHash = {};
     const nameTemplate = '{{fname}} {{mname}} {{lname}} {{suffix}}'
     results.forEach(d => {
-      console.log('Got a result');
-      console.log(d);
       const name = {
         fname: d.first_name,
         mname: d.middle_name ? d.middle_name : '',
@@ -67,7 +65,6 @@ async function notifications() {
       defendants.push({ id: dID, text: txt })
       console.log(txt)
     }
-    console.log('Total defendants = ' + defendants.length);
     // Now  loop through defendants, get subscriptions, and notify
     for (j = 0; j < defendants.length; ++j) {
       d = defendants[j];
@@ -75,7 +72,6 @@ async function notifications() {
       .select('subscriptions.defendant_id', 'subscriptions.subscriber_id', 'subscribers.phone')
       .leftOuterJoin('subscribers', 'subscriptions.subscriber_id', 'subscribers.id')
       .where('subscriptions.defendant_id', '=', d.id);
-      console.log(subscribers)
   
       // And send out the notifications
       for (k = 0; k < subscribers.length; ++k) {
@@ -83,9 +79,8 @@ async function notifications() {
         const msgObject = {
           body: d.text,
           from: fromTwilioPhone,
-          to: subscribers.phone
+          to: s.phone
         };
-        console.log(msgObject);
         await client.messages
         .create(msgObject)
         .then(message => console.log(message));
