@@ -5,6 +5,7 @@ var { unsubscribe } = require('./scripts/unsubscribe');
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
+const fromTwilioPhone = process.env.TWILIO_PHONE_NUMBER;
 
 function initializeDefendant(body) {
   const selectedDefendant = body.selectedDefendant;
@@ -180,7 +181,7 @@ async function registerSubscription(body, callback, onError) {
       await client.messages
           .create({
             body: msg,
-            from: '+14156635480',
+            from: fromTwilioPhone,
             to: phone
           })
           .then(message => console.log(message));
