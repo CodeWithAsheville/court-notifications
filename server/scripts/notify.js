@@ -19,9 +19,8 @@ async function notifications() {
   const client = require('twilio')(accountSid, authToken);
 
   const notificationSets = await knex('notify_configuration').select('*');
-  console.log('Notification set length = ' + notificationSets.length);
   for (i = 0; i < notificationSets.length; ++ i) {
-    console.log('Doing notifications for days_before = ' + notificationSets[i].days_before);
+    console.log('Doing notifications for ' + notificationSets[i].days_before + ' days in advance');
     const notificationDays = notificationSets[i].days_before;
     const notificationText = notificationSets[i].text;
     let dateClause = 'court_date - CURRENT_DATE = ' + notificationDays
@@ -63,7 +62,6 @@ async function notifications() {
         txt += Mustache.render(caseTemplate, c)
       });
       defendants.push({ id: dID, text: txt })
-      console.log(txt)
     }
     // Now  loop through defendants, get subscriptions, and notify
     for (j = 0; j < defendants.length; ++j) {
