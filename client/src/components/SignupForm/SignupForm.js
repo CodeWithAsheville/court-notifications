@@ -50,6 +50,10 @@ export default function SignupForm({ state, dispatch }) {
     phoneMessageText = <div>&nbsp;&nbsp;&nbsp;{state.phone_message}</div>;
   }
 
+  const explanationText = (
+    <p>Enter your cell phone to subscribe to text message reminders of any Buncombe County court dates for this defendant. You will receive two reminders, one a week in advance and one a couple days before the court date.</p>
+  );
+
   let inputBox = (
     <div className={`usa-form-group ${phoneMessageText ? 'usa-form-group--error': ''}`}>
       <label className={`usa-label ${phoneMessageText ? 'usa-label--error' : ''}`} htmlFor="input-type-text">
@@ -102,6 +106,7 @@ export default function SignupForm({ state, dispatch }) {
         <i className="fa fa-chevron-left"></i>
         Return to all defendants
       </button>
+      {explanationText}
 
       <form className="usa-form lookup-form signup-form">
         {inputBox}
