@@ -6,6 +6,7 @@ import SignupForm from "./components/SignupForm/SignupForm";
 import ResultsTable from "./components/ResultsTable/ResultsTable";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer";
+import Intro from "./components/Intro/Intro";
 import stepper from "./scripts/stepper";
 
 const initialState = {
@@ -117,6 +118,7 @@ function App() {
   return (
     <div className="App">
       <Header />
+      <Intro />
       <ol className="usa-process-list">
         <li className="usa-process-list__item">
           <h4 className="usa-process-list__heading" ref={step1}>
