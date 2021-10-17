@@ -2,6 +2,20 @@ header {
   background-color: #252f3e;
   color: white;
   padding: 0.36em 0.6em;
+  
+  .language-toggles {
+    text-align: right;
+    .language-button {
+      color: white;
+      margin-left: .3em;
+      background-color: #252f3e;
+      border-width: 1;
+      border-color: #252f3e;
+      :focus {
+        outline: none;
+      }
+    }
+  }
 
   .header-container {
     display: block;
