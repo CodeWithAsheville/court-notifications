@@ -1,4 +1,5 @@
 import { useReducer, useRef } from "react";
+import { useTranslation } from 'react-i18next';
 
 import "./App.scss";
 import SearchForm from "./components/SearchForm/SearchForm";
@@ -87,13 +88,14 @@ function reducer(state, action) {
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const { t } = useTranslation();
 
   const step1 = useRef(null);
   const step2 = useRef(null);
   stepper.setSteps([step1, step2]);
 
   let signupForm = "";
-  let headerText = "Select a Defendant and Sign Up";
+  let headerText = `${t('step2.title')}`
   let resultsItem = "";
 
   if (state.selectedDefendant) {
@@ -115,23 +117,24 @@ function App() {
     );
   }
   return (
-    <div className="App">
-      <Header />
-      <ol className="usa-process-list">
-        <li className="usa-process-list__item">
-          <h4 className="usa-process-list__heading" ref={step1}>
-            Search For Your Cases
-          </h4>
-          <p className="margin-top-05">
-            Enter your first, middle and last name to search for your court
-            cases. They will appear in a table below.
-          </p>
-          <SearchForm state={state} dispatch={dispatch} />
-        </li>
-        {resultsItem}
-      </ol>
-      <Footer />
-    </div>
+      <div className="App">
+        <Header />
+        <ol className="usa-process-list">
+          <li className="usa-process-list__item">
+            <h4 className="usa-process-list__heading" ref={step1}>
+              {t('step1.title')}
+            </h4>
+            <p className="margin-top-05">
+              {t('step1.description')}
+            </p>
+            <SearchForm state={state} dispatch={dispatch} />
+          </li>
+
+          {resultsItem}
+          
+        </ol> 
+        <Footer/>
+      </div>
   );
 }
 

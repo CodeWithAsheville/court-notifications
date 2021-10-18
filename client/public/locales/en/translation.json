@@ -1,0 +1,40 @@
+{
+    "title": "Buncombe County Court Notifications Sign Up",
+    "description": "A project of Code for Asheville",
+    "languages": {
+        "english": "English",
+        "spanish": "Spanish",
+        "russian": "Russian"
+    },
+    "step1": {
+        "title": "Search For Your Cases",
+        "description": "Enter your first, middle and last name to search for your court cases. They will appear in a table below.",
+        "inputfields": {
+            "firstName" : "First Name",
+            "middleName" : "Middle Name Or Initial (Optional)",
+            "lastName" : "Last Name"
+        }
+    },
+    "step2": {
+        "help": "You may view details on charges on the NC Courts site",
+        "title": "Select a Defendant and Sign Up",
+        "description": "Defendants who match your search are listed below. Select one to sign up."
+    },
+    "casesTable": {
+        "columns": {
+            "courtDate": "Court Date",
+            "caseNumber": "Case Number",
+            "court":   "Court",
+            "room":    "Room" 
+        },
+        "emptyTable" : "No results found"
+    },
+    "defendantsTable": {
+        "columns": {
+          "select": "Select",
+          "defendant": "Defendant",
+          "birthDate": "Date of Birth",
+          "numberOfCases": "Number of cases"
+        }
+    }
+}

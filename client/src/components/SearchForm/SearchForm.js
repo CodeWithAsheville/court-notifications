@@ -2,6 +2,7 @@ import "./SearchForm.scss";
 
 import stepper from "../../scripts/stepper";
 import { getCaseData } from "../../scripts/appState";
+import { useTranslation } from 'react-i18next';
 
 function createNameUpdater(dispatch) {
   return function updateName($event, param) {
@@ -10,6 +11,9 @@ function createNameUpdater(dispatch) {
 }
 
 export default function SearchForm({ state, dispatch }) {
+
+  const { t } = useTranslation();
+
   const updateName = createNameUpdater(dispatch);
   let showError = state.searchError && state.searchSubmitted;
 
@@ -54,7 +58,7 @@ export default function SearchForm({ state, dispatch }) {
     <form className="usa-form lookup-form">
       <div className="usa-form-group">
         <label className="usa-label" htmlFor="input-type-text">
-          First Name
+        {t('step1.inputfields.firstName')}
         </label>
         <input
           className="usa-input"
@@ -67,7 +71,7 @@ export default function SearchForm({ state, dispatch }) {
       </div>
       <div className="usa-form-group">
         <label className="usa-label" htmlFor="input-type-text">
-          Middle Name Or Initial (Optional)
+        {t('step1.inputfields.middleName')}
         </label>
         <input
           className="usa-input"
@@ -85,7 +89,7 @@ export default function SearchForm({ state, dispatch }) {
           className={`usa-label ${showError ? "usa-label--error" : ""}`}
           htmlFor="input-type-text"
         >
-          Last Name
+          {t('step1.inputfields.lastName')}
         </label>
         {showError && (
           <span className="usa-error-message" id="input-error-message">
