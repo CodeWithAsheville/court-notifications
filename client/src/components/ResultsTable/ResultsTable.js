@@ -1,11 +1,16 @@
 import CaseTableRow from "../CaseTableRow/CaseTableRow";
 import DefendantTableRow from "../DefendantTableRow/DefendantTableRow";
+import { useTranslation } from 'react-i18next';
+
 
 import './ResultsTable.scss'
 
 export default function ResultsTable({ state, dispatch }) {
   let caseRows = null;
   let caseTable = null;
+
+  const { t } = useTranslation();
+
 
   if (state.selectedDefendant !== null) {
 
@@ -27,10 +32,10 @@ export default function ResultsTable({ state, dispatch }) {
       <table className="usa-table usa-table--stacked">
         <thead>
           <tr>
-            <th scope="col">Court Date</th>
-            <th scope="col">Case Number</th>
-            <th scope="col">Court</th>
-            <th scope="col">Room</th>
+            <th scope="col">{t('casesTable.columns.courtDate')}</th>
+            <th scope="col">{t('casesTable.columns.caseNumber')}</th>
+            <th scope="col">{t('casesTable.columns.court')}</th>
+            <th scope="col">{t('casesTable.columns.room')}</th>
           </tr>
         </thead>
         <tbody>{caseRows}</tbody>
@@ -43,9 +48,9 @@ export default function ResultsTable({ state, dispatch }) {
     return (
       <div>
         <p>
-          <b>Cases for {df} </b>&nbsp;&nbsp;&nbsp;
+          <b>{t('casesTable.description')} {df} </b>&nbsp;&nbsp;&nbsp;
           <br/>
-          You may view details on charges on the <a href={computeFullSearchUrl(df)} target="_blank" rel="noreferrer">NC Courts site</a>.
+           {t('casesTable.help')} <a href={computeFullSearchUrl(df)} target="_blank" rel="noreferrer">NC Courts site</a>.
         </p>
         {populatedTable}
       </div>
@@ -65,22 +70,22 @@ export default function ResultsTable({ state, dispatch }) {
       <table className="usa-table usa-table--stacked">
         <thead>
           <tr>
-            <th scope="col">Select</th>
-            <th scope="col">Defendant</th>
-            <th scope="col">Date of Birth</th>
-            <th scope="col">Number of Cases</th>
+            <th scope="col">{t('defendantsTable.columns.select')}</th>
+            <th scope="col">{t('defendantsTable.columns.defendant')}</th>
+            <th scope="col">{t('defendantsTable.columns.birthDate')}</th>
+            <th scope="col">{t('defendantsTable.columns.numberOfCases')}</th>
           </tr>
         </thead>
         <tbody>{defendantRows}</tbody>
       </table>
     );
   
-    const emptyTable = (<div className="empty"><em>No results found</em></div>)
+    const emptyTable = (<div className="empty"><em>{t('casesTable.emptyTable')}</em></div>)
     caseTable = (defendantRows && defendantRows.length > 0) ? populatedTable : emptyTable;
     return (
       <div>
         <p>
-          Defendants who match your search are listed below. Select one to sign up.
+          {t('step2.description')}
         </p>
         {caseTable}
       </div>

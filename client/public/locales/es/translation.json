@@ -1,0 +1,41 @@
+{
+  "title": "Los inscripciones para recordatorios de la corte del condado de Bumcombe",
+  "description": "Un proyecto de Code For Asheville",
+  "languages": {
+      "english": "Inglés",
+      "spanish": "Español",
+      "ESssian": "Ruso"
+  },
+  "step1": {
+      "title": "Busque para los casos judiciales",
+      "description": "Ingresa su nombre, segundo y apellido para buscar los casos judiciales suyos. Aparecerán en la siguiente tabla.",
+      "inputfields": {
+          "firstName" : "El nombre principal",
+          "middleName" : "El segundo nombre o la inicial (opcional)",
+          "lastName" : "El (los) apellido(s)"
+      }
+  },
+  "step2": {
+      "title": "Seleccione un acusado y regístrerse",
+      "description": "Los acusados que coinciden con su búsqueda se enumeran a continuación. Seleccione uno para registrarse."
+  },
+  "casesTable": {
+      "description": "Los casos judiciales de",
+      "help": "Puede ver detalles sobre los cargos en el sitio web del NC Judicial Branch",
+      "columns": {
+          "courtDate": "La fecha de la corte",
+          "caseNumber": "Número del caso judicial",
+          "court":   "El tipo de la corte",
+          "room":    "La sala" 
+      },
+      "emptyTable" : "No se han encontrado resultados"
+  },
+  "defendantsTable": {
+      "columns": {
+        "select": "Seleccione",
+        "defendant": "El acusado",
+        "birthDate": "La fecha de nacimiento",
+        "numberOfCases": "Número de los casos judiciales"
+      }
+  }
+}
