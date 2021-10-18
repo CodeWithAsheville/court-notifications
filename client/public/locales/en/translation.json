@@ -6,16 +6,22 @@
         "spanish": "Spanish",
         "russian": "Russian"
     },
-    "step1": {
+    "intro": {
+        "description": {
+            "paragraph1": "This site lets you sign up for text message reminders about upcoming criminal court dates in Buncombe County. It is free for use by anyone. Simply search for a name, select one of the resulting defendants, and provide a phone number that can receive text messages.",
+            "paragraph2": "The site is maintained by volunteers for the benefit of the community. It is intended to help people show up for court in Buncombe County, but no guarantee is made. Showing up for court remains your responsibility."
+        }
+    },
+    "search": {
         "title": "Search For Your Cases",
         "description": "Enter your first, middle and last name to search for your court cases. They will appear in a table below.",
         "inputfields": {
-            "firstName" : "First Name",
+            "firstName" : "First Name (Optional)",
             "middleName" : "Middle Name Or Initial (Optional)",
             "lastName" : "Last Name"
         }
     },
-    "step2": {
+    "select": {
         "help": "You may view details on charges on the NC Courts site",
         "title": "Select a Defendant and Sign Up",
         "description": "Defendants who match your search are listed below. Select one to sign up."
@@ -36,5 +42,9 @@
           "birthDate": "Date of Birth",
           "numberOfCases": "Number of cases"
         }
+    },
+    "signup": {
+        "title": "Sign Up for Case Notifications for",
+        "description": "Enter your cell phone to subscribe to text message reminders of any Buncombe County court dates for this defendant. You will receive two reminders, one a week in advance and one a couple days before the court date."
     }
 }

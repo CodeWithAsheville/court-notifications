@@ -1,10 +1,13 @@
 import "./Intro.scss";
+import { useTranslation } from 'react-i18next';
 
 export default function Intro() {
+  const { t } = useTranslation();
+
   return (
     <div className="usa-prose">
-      <p>This site lets you sign up for text message reminders about upcoming criminal court dates in Buncombe County. It is free for use by anyone. Simply search for a name, select one of the resulting defendants, and provide a phone number that can receive text messages.</p>
-      <p>The site is maintained by volunteers for the benefit of the community. It is intended to help people show up for court in Buncombe County, but no guarantee is made. Showing up for court remains <em>your</em> responsibility.</p>
+      <p>{t('intro.description.paragraph1')}</p>
+      <p>{t('intro.description.paragraph2')}</p>
     </div>
   );
 }

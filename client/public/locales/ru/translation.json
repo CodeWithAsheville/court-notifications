@@ -6,7 +6,13 @@
         "spanish": "испанский",
         "russian": "русский"
     },
-    "step1": {
+    "intro": {
+      "description": {
+          "paragraph1": "[NEED RUSSIAN TRANSLATION] This site lets you sign up for text message reminders about upcoming criminal court dates in Buncombe County. It is free for use by anyone. Simply search for a name, select one of the resulting defendants, and provide a phone number that can receive text messages.",
+          "paragraph2": "The site is maintained by volunteers for the benefit of the community. It is intended to help people show up for court in Buncombe County, but no guarantee is made. Showing up for court remains your responsibility."
+      }
+  },
+  "search": {
         "title": "Найти судебные дела",
         "description": "Введите имя, второе имя, и фамилию, чтобы найти ваши судебные дела. Они появятся в таблице внизу.",
         "inputfields": {
@@ -15,7 +21,7 @@
             "lastName" : "Фамилия"
         }
     },
-    "step2": {
+    "select": {
         "title": "Выбрать обвиняемого и зарегистрироваться.",
         "description": "Обвиняемые, которые соответствуют вашему поиску, изложены в таблице внизу. Выберите одного, чтобы зарегистрироваться."
     },
@@ -37,5 +43,9 @@
           "birthDate": "Дата Рождения",
           "numberOfCases": "Количество дел"
         }
+    },
+    "signup": {
+      "title": "[RU] Sign Up for Case Notifications for",
+      "description": "[RU] Enter your cell phone to subscribe to text message reminders of any Buncombe County court dates for this defendant. You will receive two reminders, one a week  in advance and one a couple days before the court date."
     }
-}
+  }

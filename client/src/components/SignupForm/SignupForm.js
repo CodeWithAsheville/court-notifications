@@ -1,5 +1,6 @@
 import "./SignupForm.scss";
 import { subscribeToDefendant } from "../../scripts/appState";
+import { useTranslation } from 'react-i18next';
 
 function createPhoneUpdater(dispatch) {
   return function updatePhone($event, param) {
@@ -9,6 +10,7 @@ function createPhoneUpdater(dispatch) {
 
 export default function SignupForm({ state, dispatch }) {
   const updatePhone = createPhoneUpdater(dispatch);
+  const { t } = useTranslation();
 
   async function doSubscription() {
     let doit = false;
@@ -51,7 +53,7 @@ export default function SignupForm({ state, dispatch }) {
   }
 
   const explanationText = (
-    <p>Enter your cell phone to subscribe to text message reminders of any Buncombe County court dates for this defendant. You will receive two reminders, one a week in advance and one a couple days before the court date.</p>
+    <p>{t('signup.description')}</p>
   );
 
   let inputBox = (

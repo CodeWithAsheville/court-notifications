@@ -96,13 +96,13 @@ function App() {
   stepper.setSteps([step1, step2]);
 
   let signupForm = "";
-  let headerText = `${t('step2.title')}`
+  let headerText = `${t('select.title')}`
   let resultsItem = "";
 
   if (state.selectedDefendant) {
     let defendantName = state.cases.filter(item => item.defendant+'.'+item.dob === state.selectedDefendant)[0].defendant;
     headerText =
-      "Sign Up for Case Notifications for " + defendantName;
+      `${t('signup.title')} ${defendantName}`;
     signupForm = <SignupForm state={state} dispatch={dispatch} />;
   }
 
@@ -124,10 +124,10 @@ function App() {
         <ol className="usa-process-list">
           <li className="usa-process-list__item">
             <h4 className="usa-process-list__heading" ref={step1}>
-              {t('step1.title')}
+              {t('search.title')}
             </h4>
             <p className="margin-top-05">
-              {t('step1.description')}
+              {t('search.description')}
             </p>
             <SearchForm state={state} dispatch={dispatch} />
           </li>
