@@ -1,5 +1,6 @@
 import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom';
+import '../../node_modules/@fortawesome/fontawesome-free/css/all.min.css'
 import './index.scss';
 import App from './App';
 import './i18n';

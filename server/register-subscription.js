@@ -1,5 +1,11 @@
 const knexConfig = require('../knexfile');
 var knex        = require('knex')(knexConfig);
+var Mustache = require('mustache');
+var { unsubscribe } = require('./scripts/unsubscribe');
+
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
+const fromTwilioPhone = process.env.TWILIO_PHONE_NUMBER;
 
 function initializeDefendant(body) {
   const selectedDefendant = body.selectedDefendant;
@@ -157,6 +163,37 @@ async function registerSubscription(body, callback, onError) {
     let subscriberId = await addSubscriber(nextDate, phone);
 
     await addSubscription(subscriberId, defendantId);
+
+    // Now send a verification message to the user
+    const client = require('twilio')(accountSid, authToken);
+    const nameTemplate = 'You have subscribed to notifications for {{fname}} {{mname}} {{lname}} {{suffix}}'
+    const name = {
+      fname: defendant.first_name,
+      mname: defendant.middle_name ? defendant.middle_name : '',
+      lname: defendant.last_name,
+      suffix: defendant.suffix ? defendant.suffix : ''
+    }
+
+    const msg = Mustache.render(nameTemplate, name);
+    console.log('Now send a message to ' + phone);
+    console.log(msg);
+    try {
+      await client.messages
+          .create({
+            body: msg,
+            from: fromTwilioPhone,
+            to: phone
+          })
+          .then(message => console.log(message));
+    } catch (e) {
+      console.log('Error code is ' + e.code);
+      if (e.code === 21610) {
+        console.log('Need to send START!');
+        unsubscribe(phone);
+        throw 'You have previously unsubscribed from all messages from this service. You must text START to ' + process.env.TWILIO_PHONE_NUMBER + ' and then subscribe here again.'
+      }
+      throw 'There was an unknown error texting you.'
+    }
   }
   catch (e) {
     returnMessage = (typeof e === 'string') ? e : e.message;

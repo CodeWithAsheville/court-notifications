@@ -19,7 +19,11 @@ const initialState = {
   phone_number: "",
   phone_message: "",
   signupSuccess: false,
-  searchError: false
+  searchError: false,
+  searchErrorMessage: "",
+  searchSubmitted: false,
+  searchInProgress: false,
+  searchReturned: false,
 };
 
 function reducer(state, action) {
@@ -28,6 +32,11 @@ function reducer(state, action) {
       return {
         ...state,
         ...action.value,
+        ...{
+          searchError: false,
+          searchErrorMessage: false,
+          searchSubmitted: false,
+        },
       };
     case "update-phone":
       return {
@@ -54,6 +63,24 @@ function reducer(state, action) {
         ...state,
         selectedDefendant: action.value,
       };
+    case "submit-search":
+      let val = false;
+      if (state.lastName) val = true;
+      return {
+        ...state,
+        searchError: state.lastName ? false : true,
+        searchErrorMessage: state.lastName
+          ? ""
+          : "You must give a last name to search",
+        searchSubmitted: true,
+        searchInProgress: val,
+      };
+    case "search-returned":
+      return {
+        ...state,
+        searchReturned: true,
+        searchInProgress: false,
+      };
     default:
       return state;
   }
@@ -69,10 +96,25 @@ function App() {
 
   let signupForm = "";
   let headerText = `${t('step2.title')}`
+  let resultsItem = "";
 
   if (state.selectedDefendant) {
-    headerText = "Sign Up for Case Notifications for " + state.cases[0].defendant;
-    signupForm =  <SignupForm state={state} dispatch={dispatch} />;
+    let defendantName = state.cases.filter(item => item.defendant+'.'+item.dob === state.selectedDefendant)[0].defendant;
+    headerText =
+      "Sign Up for Case Notifications for " + defendantName;
+    signupForm = <SignupForm state={state} dispatch={dispatch} />;
+  }
+
+  if (state.searchReturned) {
+    resultsItem = (
+      <li className="usa-process-list__item">
+      <h4 className="usa-process-list__heading" ref={step2}>
+        {headerText}
+      </h4>
+      {signupForm}
+      <ResultsTable state={state} dispatch={dispatch} />
+    </li>
+    );
   }
   return (
       <div className="App">
@@ -87,13 +129,9 @@ function App() {
             </p>
             <SearchForm state={state} dispatch={dispatch} />
           </li>
-          <li className="usa-process-list__item">
-            <h4 className="usa-process-list__heading" ref={step2}>
-              {headerText}
-            </h4>
-            {signupForm}
-            <ResultsTable state={state} dispatch={dispatch} />
-          </li>
+
+          {resultsItem}
+          
         </ol> 
         <Footer/>
       </div>
