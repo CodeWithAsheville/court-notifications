@@ -1,5 +1,6 @@
 import "./SignupForm.scss";
 import { subscribeToDefendant } from "../../scripts/appState";
+import { useTranslation } from 'react-i18next';
 
 function createPhoneUpdater(dispatch) {
   return function updatePhone($event, param) {
@@ -9,6 +10,7 @@ function createPhoneUpdater(dispatch) {
 
 export default function SignupForm({ state, dispatch }) {
   const updatePhone = createPhoneUpdater(dispatch);
+  const { t } = useTranslation();
 
   async function doSubscription() {
     let doit = false;
@@ -49,6 +51,10 @@ export default function SignupForm({ state, dispatch }) {
     console.log('Phone message ' + state.phone_message);
     phoneMessageText = <div>&nbsp;&nbsp;&nbsp;{state.phone_message}</div>;
   }
+
+  const explanationText = (
+    <p>{t('signup.description')}</p>
+  );
 
   let inputBox = (
     <div className={`usa-form-group ${phoneMessageText ? 'usa-form-group--error': ''}`}>
@@ -102,6 +108,7 @@ export default function SignupForm({ state, dispatch }) {
         <i className="fa fa-chevron-left"></i>
         Return to all defendants
       </button>
+      {explanationText}
 
       <form className="usa-form lookup-form signup-form">
         {inputBox}

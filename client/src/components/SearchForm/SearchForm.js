@@ -58,7 +58,7 @@ export default function SearchForm({ state, dispatch }) {
     <form className="usa-form lookup-form">
       <div className="usa-form-group">
         <label className="usa-label" htmlFor="input-type-text">
-        {t('step1.inputfields.firstName')}
+        {t('search.inputfields.firstName')}
         </label>
         <input
           className="usa-input"
@@ -71,7 +71,7 @@ export default function SearchForm({ state, dispatch }) {
       </div>
       <div className="usa-form-group">
         <label className="usa-label" htmlFor="input-type-text">
-        {t('step1.inputfields.middleName')}
+        {t('search.inputfields.middleName')}
         </label>
         <input
           className="usa-input"
@@ -89,7 +89,7 @@ export default function SearchForm({ state, dispatch }) {
           className={`usa-label ${showError ? "usa-label--error" : ""}`}
           htmlFor="input-type-text"
         >
-          {t('step1.inputfields.lastName')}
+          {t('search.inputfields.lastName')}
         </label>
         {showError && (
           <span className="usa-error-message" id="input-error-message">

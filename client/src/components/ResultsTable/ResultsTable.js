@@ -85,7 +85,7 @@ export default function ResultsTable({ state, dispatch }) {
     return (
       <div>
         <p>
-          {t('step2.description')}
+          {t('select.description')}
         </p>
         {caseTable}
       </div>
