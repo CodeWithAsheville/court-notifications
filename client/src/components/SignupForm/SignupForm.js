@@ -22,7 +22,7 @@ export default function SignupForm({ state, dispatch }) {
       if (tphone.length !== 10) {
         dispatch({
           type: "phone-message",
-          value: { phone_message: "Not a valid 10-digit phone number" },
+          value: { phone_message: t('signup.validations.isInvalid') },
         });
       } else {
         doit = true;
@@ -30,7 +30,7 @@ export default function SignupForm({ state, dispatch }) {
     } else {
       dispatch({
         type: "phone-message",
-        value: { phone_message: "Phone number cannot be blank" },
+        value: { phone_message: t('signup.validations.isBlank') },
       });
     }
 
@@ -59,7 +59,7 @@ export default function SignupForm({ state, dispatch }) {
   let inputBox = (
     <div className={`usa-form-group ${phoneMessageText ? 'usa-form-group--error': ''}`}>
       <label className={`usa-label ${phoneMessageText ? 'usa-label--error' : ''}`} htmlFor="input-type-text">
-        Cell Phone Number
+        {t('signup.fields.phoneNumber')}
       </label>
       <span className="usa-error-message" id="input-error-message">
         {phoneMessageText}
@@ -77,7 +77,7 @@ export default function SignupForm({ state, dispatch }) {
 
   let signupButton = (
     <button type="button" className="usa-button" onClick={doSubscription}>
-      Sign Up For Notifications
+      {t('signup.button')}
     </button>
   );
 
@@ -106,7 +106,7 @@ export default function SignupForm({ state, dispatch }) {
         onClick={() => unSelectDefendant()}
       >
         <i className="fa fa-chevron-left"></i>
-        Return to all defendants
+        {t('signup.previousList')}
       </button>
       {explanationText}
 

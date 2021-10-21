@@ -8,8 +8,8 @@
   },
   "intro": {
     "description": {
-        "paragraph1": "[NEED SPANISH TRANSLATION] This site lets you sign up for text message reminders about upcoming criminal court dates in Buncombe County. It is free for use by anyone. Simply search for a name, select one of the resulting defendants, and provide a phone number that can receive text messages.",
-        "paragraph2": "The site is maintained by volunteers for the benefit of the community. It is intended to help people show up for court in Buncombe County, but no guarantee is made. Showing up for court remains your responsibility."
+        "paragraph1": "Este sitio le permite inscribirse para recordatorios de mensajes de texto acerca de las próximas fechas de la corte criminal en el Condado de Buncombe. Es gratis para uso de cualquier persona. Simplemente busque un nombre, seleccione uno de los acusados y proporcione un número de teléfono que pueda recibir mensajes de texto.",
+        "paragraph2": "El sitio es mantenido por voluntarios para el beneficio de la comunidad. Su intención es ayudar a la gente a presentarse ante la corte en el Condado de Buncombe, pero no se garantiza. El comparecer ante la corte sigue siendo su responsabilidad."
     }
 },
 "search": {
@@ -19,7 +19,9 @@
           "firstName" : "El nombre principal (opcional)",
           "middleName" : "El segundo nombre o la inicial (opcional)",
           "lastName" : "El (los) apellido(s)"
-      }
+      },
+      "submitButton": "Enviar",
+      "inProgress": "Búsqueda en progreso"
   },
   "select": {
       "title": "Seleccione un acusado y regístrerse",
@@ -45,7 +47,16 @@
       }
   },
   "signup": {
-    "title": "[SP] Sign Up for Case Notifications for",
-    "description": "[SP] Enter your cell phone to subscribe to text message reminders of any Buncombe County court dates for this defendant. You will receive two reminders, one a week  in advance and one a couple days before the court date."
+    "title": "Regístrese para recibir notificaciones de los casos judiciales de ",
+    "description": "Ingrese su teléfono celular para suscribirse a recordatorios de mensajes de texto de cualquier fecha de la corte del Condado de Buncombe para este acusado. Usted recibirá dos recordatorios, uno por semana de anticipación y uno por un par de días antes de la fecha de la corte.",
+    "previousList": "Volver a la página anterior para todos los acusados",
+    "fields": {
+        "phoneNumber": "El número de teléfono celular"
+    }, 
+    "validations": {
+        "isBlank": "El número de teléfono celular no puede estar en blanco",
+        "isInvalid": "No es un número de teléfono válido de 10 dígitos"
+    },
+    "button": "Regístrese para recibir notificaciones"
   }
 }

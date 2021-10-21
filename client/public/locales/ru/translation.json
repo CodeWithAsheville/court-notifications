@@ -19,7 +19,10 @@
             "firstName" : "Имя (необязательно)",
             "middleName" : "Второе имя или инициал (необязательно))",
             "lastName" : "Фамилия"
-        }
+        },
+        "submitButton": "(RU) Submit",
+        "inProgress": "(RU) Search in progress"
+
     },
     "select": {
         "title": "Выбрать обвиняемого и зарегистрироваться.",
@@ -46,6 +49,16 @@
     },
     "signup": {
       "title": "[RU] Sign Up for Case Notifications for",
-      "description": "[RU] Enter your cell phone to subscribe to text message reminders of any Buncombe County court dates for this defendant. You will receive two reminders, one a week  in advance and one a couple days before the court date."
+      "description": "[RU] Enter your cell phone to subscribe to text message reminders of any Buncombe County court dates for this defendant. You will receive two reminders, one a week  in advance and one a couple days before the court date.",
+      "previousList": "[RU]Return to all defendents",
+      "fields": {
+        "phoneNumber": "[RU]Cell Phone Number"
+      }, 
+      "validations": {
+        "isBlank": "[RU]Phone number cannot be blank",
+        "isInvalid": "[RU]Not a valid 10-digit phone number"
+      },
+      "button": "[RU] Sign Up for Notifications"
+
     }
   }
