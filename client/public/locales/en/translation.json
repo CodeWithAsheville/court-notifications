@@ -19,7 +19,9 @@
             "firstName" : "First Name (Optional)",
             "middleName" : "Middle Name Or Initial (Optional)",
             "lastName" : "Last Name"
-        }
+        },
+        "submitButton": "Submit",
+        "inProgress": "Search in progress"
     },
     "select": {
         "help": "You may view details on charges on the NC Courts site",
@@ -45,6 +47,15 @@
     },
     "signup": {
         "title": "Sign Up for Case Notifications for",
-        "description": "Enter your cell phone to subscribe to text message reminders of any Buncombe County court dates for this defendant. You will receive two reminders, one a week in advance and one a couple days before the court date."
+        "description": "Enter your cell phone to subscribe to text message reminders of any Buncombe County court dates for this defendant. You will receive two reminders, one a week in advance and one a couple days before the court date.",
+        "previousList": "Return to all defendents",
+        "fields": {
+            "phoneNumber": "Cell Phone Number"
+        }, 
+        "validations": {
+            "isBlank": "Phone number cannot be blank",
+            "isInvalid": "Not a valid 10-digit phone number"
+        },
+        "button": "Sign Up for Notifications"
     }
 }

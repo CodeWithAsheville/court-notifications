@@ -43,13 +43,13 @@ export default function SearchForm({ state, dispatch }) {
   let searchInProgressText = "";
   if (state.searchInProgress) {
     searchInProgressText = (
-      <div><span>... Search in progress ...</span></div>
+      <div><span>... {t('search.inProgress')} ...</span></div>
     );
   }
   let searchButton = (
     <div>
       <button disabled = {state.searchInProgress} type="button" className="usa-button" onClick={reloadCaseLookUp}>
-        Submit
+        {t('search.submitButton')}
       </button>
       {searchInProgressText}
     </div>
