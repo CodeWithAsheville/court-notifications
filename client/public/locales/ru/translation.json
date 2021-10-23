@@ -1,5 +1,5 @@
 {
-    "title": "Зарегистрироваться для напоминаний о датах суда Округа Банкомб",
+    "title": "Подписаться на напоминания о датах суда Округа Банкомб",
     "description": "Проект 'Кода для Эшвилла' (Code for Asheville)",
     "languages": {
         "english": "английский",
@@ -8,8 +8,8 @@
     },
     "intro": {
       "description": {
-          "paragraph1": "[NEED RUSSIAN TRANSLATION] This site lets you sign up for text message reminders about upcoming criminal court dates in Buncombe County. It is free for use by anyone. Simply search for a name, select one of the resulting defendants, and provide a phone number that can receive text messages.",
-          "paragraph2": "The site is maintained by volunteers for the benefit of the community. It is intended to help people show up for court in Buncombe County, but no guarantee is made. Showing up for court remains your responsibility."
+          "paragraph1": "Этот сайт позволяет подписаться на СМС напоминания о предстоящих датах суда Окуга Банкомб. Использование этого сервиса бесплатно. Вы можете просто искать фамилию, выбрать одного из найденных подсудимых, и ввести телефон, который может принимать сообщения СМС.",
+          "paragraph2": "Сайт поддерживается волонтерами на благо общества. Он предназначен чтобы помочь людям не забыть явиться в суд Округа Банкомб, но никаких гарантий не дается. Явка в суд остается вашей ответсвенностью.."
       }
   },
   "search": {
@@ -20,13 +20,13 @@
             "middleName" : "Второе имя или инициал (необязательно))",
             "lastName" : "Фамилия"
         },
-        "submitButton": "(RU) Submit",
-        "inProgress": "(RU) Search in progress"
+        "submitButton": "Искать",
+        "inProgress": "Ищем"
 
     },
     "select": {
-        "title": "Выбрать обвиняемого и зарегистрироваться.",
-        "description": "Обвиняемые, которые соответствуют вашему поиску, изложены в таблице внизу. Выберите одного, чтобы зарегистрироваться."
+        "title": "Выбрать подсудимого и зарегистрироваться.",
+        "description": "Подсудимые, которые соответствуют вашему поиску, изложены в таблице внизу. Выберите одного, чтобы зарегистрироваться."
     },
     "casesTable": {
         "description": "Судебные дела для",
@@ -42,23 +42,23 @@
     "defendantsTable": {
         "columns": {
           "select": "Выбрать",
-          "defendant": "Обвиняемый",
+          "defendant": "Подсудимый",
           "birthDate": "Дата Рождения",
           "numberOfCases": "Количество дел"
         }
     },
     "signup": {
-      "title": "[RU] Sign Up for Case Notifications for",
-      "description": "[RU] Enter your cell phone to subscribe to text message reminders of any Buncombe County court dates for this defendant. You will receive two reminders, one a week  in advance and one a couple days before the court date.",
-      "previousList": "[RU]Return to all defendents",
+      "title": "Подписаться на напоминания о датах суда для",
+      "description": "Введите телефон, чтобы подписаться на СМС напоминания о всех датах суда для этого подсудимого. Вы получите два напоминания: одно за неделю и одно за пару дней до даты суда.",
+      "previousList": "Вернуться к списку всех подсудимых",
       "fields": {
-        "phoneNumber": "[RU]Cell Phone Number"
+        "phoneNumber": "Телефонный номер"
       }, 
       "validations": {
-        "isBlank": "[RU]Phone number cannot be blank",
-        "isInvalid": "[RU]Not a valid 10-digit phone number"
+        "isBlank": "Телефонный номер обязателен",
+        "isInvalid": "Неверный формат номера телефона"
       },
-      "button": "[RU] Sign Up for Notifications"
+      "button": "Подписаться на напоминания"
 
     }
   }
