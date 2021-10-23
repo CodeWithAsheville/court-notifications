@@ -23,7 +23,7 @@
       "submitButton": "Enviar",
       "inProgress": "Búsqueda en progreso",
       "validations": {
-        "lastName": "El (los) apellido(s) es/son obligatorio(s)"
+        "lastName": "Se requiere un apellido"
     }
 },
   "select": {
