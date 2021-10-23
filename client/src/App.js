@@ -12,6 +12,7 @@ import Intro from "./components/Intro/Intro";
 import stepper from "./scripts/stepper";
 
 const initialState = {
+  language: "en",
   firstName: "",
   lastName: "",
   middleName: "",
@@ -31,6 +32,11 @@ const initialState = {
 function reducer(state, action) {
 
   switch (action.type) {
+    case "language":
+      return {
+        ...state,
+        ...action.value,
+      };
     case "update-name":
       return {
         ...state,
@@ -121,7 +127,7 @@ function App() {
   }
   return (
       <div className="App">
-        <Header />
+        <Header state={state} dispatch={dispatch} />
         <Intro />
         <ol className="usa-process-list">
           <li className="usa-process-list__item">
