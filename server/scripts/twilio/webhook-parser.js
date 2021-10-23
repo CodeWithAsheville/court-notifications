@@ -96,7 +96,7 @@ function identifyVerbs(body) {
 
 function parseWebhook(req, res) {
   const verb = identifyVerbs(req.body.Body)
-
+  console.log('We are successfully here in the webhook');
   if (verb === undefined) {
     respondToUser(res, 'Unknown request. Text STOP to unsubscribe.')
   } else {
