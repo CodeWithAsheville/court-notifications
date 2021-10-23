@@ -21,8 +21,11 @@
           "lastName" : "El (los) apellido(s)"
       },
       "submitButton": "Enviar",
-      "inProgress": "Búsqueda en progreso"
-  },
+      "inProgress": "Búsqueda en progreso",
+      "validations": {
+        "lastName": "El (los) apellido(s) es/son obligatorio(s)"
+    }
+},
   "select": {
       "title": "Seleccione un acusado y regístrerse",
       "description": "Los acusados que coinciden con su búsqueda se enumeran a continuación. Seleccione uno para registrarse."

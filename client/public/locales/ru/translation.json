@@ -21,8 +21,10 @@
             "lastName" : "Фамилия"
         },
         "submitButton": "Искать",
-        "inProgress": "Ищем"
-
+        "inProgress": "Ищем",
+        "validations": {
+          "lastName": "Фамилия обязательна"
+      }
     },
     "select": {
         "title": "Выбрать подсудимого и зарегистрироваться.",

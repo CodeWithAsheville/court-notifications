@@ -21,7 +21,10 @@
             "lastName" : "Last Name"
         },
         "submitButton": "Submit",
-        "inProgress": "Search in progress"
+        "inProgress": "Search in progress",
+        "validations": {
+            "lastName": "A last name is required"
+        }
     },
     "select": {
         "help": "You may view details on charges on the NC Courts site",

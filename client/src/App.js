@@ -1,5 +1,6 @@
 import { useReducer, useRef } from "react";
 import { useTranslation } from 'react-i18next';
+import i18next from 'i18next';
 
 import "./App.scss";
 import SearchForm from "./components/SearchForm/SearchForm";
@@ -28,6 +29,7 @@ const initialState = {
 };
 
 function reducer(state, action) {
+
   switch (action.type) {
     case "update-name":
       return {
@@ -72,7 +74,7 @@ function reducer(state, action) {
         searchError: state.lastName ? false : true,
         searchErrorMessage: state.lastName
           ? ""
-          : "You must give a last name to search",
+          : `${i18next.t('search.validations.lastName')}`,
         searchSubmitted: true,
         searchInProgress: val,
       };
