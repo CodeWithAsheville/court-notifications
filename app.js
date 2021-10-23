@@ -31,7 +31,7 @@ app.post("/api/subscribe-to-defendant", (req, res) => {
   registerSubscription(req.body, (signUpResult) => res.json(signUpResult), console.log);
 });
 
-app.post('/sms', twilio.webhook(), parseWebhook);
+app.post('/sms', twilio.webhook({validate: false}), parseWebhook);
 
 if (process.env.NODE_ENV === "production") {
   // Serve any static files
