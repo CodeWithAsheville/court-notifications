@@ -96,7 +96,6 @@ async function searchCourtRecords(body, callback, onError) {
   axiosCookieJarSupport(axiosInstance);
   axiosInstance.defaults.jar = new tough.CookieJar(); // Make sure we're using cookies
 
-  console.log('Language detected is ' + body.language);
   let url = computeSearchUrl(body, 0, 0, 'Search');
   var cases = []
 
