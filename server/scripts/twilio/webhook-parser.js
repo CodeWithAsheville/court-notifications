@@ -107,6 +107,7 @@ function parseWebhook(req, res) {
   );
   if (!isValid) {
     console.log('Invalid incoming request - not from Twilio');
+    return res.status(401).send('Unauthorized');
   } 
   else {
     console.log('It is a valid request!');
