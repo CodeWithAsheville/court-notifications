@@ -41,7 +41,7 @@
  *   ApiVersion: '2010-04-01'
  * }
  */
-
+const twilio = require('twilio')
 const actions = require('./actions')
 const respondToUser = require('./respond-to-user')
 
@@ -95,6 +95,23 @@ function identifyVerbs(body) {
 }
 
 function parseWebhook(req, res) {
+  // Make sure this is from Twilio
+  const twilioSignature = req.headers['x-twilio-signature'];
+  const params = req.body;
+  const url = 'https://bc-court-reminders-dev.herokuapp.com/sms';
+  const isValid = twilio.validateRequest(
+    process.env.TWILIO_AUTH_TOKEN,
+    twilioSignature,
+    url,
+    params
+  );
+  if (!isValid) {
+    console.log('Invalid incoming request - not from Twilio');
+  } 
+  else {
+    console.log('It is a valid request!');
+  }
+
   const verb = identifyVerbs(req.body.Body)
   console.log('We are successfully here in the webhook');
   if (verb === undefined) {
