@@ -98,7 +98,7 @@ function parseWebhook(req, res) {
   // Make sure this is from Twilio
   const twilioSignature = req.headers['x-twilio-signature'];
   const params = req.body;
-  const url = 'https://bc-court-reminders-dev.herokuapp.com/sms';
+  const url = process.env.TWILIO_WEBHOOK_URL;
   const isValid = twilio.validateRequest(
     process.env.TWILIO_AUTH_TOKEN,
     twilioSignature,
@@ -106,19 +106,15 @@ function parseWebhook(req, res) {
     params
   );
   if (!isValid) {
-    console.log('Invalid incoming request - not from Twilio');
+    console.log('parseWebhook: invalid incoming request - not from Twilio');
     return res.status(401).send('Unauthorized');
   } 
-  else {
-    console.log('It is a valid request!');
-  }
 
   const verb = identifyVerbs(req.body.Body)
   console.log('We are successfully here in the webhook');
   if (verb === undefined) {
     respondToUser(res, 'Unknown request. Text STOP to unsubscribe.')
   } else {
-    console.log(actions, verb, actions[verb])
     return actions[verb](req, res)
   }
 }
