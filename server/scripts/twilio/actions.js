@@ -25,7 +25,7 @@ async function unsubscribe(req, res) {
 async function resubscribe(req, res) {
   // Use req.body.From to get the number, 
   // look it up the database
-  let message = 'Your phone number can now receive court reminders. You will need to sign up again at https://buncombe.courtdates.org';
+  let message = 'Your phone number can now receive court reminders. You will need to sign up again at https://buncombenc.courtdates.org';
 
  try {
     let phone = req.body.From;
