@@ -22,6 +22,25 @@ async function unsubscribe(req, res) {
   respondToUser(res, message)
 }
 
+async function resubscribe(req, res) {
+  // Use req.body.From to get the number, 
+  // look it up the database
+  let message = 'Your phone number can now receive court reminders. You will need to sign up again at https://buncombe.courtdates.org';
+
+ try {
+    let phone = req.body.From;
+    if (phone.startsWith('+1')) {
+      phone = phone.substring(2);
+    }
+  } catch(e) {
+    console.error(e)
+    message = 'An error occurred. Resubscribe unsuccessful.'
+  }
+
+  respondToUser(res, message)
+}
+
 module.exports = {
-  unsubscribe
+  unsubscribe,
+  resubscribe
 }

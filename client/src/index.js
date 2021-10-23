@@ -1,14 +1,17 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom';
-import '../../node_modules/@fortawesome/fontawesome-free/css/all.min.css'
+//import '../../ode_modules/@fortawesome/fontawesome-free/css/all.min.css'
 import './index.scss';
 import App from './App';
+import './i18n';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
+  <Suspense fallback="loading">
   <React.StrictMode>
     <App />
-  </React.StrictMode>,
+  </React.StrictMode>
+  </Suspense>,
   document.getElementById('root')
 );
 

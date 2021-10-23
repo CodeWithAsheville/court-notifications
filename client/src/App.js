@@ -1,4 +1,5 @@
 import { useReducer, useRef } from "react";
+import { useTranslation } from 'react-i18next';
 
 import "./App.scss";
 import SearchForm from "./components/SearchForm/SearchForm";
@@ -6,6 +7,7 @@ import SignupForm from "./components/SignupForm/SignupForm";
 import ResultsTable from "./components/ResultsTable/ResultsTable";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer";
+import Intro from "./components/Intro/Intro";
 import stepper from "./scripts/stepper";
 
 const initialState = {
@@ -87,19 +89,20 @@ function reducer(state, action) {
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const { t } = useTranslation();
 
   const step1 = useRef(null);
   const step2 = useRef(null);
   stepper.setSteps([step1, step2]);
 
   let signupForm = "";
-  let headerText = "Select a Defendant and Sign Up";
+  let headerText = `${t('select.title')}`
   let resultsItem = "";
 
   if (state.selectedDefendant) {
     let defendantName = state.cases.filter(item => item.defendant+'.'+item.dob === state.selectedDefendant)[0].defendant;
     headerText =
-      "Sign Up for Case Notifications for " + defendantName;
+      `${t('signup.title')} ${defendantName}`;
     signupForm = <SignupForm state={state} dispatch={dispatch} />;
   }
 
@@ -115,23 +118,25 @@ function App() {
     );
   }
   return (
-    <div className="App">
-      <Header />
-      <ol className="usa-process-list">
-        <li className="usa-process-list__item">
-          <h4 className="usa-process-list__heading" ref={step1}>
-            Search For Your Cases
-          </h4>
-          <p className="margin-top-05">
-            Enter your first, middle and last name to search for your court
-            cases. They will appear in a table below.
-          </p>
-          <SearchForm state={state} dispatch={dispatch} />
-        </li>
-        {resultsItem}
-      </ol>
-      <Footer />
-    </div>
+      <div className="App">
+        <Header />
+        <Intro />
+        <ol className="usa-process-list">
+          <li className="usa-process-list__item">
+            <h4 className="usa-process-list__heading" ref={step1}>
+              {t('search.title')}
+            </h4>
+            <p className="margin-top-05">
+              {t('search.description')}
+            </p>
+            <SearchForm state={state} dispatch={dispatch} />
+          </li>
+
+          {resultsItem}
+          
+        </ol> 
+        <Footer/>
+      </div>
   );
 }
 
