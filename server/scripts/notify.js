@@ -67,10 +67,11 @@ async function notifications() {
     for (j = 0; j < defendants.length; ++j) {
       d = defendants[j];
       const subscribers = await knex('subscriptions')
-      .select('subscriptions.defendant_id', 'subscriptions.subscriber_id', 'subscribers.phone')
+      .select('subscriptions.defendant_id', 'subscriptions.subscriber_id',
+      knex.raw("PGP_SYM_DECRYPT(subscribers.encrypted_phone::bytea, ?) as phone", [process.env.DB_CRYPTO_SECRET]))
       .leftOuterJoin('subscribers', 'subscriptions.subscriber_id', 'subscribers.id')
       .where('subscriptions.defendant_id', '=', d.id);
-  
+
       // And send out the notifications
       for (k = 0; k < subscribers.length; ++k) {
         const s = subscribers[k];

@@ -3,7 +3,7 @@
 exports.up = async function(knex) {
   await knex.schema.createTable('subscribers', function (table) {
     table.increments();
-    table.string('phone');
+    table.binary('encrypted_phone');
     table.date('next_notify')
     table.timestamps(false, true);
   })

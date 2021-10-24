@@ -95,9 +95,13 @@ async function addSubscriber(nextDate, phone) {
   let subscriberId = null;
   let subscribers = null;
   try {
-    subscribers = await knex('subscribers').select().where('phone', phone);
+    subscribers = await knex('subscribers').select()
+      .where(
+        knex.raw("PGP_SYM_DECRYPT(encrypted_phone::bytea, ?) = ?", [process.env.DB_CRYPTO_SECRET, phone])
+      )
   }
   catch (e) {
+    console.log(e);
     throw 'Error in subscriber lookup';
   }
   if (subscribers.length > 0) { // We already have this subscriber, update the date if needed
@@ -117,13 +121,14 @@ async function addSubscriber(nextDate, phone) {
   else { // New subscriber
     try {
       let retVal = await knex('subscribers').insert({
-          phone,
+          encrypted_phone: knex.raw("PGP_SYM_ENCRYPT(?::text, ?)", [phone, process.env.DB_CRYPTO_SECRET]),
           next_notify: nextNotify,
         })
         .returning('id');
       subscriberId = retVal[0];
     }
     catch (e) {
+      console.log(e);
       throw 'Error adding subscriber';
     }
   }

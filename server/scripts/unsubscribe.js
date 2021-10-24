@@ -2,7 +2,10 @@ const knexConfig = require('../../knexfile');
 const knex = require('knex')(knexConfig);
 
 async function unsubscribe(phone) {
-  const subscribers = await knex('subscribers').where('phone', phone);
+  const subscribers = await knex('subscribers').select()
+      .where(
+        knex.raw("PGP_SYM_DECRYPT(encrypted_phone::bytea, ?) = ?", [process.env.DB_CRYPTO_SECRET, phone])
+      );
   // Delete subscriber and any associated descriptions
   subscribers.forEach(async subscriber => {
     await knex('subscribers').delete().where('id', subscriber.id);
@@ -24,3 +27,5 @@ async function unsubscribe(phone) {
 module.exports = {
   unsubscribe
 }
+
+unsubscribe('7812966267');
