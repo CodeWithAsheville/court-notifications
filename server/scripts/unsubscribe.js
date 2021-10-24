@@ -27,5 +27,3 @@ async function unsubscribe(phone) {
 module.exports = {
   unsubscribe
 }
-
-unsubscribe('7812966267');
