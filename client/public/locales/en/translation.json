@@ -32,7 +32,9 @@
         "description": "Defendants who match your search are listed below. Select one to sign up."
     },
     "casesTable": {
-        "columns": {
+      "description": "Cases for",
+      "help": "You may find details of charges on the NC Judicial Branch site",
+      "columns": {
             "courtDate": "Court Date",
             "caseNumber": "Case Number",
             "court":   "Court",
