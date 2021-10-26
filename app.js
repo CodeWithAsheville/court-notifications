@@ -22,6 +22,14 @@ app.use(function(req, res, next) {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use(function(req, resp, next){
+  if (req.headers['x-forwarded-proto'] == 'http') {
+      return resp.redirect(301, 'https://' + req.headers.host + '/');
+  } else {
+      return next();
+  }
+});
+
 app.post("/api/court-search", (req, res) => {
   searchCourtRecords(req.body, (cases) => res.json(cases), console.log);
 });
