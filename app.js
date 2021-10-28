@@ -1,12 +1,39 @@
 require('dotenv').config()
 
 const express = require("express");
+
+var i18next = require('i18next');
+var FsBackend = require('i18next-fs-backend');
+var middleware = require('i18next-http-middleware');
+
+
 const MessagingResponse = require('twilio').twiml.MessagingResponse;
 const { searchCourtRecords } = require("./server/search-court-records");
 const { registerSubscription } = require("./server/register-subscription");
 const { parseWebhook } = require('./server/scripts/twilio/webhook-parser')
 
 const path = require("path");
+
+i18next
+.use(middleware.LanguageDetector)
+.use(FsBackend)
+  .init({
+    detection: {
+      lookupQueryString: 'lng',
+      order: ['querystring'],
+      ignoreCase: true,
+//      lookupHeaderRegex: /(([a-z]{2})-?([A-Z]{2})?)\s*;?\s*(q=([0-9.]+))?/gi
+    },
+    saveMissing: true,
+    debug: true,
+    fallbackLng: 'en',
+    backend: {
+      loadPath: __dirname + '/server/locales/{{lng}}/{{ns}}.json',
+      addPath: __dirname + '/server/locales/{{lng}}/{{ns}}.missing.json'
+    },
+    nsSeparator: '#||#',
+    keySeparator: '#|#'
+  });
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -22,15 +49,22 @@ app.use(function(req, res, next) {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(function(req, resp, next){
-  if (req.headers['x-forwarded-proto'] == 'http') {
-      return resp.redirect(301, 'https://' + req.headers.host + '/');
-  } else {
-      return next();
-  }
-});
+app.use(middleware.handle(i18next, {
+  // ignoreRoutes: ["/foo"],
+  // removeLngFromUrl: false
+}));
 
+if (process.env.NODE_ENV === "production") {
+  app.use(function(req, resp, next){
+    if (req.headers['x-forwarded-proto'] == 'http') {
+        return resp.redirect(301, 'https://' + req.headers.host + '/');
+    } else {
+        return next();
+    }
+  });
+}
 app.post("/api/court-search", (req, res) => {
+  console.log("Trying to translate: " + req.t("test"));
   searchCourtRecords(req.body, (cases) => res.json(cases), console.log);
 });
 

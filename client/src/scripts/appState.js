@@ -1,3 +1,5 @@
+import i18next from 'i18next';
+
 // Grab a reference to localStorage when the app boots
 const localStorage = window.localStorage;
 
@@ -108,7 +110,8 @@ export async function getCaseData(state) {
   const fullName = getCSVFullName(state);
   const storedCases = getPersonFromStorage(fullName);
 
-  const response = await fetch("/api/court-search?lng="+state.language, {
+  const url = "/api/court-search?lng="+i18next.language;
+  const response = await fetch(url, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -129,7 +132,8 @@ export async function subscribeToDefendant(state) {
   const filteredCases = state.cases.filter(item => {
     return (item.defendant+'.'+item.dob === state.selectedDefendant);
   });
-  const response = await fetch("/api/subscribe-to-defendant?lng="+state.language, {
+  const url = "/api/subscribe-to-defendant?lng="+i18next.language;
+  const response = await fetch(url, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

@@ -6,10 +6,6 @@ export default function Header({ state, dispatch }) {
   const { t, i18n } = useTranslation();
   function changeLanguage(language) {
     i18n.changeLanguage(language);
-    dispatch({
-      type: "language",
-      value: { language },
-    });
   }
   return (
     <header>

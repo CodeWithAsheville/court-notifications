@@ -32,11 +32,6 @@ const initialState = {
 function reducer(state, action) {
 
   switch (action.type) {
-    case "language":
-      return {
-        ...state,
-        ...action.value,
-      };
     case "update-name":
       return {
         ...state,
