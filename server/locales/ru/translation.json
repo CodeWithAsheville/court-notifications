@@ -1,5 +1,7 @@
 {
   "signup-success": "Вы удачно подписались",
   "no-cases": "Не нашлось судебных дел",
-  "name-template": "Вы удачно подписались на напоминания для {{fname}} {{mname}} {{lname}} {{suffix}}"
+  "name-template": "Вы удачно подписались на напоминания для {{fname}} {{mname}} {{lname}} {{suffix}}",
+  "error-start": "You have previously unsubscribed from all messages from this service. You must text START to {{phone}} and then subscribe here again.",
+  "error-unknown": "There was an unknown error texting you."
 }

@@ -1,5 +1,7 @@
 {
   "signup-success": "Successfully subscribed",
   "no-cases": "No cases found",
-  "name-template": "You have subscribed to notifications for {{fname}} {{mname}} {{lname}} {{suffix}}"
+  "name-template": "You have subscribed to notifications for {{fname}} {{mname}} {{lname}} {{suffix}}",
+  "error-start": "You have previously unsubscribed from all messages from this service. You must text START to {{phone}} and then subscribe here again.",
+  "error-unknown": "There was an unknown error texting you."
 }

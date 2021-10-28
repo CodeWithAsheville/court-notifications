@@ -180,7 +180,7 @@ async function registerSubscription(req, callback, onError) {
       suffix: defendant.suffix ? defendant.suffix : ''
     }
 
-    const msg = Mustache.render(nameTemplate, name);
+    let msg = Mustache.render(nameTemplate, name);
     try {
       await client.messages
           .create({
@@ -192,9 +192,10 @@ async function registerSubscription(req, callback, onError) {
     } catch (e) {
       if (e.code === 21610) {
         unsubscribe(phone);
-        throw 'You have previously unsubscribed from all messages from this service. You must text START to ' + process.env.TWILIO_PHONE_NUMBER + ' and then subscribe here again.'
+        msg = Mustache.render(req.t("error-start"), { phone: process.env.TWILIO_PHONE_NUMBER});
+        throw msg;
       }
-      throw 'There was an unknown error texting you.'
+      throw req.t("error-unknown");
     }
   }
   catch (e) {
