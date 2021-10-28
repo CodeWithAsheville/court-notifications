@@ -1,3 +1,5 @@
 {
-  "test": "[SP]This is a test"
+  "signup-success": "Suscripción exitosa",
+  "no-cases": "No se encontraron casos judiciales",
+  "name-template": "Te has suscrito a las notificaciones de {{fname}} {{mname}} {{lname}} {{suffix}}"
 }

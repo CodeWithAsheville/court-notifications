@@ -1,3 +1,5 @@
 {
-  "test": "This is a test"
+  "signup-success": "Successfully subscribed",
+  "no-cases": "No cases found",
+  "name-template": "You have subscribed to notifications for {{fname}} {{mname}} {{lname}} {{suffix}}"
 }

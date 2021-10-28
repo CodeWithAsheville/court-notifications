@@ -153,14 +153,15 @@ async function addSubscription(subscriberId, defendantId) {
   }
 }
 
-async function registerSubscription(body, callback, onError) {  
-  let returnMessage = 'Successfully subscribed';
+async function registerSubscription(req, callback, onError) {
+  let returnMessage = req.t("signup-success");
   let returnCode = 200;
+  const body = req.body;
 
   try {
     const phone = body.phone_number.replace(/\D/g,'');
     let cases = body.details.cases;
-    if (cases == null || cases.length == 0) throw 'No cases selected';
+    if (cases == null || cases.length == 0) throw req.t("no-cases");
 
     const defendant  = initializeDefendant(body);
     let defendantId  = await addDefendant(defendant);
@@ -171,7 +172,7 @@ async function registerSubscription(body, callback, onError) {
 
     // Now send a verification message to the user
     const client = require('twilio')(accountSid, authToken);
-    const nameTemplate = 'You have subscribed to notifications for {{fname}} {{mname}} {{lname}} {{suffix}}'
+    const nameTemplate = req.t("name-template");
     const name = {
       fname: defendant.first_name,
       mname: defendant.middle_name ? defendant.middle_name : '',
@@ -180,8 +181,6 @@ async function registerSubscription(body, callback, onError) {
     }
 
     const msg = Mustache.render(nameTemplate, name);
-    console.log('Now send a message to ' + phone);
-    console.log(msg);
     try {
       await client.messages
           .create({
@@ -191,9 +190,7 @@ async function registerSubscription(body, callback, onError) {
           })
           .then(message => console.log(message));
     } catch (e) {
-      console.log('Error code is ' + e.code);
       if (e.code === 21610) {
-        console.log('Need to send START!');
         unsubscribe(phone);
         throw 'You have previously unsubscribed from all messages from this service. You must text START to ' + process.env.TWILIO_PHONE_NUMBER + ' and then subscribe here again.'
       }

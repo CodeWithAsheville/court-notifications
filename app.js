@@ -21,8 +21,7 @@ i18next
     detection: {
       lookupQueryString: 'lng',
       order: ['querystring'],
-      ignoreCase: true,
-//      lookupHeaderRegex: /(([a-z]{2})-?([A-Z]{2})?)\s*;?\s*(q=([0-9.]+))?/gi
+      ignoreCase: true
     },
     saveMissing: true,
     debug: true,
@@ -49,10 +48,7 @@ app.use(function(req, res, next) {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(middleware.handle(i18next, {
-  // ignoreRoutes: ["/foo"],
-  // removeLngFromUrl: false
-}));
+app.use(middleware.handle(i18next, {}));
 
 if (process.env.NODE_ENV === "production") {
   app.use(function(req, resp, next){
@@ -69,7 +65,7 @@ app.post("/api/court-search", (req, res) => {
 });
 
 app.post("/api/subscribe-to-defendant", (req, res) => {
-  registerSubscription(req.body, (signUpResult) => res.json(signUpResult), console.log);
+  registerSubscription(req, (signUpResult) => res.json(signUpResult), console.log);
 });
 
 app.post('/sms', parseWebhook);
