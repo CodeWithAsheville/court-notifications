@@ -17,15 +17,108 @@ function getFormattedDate(d) {
   return dString;
 }
 
+// Load all defendants with cases scheduled notificationDays from now
+async function loadDefendants(notificationDays) {
+  let dateClause = 'court_date - CURRENT_DATE = ' + notificationDays
+  const results = await knex('cases')
+    .select('cases.defendant_id', 'cases.case_number', 'cases.court_date', 'cases.court', 'cases.room', 'cases.session', 'defendants.first_name', 'defendants.middle_name', 'defendants.last_name', 'defendants.suffix')
+    .leftOuterJoin('defendants', 'cases.defendant_id', 'defendants.id')
+    .whereRaw(dateClause)
+
+  // First, get all the defendants and their cases and set up the text for them
+  const defendantHash = {};
+  const nameTemplate = '{{fname}} {{mname}} {{lname}} {{suffix}}'
+  results.forEach(d => {
+    const name = {
+      fname: d.first_name,
+      mname: d.middle_name ? d.middle_name : '',
+      lname: d.last_name,
+      suffix: d.suffix ? d.suffix : ''
+    }
+    // First time for this defendant - initialize in the hash
+    if (!(d.defendant_id in defendantHash)) {
+      const courtDate = new Date(d.court_date);
+      const id = d.defendant_id;
+      defendantHash[id] = {
+        name: Mustache.render(nameTemplate, name),
+        date: getFormattedDate(courtDate),
+        cases: [],
+        adminCount: 0,
+        districtCount: 0,
+        districtRooms: {},
+        superiorCount: 0,
+        superiorRooms: {}
+      }
+    }
+    if (d.court.toLowerCase() === 'district') {
+      if (d.room.toLowerCase() === 'admn') {
+        ++defendantHash[id].adminCount
+      }
+      else {
+        ++defendantHash[id].districtCount;
+        defendantHash[id].districtRooms[d.room] = d.room;
+      }
+    }
+    else {
+      ++defendantHas[id].superiorCount;
+      defendantHas[id].superiorRooms[d.room.toLowerCase()] = d.room;
+    }
+  });
+  const defendants = [];
+  for (dID in defendantHash) {
+    defendants.pushdefendantHash[dID];
+  }
+  return defendants
+}
+
+function loadSubscribers(defendantId) {
+  return knex('subscriptions')
+      .select('subscriptions.defendant_id', 'subscriptions.subscriber_id', 'subscribers.language',
+      knex.raw("PGP_SYM_DECRYPT(subscribers.encrypted_phone::bytea, ?) as phone", [process.env.DB_CRYPTO_SECRET]))
+      .leftOuterJoin('subscribers', 'subscriptions.subscriber_id', 'subscribers.id')
+      .where('subscriptions.defendant_id', '=', defendantId);
+}
+
+async function sendNotifications() {
+  const client = require('twilio')(accountSid, authToken);
+
+  const notificationSets = await knex('notify_configuration').select('*');
+
+  for (i = 0; i < notificationSets.length; ++ i) {
+    console.log('Do notifications for ' + notificationSets[i].days_before + ' days');
+    const notificationDays = notificationSets[i].days_before;
+    const notificationText = notificationSets[i].text;
+    const defendants = await loadDefendants(notificationDays);
+
+    for (j = 0; j < defendants.length; ++j) {
+      defendant = defendants[j];
+      const subscribers = await loadSubscribers(defendant.id)
+      
+      // And send out the notifications
+      for (k = 0; k < subscribers.length; ++k) {
+        const s = subscribers[k];
+        await i18next.changeLanguage(s.language);
+
+        // !!!!!!!!!!!!!!!!!!!!!!
+        // Construct the text here
+        // !!!!!!!!!!!!!!!!!!!!!!
+
+        const msgObject = {
+          body: d.text,
+          from: fromTwilioPhone,
+          to: s.phone
+        };
+        await client.messages
+        .create(msgObject)
+        .then(message => console.log(message));
+      }
+    }
+  }
+}
+
 async function notifications() {
   const client = require('twilio')(accountSid, authToken);
 
-  await i18next.changeLanguage('en');
-  console.log(i18next.t('no-cases'));
-  await i18next.changeLanguage('ru');
-  console.log(i18next.t('no-cases'));
-  await i18next.changeLanguage('es');
-  console.log(i18next.t('no-cases'));
   const notificationSets = await knex('notify_configuration').select('*');
   for (i = 0; i < notificationSets.length; ++ i) {
     console.log('Doing notifications for ' + notificationSets[i].days_before + ' days in advance');
@@ -96,8 +189,6 @@ async function notifications() {
   }
 }
 
-// readyToNotify(18)
-
 async function initTranslations() {
   await i18next
   .use(FsBackend)
@@ -117,7 +208,6 @@ async function initTranslations() {
 
 // 
 (async() => {
-  console.log(__dirname);
   await initTranslations();
   console.log('Call notifications');
   await notifications();
