@@ -36,10 +36,11 @@ async function loadDefendants(notificationDays) {
       suffix: d.suffix ? d.suffix : ''
     }
     // First time for this defendant - initialize in the hash
+    const id = d.defendant_id;
     if (!(d.defendant_id in defendantHash)) {
       const courtDate = new Date(d.court_date);
-      const id = d.defendant_id;
       defendantHash[id] = {
+        id,
         name: Mustache.render(nameTemplate, name),
         date: getFormattedDate(courtDate),
         cases: [],
@@ -66,18 +67,20 @@ async function loadDefendants(notificationDays) {
   });
   const defendants = [];
   for (dID in defendantHash) {
-    defendants.pushdefendantHash[dID];
+    defendants.push(defendantHash[dID]);
   }
   return defendants
 }
 
 function loadSubscribers(defendantId) {
+  console.log('Type of defendant ID is ' + typeof defendantId);
   return knex('subscriptions')
       .select('subscriptions.defendant_id', 'subscriptions.subscriber_id', 'subscribers.language',
-      knex.raw("PGP_SYM_DECRYPT(subscribers.encrypted_phone::bytea, ?) as phone", [process.env.DB_CRYPTO_SECRET]))
+      knex.raw('PGP_SYM_DECRYPT("subscribers"."encrypted_phone"::bytea, ?) as phone', [process.env.DB_CRYPTO_SECRET]))
       .leftOuterJoin('subscribers', 'subscriptions.subscriber_id', 'subscribers.id')
-      .where('subscriptions.defendant_id', '=', defendantId);
+      .where('subscriptions.defendant_id', '=', defendantId);  
 }
+
 
 async function sendNotifications() {
   const client = require('twilio')(accountSid, authToken);
@@ -87,7 +90,7 @@ async function sendNotifications() {
   for (i = 0; i < notificationSets.length; ++ i) {
     console.log('Do notifications for ' + notificationSets[i].days_before + ' days');
     const notificationDays = notificationSets[i].days_before;
-    const notificationText = notificationSets[i].text;
+    const msgKey = notificationSets[i].key;
     const defendants = await loadDefendants(notificationDays);
 
     for (j = 0; j < defendants.length; ++j) {
@@ -98,13 +101,26 @@ async function sendNotifications() {
       for (k = 0; k < subscribers.length; ++k) {
         const s = subscribers[k];
         await i18next.changeLanguage(s.language);
-
-        // !!!!!!!!!!!!!!!!!!!!!!
-        // Construct the text here
-        // !!!!!!!!!!!!!!!!!!!!!!
+        let message = Mustache.render(i18next.t(msgKey), defendant) + '\n';
+        if (defendant.adminCount > 0) {
+          message += Mustache.render(i18next.t('notifications.admin-court'), defendant);
+        }
+        if (defendant.districtCount > 0) {
+          message += Mustache.render(i18next.t('notifications.district-court'), defendant);
+          let sep = '';
+          for (const room in defendant.districtRooms) {
+            message += sep + room;
+            sep = ', ';
+          }
+          message += '\n';
+        }
+        if (defendant.superiorCount > 0) {
+          message += Mustache.render(i18next.t('notifications.district-court'), defendant);
+        }
+        message += Mustache.render(i18next.t('notifications.reminder-final'), { url: 'https://www.buncombecounty.org/governing/depts/justice-services/default.aspx' });
 
         const msgObject = {
-          body: d.text,
+          body: message,
           from: fromTwilioPhone,
           to: s.phone
         };
@@ -199,9 +215,7 @@ async function initTranslations() {
     backend: {
       loadPath: __dirname + '/../locales/{{lng}}/{{ns}}.json',
       addPath: __dirname + '/../locales/{{lng}}/{{ns}}.missing.json'
-    },
-    nsSeparator: '#||#',
-    keySeparator: '#|#'
+    }
   });
   return i18next.loadLanguages(['en', 'es', 'ru']);
 }
@@ -210,7 +224,8 @@ async function initTranslations() {
 (async() => {
   await initTranslations();
   console.log('Call notifications');
-  await notifications();
+//  await notifications();
+  await sendNotifications();
   console.log('Done with notifications');
   process.exit();
 })();
