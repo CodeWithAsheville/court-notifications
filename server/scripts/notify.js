@@ -101,7 +101,7 @@ async function sendNotifications() {
       for (k = 0; k < subscribers.length; ++k) {
         const s = subscribers[k];
         await i18next.changeLanguage(s.language);
-        let message = Mustache.render(i18next.t(msgKey), defendant) + '\n';
+        let message = Mustache.render(i18next.t(msgKey), defendant) + '\n\n';
         if (defendant.adminCount > 0) {
           message += Mustache.render(i18next.t('notifications.admin-court'), defendant);
         }
@@ -117,7 +117,7 @@ async function sendNotifications() {
         if (defendant.superiorCount > 0) {
           message += Mustache.render(i18next.t('notifications.district-court'), defendant);
         }
-        message += i18next.t('notifications.reminder-final');
+        message += '\n' + i18next.t('notifications.reminder-final');
 
         const msgObject = {
           body: message,
