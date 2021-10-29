@@ -1,4 +1,6 @@
-require('dotenv').config({ path: '../../.env'})
+require('dotenv').config({ path: '../../.env'});
+const i18next = require('i18next');
+var FsBackend = require('i18next-fs-backend');
 
 const knexConfig = require('../../knexfile');
 var knex        = require('knex')(knexConfig);
@@ -18,6 +20,12 @@ function getFormattedDate(d) {
 async function notifications() {
   const client = require('twilio')(accountSid, authToken);
 
+  await i18next.changeLanguage('en');
+  console.log(i18next.t('no-cases'));
+  await i18next.changeLanguage('ru');
+  console.log(i18next.t('no-cases'));
+  await i18next.changeLanguage('es');
+  console.log(i18next.t('no-cases'));
   const notificationSets = await knex('notify_configuration').select('*');
   for (i = 0; i < notificationSets.length; ++ i) {
     console.log('Doing notifications for ' + notificationSets[i].days_before + ' days in advance');
@@ -90,9 +98,27 @@ async function notifications() {
 
 // readyToNotify(18)
 
+async function initTranslations() {
+  await i18next
+  .use(FsBackend)
+  .init({
+    saveMissing: false,
+    debug: true,
+    fallbackLng: 'en',
+    backend: {
+      loadPath: __dirname + '/../locales/{{lng}}/{{ns}}.json',
+      addPath: __dirname + '/../locales/{{lng}}/{{ns}}.missing.json'
+    },
+    nsSeparator: '#||#',
+    keySeparator: '#|#'
+  });
+  return i18next.loadLanguages(['en', 'es', 'ru']);
+}
 
 // 
 (async() => {
+  console.log(__dirname);
+  await initTranslations();
   console.log('Call notifications');
   await notifications();
   console.log('Done with notifications');
