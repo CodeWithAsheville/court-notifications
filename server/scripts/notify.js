@@ -117,7 +117,7 @@ async function sendNotifications() {
         if (defendant.superiorCount > 0) {
           message += Mustache.render(i18next.t('notifications.district-court'), defendant);
         }
-        message += Mustache.render(i18next.t('notifications.reminder-final'), { url: 'https://www.buncombecounty.org/governing/depts/justice-services/default.aspx' });
+        message += i18next.t('notifications.reminder-final');
 
         const msgObject = {
           body: message,
