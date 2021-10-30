@@ -60,7 +60,6 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 app.post("/api/court-search", (req, res) => {
-  console.log("Trying to translate: " + req.t("test"));
   searchCourtRecords(req.body, (cases) => res.json(cases), console.log);
 });
 

@@ -90,7 +90,7 @@ async function addCases(defendantId, casesIn) {
   return nextDate;
 }
 
-async function addSubscriber(nextDate, phone) {
+async function addSubscriber(nextDate, phone, language) {
   const nextNotify = (nextDate.getMonth()+1) + '/' + nextDate.getDate() + '/' + nextDate.getFullYear();
   let subscriberId = null;
   let subscribers = null;
@@ -122,6 +122,7 @@ async function addSubscriber(nextDate, phone) {
     try {
       let retVal = await knex('subscribers').insert({
           encrypted_phone: knex.raw("PGP_SYM_ENCRYPT(?::text, ?)", [phone, process.env.DB_CRYPTO_SECRET]),
+          language,
           next_notify: nextNotify,
         })
         .returning('id');
@@ -166,7 +167,7 @@ async function registerSubscription(req, callback, onError) {
     const defendant  = initializeDefendant(body);
     let defendantId  = await addDefendant(defendant);
     const nextDate   = await addCases(defendantId, cases);
-    let subscriberId = await addSubscriber(nextDate, phone);
+    let subscriberId = await addSubscriber(nextDate, phone, req.language);
 
     await addSubscription(subscriberId, defendantId);
 

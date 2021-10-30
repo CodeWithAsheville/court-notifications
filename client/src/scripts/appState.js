@@ -133,6 +133,7 @@ export async function subscribeToDefendant(state) {
     return (item.defendant+'.'+item.dob === state.selectedDefendant);
   });
   const url = "/api/subscribe-to-defendant?lng="+i18next.language;
+  console.log('URL to subscribe ' + url);
   const response = await fetch(url, {
     method: "POST",
     headers: {

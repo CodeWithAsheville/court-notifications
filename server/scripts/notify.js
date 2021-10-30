@@ -61,8 +61,8 @@ async function loadDefendants(notificationDays) {
       }
     }
     else {
-      ++defendantHas[id].superiorCount;
-      defendantHas[id].superiorRooms[d.room.toLowerCase()] = d.room;
+      ++defendantHash[id].superiorCount;
+      defendantHash[id].superiorRooms[d.room.toLowerCase()] = d.room;
     }
   });
   const defendants = [];
@@ -115,9 +115,9 @@ async function sendNotifications() {
           message += '\n';
         }
         if (defendant.superiorCount > 0) {
-          message += Mustache.render(i18next.t('notifications.district-court'), defendant);
+          message += Mustache.render(i18next.t('notifications.superior-court'), defendant);
         }
-        message += '\n' + i18next.t('notifications.reminder-final');
+        message += '\n\n' + i18next.t('notifications.reminder-final');
 
         const msgObject = {
           body: message,

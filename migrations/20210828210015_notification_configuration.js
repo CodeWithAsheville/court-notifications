@@ -7,7 +7,10 @@ exports.up = async function(knex) {
     table.string('text');
   });
   await knex('notify_configuration').insert([
-    { days_before: 10, key: 'reminder1', text: 'This is a reminder that {{name}} must be at the Buncombe County courthouse on {{date}} for the following cases:' }
+    { days_before: 6, key: 'notifications.reminder1', text: 'This is a reminder that {{name}} must be at the Buncombe County courthouse on {{date}} for the following cases:' }
+  ])
+  await knex('notify_configuration').insert([
+    { days_before: 2, key: 'notifications.reminder2', text: 'This is a 2nd reminder that {{name}} must be at the Buncombe County courthouse on {{date}} for the following cases:' }
   ])
 };
 
