@@ -4,13 +4,12 @@ exports.up = async function(knex) {
   .createTable('notify_configuration', function (table) {
     table.integer('days_before');
     table.string('key');
-    table.string('text');
   });
   await knex('notify_configuration').insert([
-    { days_before: 6, key: 'notifications.reminder1', text: 'This is a reminder that {{name}} must be at the Buncombe County courthouse on {{date}} for the following cases:' }
+    { days_before: 7, key: 'notifications.reminder1' }
   ])
   await knex('notify_configuration').insert([
-    { days_before: 2, key: 'notifications.reminder2', text: 'This is a 2nd reminder that {{name}} must be at the Buncombe County courthouse on {{date}} for the following cases:' }
+    { days_before: 2, key: 'notifications.reminder2' }
   ])
 };
 
