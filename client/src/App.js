@@ -106,21 +106,13 @@ function App() {
           <Route path="/go-to-court">
             <CourtGuide />
           </Route>
-          <Route path="/">
+          <Route exact={true} path="/">
             <Home state={state} dispatch={dispatch} />
           </Route>
         </Switch>
       </div>
     </Router>
   );
-}
-
-function GoToCourt() {
-  return (
-    <div>
-      <CourtGuide />
-    </div>
-  )
 }
 
 function Home({ state, dispatch }) {
