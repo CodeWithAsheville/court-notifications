@@ -42,6 +42,7 @@ app.use(function(req, res, next) {
   res.header('Access-Control-Allow-Origin', req.headers.origin);
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,UPDATE,OPTIONS');
   res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
+  console.log('processed header');
   next();
 });
 
@@ -74,10 +75,10 @@ if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "client/build")));
 
   // Handle React routing, return all requests to React app
-  app.get("*", function (req, res) {
+  app.get("/go-to-court", function (req, res) {
     res.sendFile(path.join(__dirname, "../", "client/build", "index.html"));
   });
-  app.get("/*", function (req, res) {
+  app.get("*", function (req, res) {
     res.sendFile(path.join(__dirname, "../", "client/build", "index.html"));
   });
 }
