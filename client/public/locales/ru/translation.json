@@ -1,6 +1,6 @@
 {
     "title": "Подписаться на напоминания о датах суда Округа Банкомб",
-    "description": "Проект 'Кода для Эшвилла' (Code for Asheville)",
+    "description": "Проект Code for Asheville",
     "languages": {
         "english": "английский",
         "spanish": "испанский",
@@ -61,6 +61,18 @@
         "isInvalid": "Неверный формат номера телефона"
       },
       "button": "Подписаться на напоминания"
-
+    },
+    "courtguide": {
+      "intro": "[RU]Failing to appear in court can result in an order for arrest and financial penalty. Here are some things to remember as your court date approaches:",
+      "item1": "[RU]Arrive at the Buncombe County Courthouse, 60 Court Plaza in Asheville, 30 minutes before your scheduled court session.",
+      "item2": "[RU]Paid parking is available at Buncombe County parking deck across the street from the courthouse, at 164 College Street.",
+      "item3": "[RU]A security checkpoint is located at the courthouse entrance. All persons must have their bags scanned and pass through a metal detector.",
+      "item4": "[RU]Make the necessary arrangements ahead of time so you can be present for court.",
+      "item5": "[RU]Dress respectfully.",
+      "item6": "[RU]You are responsible for appearing to all court dates. Be sure to know all of your court dates for any pending charges you have.",
+      "if-miss": "[RU]If you miss your court date, contact your lawyer immediately.",
+      "pd-phone": "[RU]Office of the Public Defender: (828) 259-3423",
+      "da-phone": "[RU]District Attorney’s Office: (828) 259-3410",
+      "clerk-phone": "[RU]Clerk of Superior Court: (828) 259-3400"
     }
   }

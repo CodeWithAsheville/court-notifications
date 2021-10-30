@@ -9,7 +9,13 @@ import ResultsTable from "./components/ResultsTable/ResultsTable";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer";
 import Intro from "./components/Intro/Intro";
+import CourtGuide from "./components/CourtGuide/CourtGuide";
 import stepper from "./scripts/stepper";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route
+} from "react-router-dom";
 
 const initialState = {
   language: "en",
@@ -92,8 +98,33 @@ function reducer(state, action) {
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const { t } = useTranslation();
+  return (
+    <Router>
+      <div className="App">
+        <Header state={state} dispatch={dispatch} />
+        <Switch>
+          <Route path="/go-to-court">
+            <CourtGuide />
+          </Route>
+          <Route path="/">
+            <Home state={state} dispatch={dispatch} />
+          </Route>
+        </Switch>
+      </div>
+    </Router>
+  );
+}
 
+function GoToCourt() {
+  return (
+    <div>
+      <CourtGuide />
+    </div>
+  )
+}
+
+function Home({ state, dispatch }) {
+  const { t } = useTranslation();
   const step1 = useRef(null);
   const step2 = useRef(null);
   stepper.setSteps([step1, step2]);
@@ -121,8 +152,7 @@ function App() {
     );
   }
   return (
-      <div className="App">
-        <Header state={state} dispatch={dispatch} />
+      <div>
         <Intro />
         <ol className="usa-process-list">
           <li className="usa-process-list__item">
