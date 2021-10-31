@@ -90,14 +90,18 @@ async function addCases(defendantId, casesIn) {
   return nextDate;
 }
 
-async function addSubscriber(nextDate, phone) {
+async function addSubscriber(nextDate, phone, language) {
   const nextNotify = (nextDate.getMonth()+1) + '/' + nextDate.getDate() + '/' + nextDate.getFullYear();
   let subscriberId = null;
   let subscribers = null;
   try {
-    subscribers = await knex('subscribers').select().where('phone', phone);
+    subscribers = await knex('subscribers').select()
+      .where(
+        knex.raw("PGP_SYM_DECRYPT(encrypted_phone::bytea, ?) = ?", [process.env.DB_CRYPTO_SECRET, phone])
+      )
   }
   catch (e) {
+    console.log(e);
     throw 'Error in subscriber lookup';
   }
   if (subscribers.length > 0) { // We already have this subscriber, update the date if needed
@@ -117,13 +121,15 @@ async function addSubscriber(nextDate, phone) {
   else { // New subscriber
     try {
       let retVal = await knex('subscribers').insert({
-          phone,
+          encrypted_phone: knex.raw("PGP_SYM_ENCRYPT(?::text, ?)", [phone, process.env.DB_CRYPTO_SECRET]),
+          language,
           next_notify: nextNotify,
         })
         .returning('id');
       subscriberId = retVal[0];
     }
     catch (e) {
+      console.log(e);
       throw 'Error adding subscriber';
     }
   }
@@ -148,25 +154,26 @@ async function addSubscription(subscriberId, defendantId) {
   }
 }
 
-async function registerSubscription(body, callback, onError) {  
-  let returnMessage = 'Successfully subscribed';
+async function registerSubscription(req, callback, onError) {
+  let returnMessage = req.t("signup-success");
   let returnCode = 200;
+  const body = req.body;
 
   try {
     const phone = body.phone_number.replace(/\D/g,'');
     let cases = body.details.cases;
-    if (cases == null || cases.length == 0) throw 'No cases selected';
+    if (cases == null || cases.length == 0) throw req.t("no-cases");
 
     const defendant  = initializeDefendant(body);
     let defendantId  = await addDefendant(defendant);
     const nextDate   = await addCases(defendantId, cases);
-    let subscriberId = await addSubscriber(nextDate, phone);
+    let subscriberId = await addSubscriber(nextDate, phone, req.language);
 
     await addSubscription(subscriberId, defendantId);
 
     // Now send a verification message to the user
     const client = require('twilio')(accountSid, authToken);
-    const nameTemplate = 'You have subscribed to notifications for {{fname}} {{mname}} {{lname}} {{suffix}}'
+    const nameTemplate = req.t("name-template");
     const name = {
       fname: defendant.first_name,
       mname: defendant.middle_name ? defendant.middle_name : '',
@@ -174,9 +181,7 @@ async function registerSubscription(body, callback, onError) {
       suffix: defendant.suffix ? defendant.suffix : ''
     }
 
-    const msg = Mustache.render(nameTemplate, name);
-    console.log('Now send a message to ' + phone);
-    console.log(msg);
+    let msg = Mustache.render(nameTemplate, name);
     try {
       await client.messages
           .create({
@@ -186,13 +191,12 @@ async function registerSubscription(body, callback, onError) {
           })
           .then(message => console.log(message));
     } catch (e) {
-      console.log('Error code is ' + e.code);
       if (e.code === 21610) {
-        console.log('Need to send START!');
         unsubscribe(phone);
-        throw 'You have previously unsubscribed from all messages from this service. You must text START to ' + process.env.TWILIO_PHONE_NUMBER + ' and then subscribe here again.'
+        msg = Mustache.render(req.t("error-start"), { phone: process.env.TWILIO_PHONE_NUMBER});
+        throw msg;
       }
-      throw 'There was an unknown error texting you.'
+      throw req.t("error-unknown");
     }
   }
   catch (e) {

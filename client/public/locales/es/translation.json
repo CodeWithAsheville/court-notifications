@@ -21,8 +21,11 @@
           "lastName" : "El (los) apellido(s)"
       },
       "submitButton": "Enviar",
-      "inProgress": "Búsqueda en progreso"
-  },
+      "inProgress": "Búsqueda en progreso",
+      "validations": {
+        "lastName": "Se requiere un apellido"
+    }
+},
   "select": {
       "title": "Seleccione un acusado y regístrerse",
       "description": "Los acusados que coinciden con su búsqueda se enumeran a continuación. Seleccione uno para registrarse."
@@ -58,5 +61,18 @@
         "isInvalid": "No es un número de teléfono válido de 10 dígitos"
     },
     "button": "Regístrese para recibir notificaciones"
+  },
+  "courtguide": {
+    "intro": "[ES]Failing to appear in court can result in an order for arrest and financial penalty. Here are some things to remember as your court date approaches:",
+    "item1": "[ES]Arrive at the Buncombe County Courthouse, 60 Court Plaza in Asheville, 30 minutes before your scheduled court session.",
+    "item2": "[ES]Paid parking is available at Buncombe County parking deck across the street from the courthouse, at 164 College Street.",
+    "item3": "[ES]A security checkpoint is located at the courthouse entrance. All persons must have their bags scanned and pass through a metal detector.",
+    "item4": "[ES]Make the necessary arrangements ahead of time so you can be present for court.",
+    "item5": "[ES]Dress respectfully.",
+    "item6": "[ES]You are responsible for appearing to all court dates. Be sure to know all of your court dates for any pending charges you have.",
+    "if-miss": "[ES]If you miss your court date, contact your lawyer immediately.",
+    "pd-phone": "[ES]Office of the Public Defender: (828) 259-3423",
+    "da-phone": "[ES]District Attorney’s Office: (828) 259-3410",
+    "clerk-phone": "[ES]Clerk of Superior Court: (828) 259-3400"
   }
 }

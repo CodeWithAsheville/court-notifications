@@ -1,8 +1,14 @@
+
 header {
   background-color: #252f3e;
   color: white;
   padding: 0.36em 0.6em;
-  
+  div.language-toggles {
+    float: right;
+    // border-style: solid;
+    // border-width: 5px;
+    // border-color: white;
+  }
   .language-toggles {
     text-align: right;
     .language-button {
@@ -23,5 +29,40 @@ header {
     margin-left: auto;
     margin-right: auto;
     text-align: center;
+  }
+
+  div.basic-nav {
+    max-width: 50%;
+    min-width: 50%;
+    display: inline-block;
+    // border-style: solid;
+    // border-width: 5px;
+    // border-color: white;
+  }
+  .basic-nav {
+    ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      text-decoration: none;
+    }
+    li a {
+      float: left;
+      text-align: center;
+      text-decoration: none;
+      color: white;
+      display: inline;
+      padding-left:10px;
+      padding-right:10px;
+    }
+    li a:hover {
+      background-color: #777;
+//      color: rgb(106, 189, 235);
+    }
+    li a.active-link {
+      text-decoration:underline;
+      outline: none;
+    }
   }
 }

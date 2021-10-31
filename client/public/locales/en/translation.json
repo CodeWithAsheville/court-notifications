@@ -21,7 +21,10 @@
             "lastName" : "Last Name"
         },
         "submitButton": "Submit",
-        "inProgress": "Search in progress"
+        "inProgress": "Search in progress",
+        "validations": {
+            "lastName": "A last name is required"
+        }
     },
     "select": {
         "help": "You may view details on charges on the NC Courts site",
@@ -29,7 +32,9 @@
         "description": "Defendants who match your search are listed below. Select one to sign up."
     },
     "casesTable": {
-        "columns": {
+      "description": "Cases for",
+      "help": "You may find details of charges on the NC Judicial Branch site",
+      "columns": {
             "courtDate": "Court Date",
             "caseNumber": "Case Number",
             "court":   "Court",
@@ -57,5 +62,18 @@
             "isInvalid": "Not a valid 10-digit phone number"
         },
         "button": "Sign Up for Notifications"
+    },
+    "courtguide": {
+      "intro": "Failing to appear in court can result in an order for arrest and financial penalty. Here are some things to remember as your court date approaches:",
+      "item1": "Arrive at the Buncombe County Courthouse, 60 Court Plaza in Asheville, 30 minutes before your scheduled court session.",
+      "item2": "Paid parking is available at Buncombe County parking deck across the street from the courthouse, at 164 College Street.",
+      "item3": "A security checkpoint is located at the courthouse entrance. All persons must have their bags scanned and pass through a metal detector.",
+      "item4": "Make the necessary arrangements ahead of time so you can be present for court.",
+      "item5": "Dress respectfully.",
+      "item6": "You are responsible for appearing to all court dates. Be sure to know all of your court dates for any pending charges you have.",
+      "if-miss": "If you miss your court date, contact your lawyer immediately.",
+      "pd-phone": "Office of the Public Defender: (828) 259-3423",
+      "da-phone": "District Attorney’s Office: (828) 259-3410",
+      "clerk-phone": "Clerk of Superior Court: (828) 259-3400"
     }
 }

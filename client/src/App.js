@@ -1,5 +1,6 @@
 import { useReducer, useRef } from "react";
 import { useTranslation } from 'react-i18next';
+import i18next from 'i18next';
 
 import "./App.scss";
 import SearchForm from "./components/SearchForm/SearchForm";
@@ -8,9 +9,16 @@ import ResultsTable from "./components/ResultsTable/ResultsTable";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer";
 import Intro from "./components/Intro/Intro";
+import CourtGuide from "./components/CourtGuide/CourtGuide";
 import stepper from "./scripts/stepper";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route
+} from "react-router-dom";
 
 const initialState = {
+  language: "en",
   firstName: "",
   lastName: "",
   middleName: "",
@@ -28,6 +36,7 @@ const initialState = {
 };
 
 function reducer(state, action) {
+
   switch (action.type) {
     case "update-name":
       return {
@@ -72,7 +81,7 @@ function reducer(state, action) {
         searchError: state.lastName ? false : true,
         searchErrorMessage: state.lastName
           ? ""
-          : "You must give a last name to search",
+          : `${i18next.t('search.validations.lastName')}`,
         searchSubmitted: true,
         searchInProgress: val,
       };
@@ -89,8 +98,25 @@ function reducer(state, action) {
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const { t } = useTranslation();
+  return (
+    <Router>
+      <div className="App">
+        <Header state={state} dispatch={dispatch} />
+        <Switch>
+          <Route path="/go-to-court">
+            <CourtGuide />
+          </Route>
+          <Route exact={true} path="/">
+            <Home state={state} dispatch={dispatch} />
+          </Route>
+        </Switch>
+      </div>
+    </Router>
+  );
+}
 
+function Home({ state, dispatch }) {
+  const { t } = useTranslation();
   const step1 = useRef(null);
   const step2 = useRef(null);
   stepper.setSteps([step1, step2]);
@@ -118,8 +144,7 @@ function App() {
     );
   }
   return (
-      <div className="App">
-        <Header />
+      <div>
         <Intro />
         <ol className="usa-process-list">
           <li className="usa-process-list__item">
