@@ -8,7 +8,7 @@
     },
     "intro": {
       "description": {
-          "paragraph1": "Этот сайт позволяет подписаться на СМС напоминания о предстоящих датах суда Окуга Банкомб. Использование этого сервиса бесплатно. Вы можете просто искать фамилию, выбрать одного из найденных подсудимых, и ввести телефон, который может принимать сообщения СМС.",
+          "paragraph1": "Этот сайт позволяет подписаться на СМС напоминания о предстоящих датах суда Окуга Банкомб. Использование этого сервиса бесплатно. Вы можете просто искать фамилию, выбрать одного из найденных подсудимых, и ввести телефон, который может принимать сообщения СМС. Примечание: случаи выплаты денежной поддержки ребенка сюда не включены.",
           "paragraph2": "Сайт поддерживается волонтерами на благо общества. Он предназначен чтобы помочь людям не забыть явиться в суд Округа Банкомб, но никаких гарантий не дается. Явка в суд остается вашей ответсвенностью.."
       }
   },
@@ -63,16 +63,16 @@
       "button": "Подписаться на напоминания"
     },
     "courtguide": {
-      "intro": "[RU]Failing to appear in court can result in an order for arrest and financial penalty. Here are some things to remember as your court date approaches:",
-      "item1": "[RU]Arrive at the Buncombe County Courthouse, 60 Court Plaza in Asheville, 30 minutes before your scheduled court session.",
-      "item2": "[RU]Paid parking is available at Buncombe County parking deck across the street from the courthouse, at 164 College Street.",
-      "item3": "[RU]A security checkpoint is located at the courthouse entrance. All persons must have their bags scanned and pass through a metal detector.",
-      "item4": "[RU]Make the necessary arrangements ahead of time so you can be present for court.",
-      "item5": "[RU]Dress respectfully.",
-      "item6": "[RU]You are responsible for appearing to all court dates. Be sure to know all of your court dates for any pending charges you have.",
-      "if-miss": "[RU]If you miss your court date, contact your lawyer immediately.",
-      "pd-phone": "[RU]Office of the Public Defender: (828) 259-3423",
-      "da-phone": "[RU]District Attorney’s Office: (828) 259-3410",
-      "clerk-phone": "[RU]Clerk of Superior Court: (828) 259-3400"
+      "intro": "Неявка в суд может повлечь за собой арест и денежный штраф. Вот несколько вещей, которые следует помнить при подготовке к суду:",
+      "item1": "Вам следует прибыть в здание суда округа Банкомб, 60 Court Plaza в Эшвилле, за 30 минут до назначенного вами судебного заседания.",
+      "item2": "Платная парковка доступна на стоянке округа Банкомб через дорогу от здания суда, по адресу 164 College Street.",
+      "item3": "Контрольно-пропускной пункт находится у входа в здание суда. Все люди должны пройти сканирование сумок и пройти через металлоискатель.",
+      "item4": "Заранее примите необходимые меры, чтобы вы могли присутствовать в суде.",
+      "item5": "Одевайтесь уважительно.",
+      "item6": "Вы обязаны явиться в суд во все даты. Убедитесь, что вы знаете все даты судебного заседания по любым нерешенным обвинениям.",
+      "if-miss": "Если вы пропустите дату суда, немедленно обратитесь к своему адвокату.",
+      "pd-phone": "Канцелярия Народного защитника: (828) 259-3423",
+      "da-phone": "Окружная прокуратура: (828) 259-3410",
+      "clerk-phone": "Секретарь высшего суда: (828) 259-3400"
     }
   }
