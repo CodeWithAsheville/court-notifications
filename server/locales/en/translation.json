@@ -11,6 +11,6 @@
     "admin-court": "{{adminCount}} case(s) in Admin Court. This is a drop-in court that is open 8:30-11:30 AM and 1-4 PM.\n",
     "district-court": "{{districtCount}} case(s) in District Court at 9am in room(s): ",
     "superior-court": "{{superiorCount}} cases in Superior Court. Superior Court matters are scheduled for the whole week. Please contact your attorney to find out what date and time you should appear in Court for the week your case is scheduled.",
-    "reminder-final": "You can find more information about showing up for court at https://buncombenc.courtdates.org/go-to-court/"
+    "reminder-final": "You can find more information about showing up for court at https://buncombenc.courtdates.org/tips/"
   }
 }

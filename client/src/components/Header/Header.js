@@ -14,7 +14,7 @@ export default function Header({ state, dispatch }) {
         <div className="basic-nav" >
           <ul>
             <li><NavLink exact={true} activeClassName="active-link" to="/">Home</NavLink></li>
-            <li><NavLink activeClassName="active-link" to="go-to-court">Going to Court</NavLink></li>
+            <li><NavLink activeClassName="active-link" to="tips">Tips</NavLink></li>
           </ul>
         </div>
         <div className="language-toggles">

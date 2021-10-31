@@ -9,7 +9,7 @@ import ResultsTable from "./components/ResultsTable/ResultsTable";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer";
 import Intro from "./components/Intro/Intro";
-import CourtGuide from "./components/CourtGuide/CourtGuide";
+import Tips from "./components/Tips/Tips";
 import stepper from "./scripts/stepper";
 import {
   BrowserRouter as Router,
@@ -103,8 +103,8 @@ function App() {
       <div className="App">
         <Header state={state} dispatch={dispatch} />
         <Switch>
-          <Route path="/go-to-court">
-            <CourtGuide />
+          <Route path="/tips">
+            <Tips />
           </Route>
           <Route exact={true} path="/">
             <Home state={state} dispatch={dispatch} />
