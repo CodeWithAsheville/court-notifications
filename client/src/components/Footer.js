@@ -12,6 +12,11 @@ export default function Footer() {
                 />
               </a>
             </div>
+              <div style={{textAlign: "right", width: "100%", float: "right",  paddingRight: "2em"}}>
+                <p>
+                  <a href="https://docs.google.com/document/d/19M2zCxx4gICCmjgVx1bKSHlC92Gnb2SCmkmrclLIq3Y/" target="_blank">Privacy Policy</a>
+                </p>
+            </div>
           </div>
         </div>
       </div>
