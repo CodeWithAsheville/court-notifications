@@ -60,6 +60,7 @@ if (process.env.NODE_ENV === "production") {
     }
   });
 }
+
 app.post("/api/court-search", (req, res) => {
   searchCourtRecords(req.body, (cases) => res.json(cases), console.log);
 });
