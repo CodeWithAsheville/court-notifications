@@ -12,10 +12,16 @@ export default function Footer() {
                 />
               </a>
             </div>
-              <div style={{textAlign: "right", width: "100%", float: "right",  paddingRight: "2em"}}>
-                <p>
-                  <a href="https://docs.google.com/document/d/19M2zCxx4gICCmjgVx1bKSHlC92Gnb2SCmkmrclLIq3Y/" target="_blank">Privacy Policy</a>
-                </p>
+              <div style={{textAlign: "center", width: "100%"}}>
+                <span style={{paddingRight: "2em"}}>
+                  <a href="https://docs.google.com/forms/d/e/1FAIpQLSfraeD1Uwlz10Mr_t4mbV96Hdwb0njm-kTQofQbNjucMw8KAQ/viewform?usp=sf_link" target="_blank" rel="noreferrer">Contact</a>
+                </span>
+                <span style={{paddingRight: "2em"}}>
+                  <a href="https://docs.google.com/document/d/19M2zCxx4gICCmjgVx1bKSHlC92Gnb2SCmkmrclLIq3Y/" rel="noreferrer" target="_blank">Privacy Policy</a>
+                </span>
+                <span>
+                  <a href="https://github.com/CodeForAsheville/court-notifications" target="_blank" rel="noreferrer">Github</a>
+                </span>
             </div>
           </div>
         </div>
