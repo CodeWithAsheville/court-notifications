@@ -1,7 +1,7 @@
-import "./CourtGuide.scss";
+import "./Tips.scss";
 import { useTranslation } from 'react-i18next';
 
-export default function CourtGuide() {
+export default function Tips() {
   const { t } = useTranslation();
 
   return (
