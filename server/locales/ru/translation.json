@@ -2,14 +2,14 @@
   "signup-success": "Вы удачно подписались",
   "no-cases": "Не нашлось судебных дел",
   "name-template": "Вы удачно подписались на напоминания для {{fname}} {{mname}} {{lname}} {{suffix}}",
-  "error-start": "[RU]You have previously unsubscribed from all messages from this service. You must text START to {{phone}} and then subscribe here again.",
-  "error-unknown": "[RU]There was an unknown error texting you.",
+  "error-start": "Вы ранее отказались от подписки на все сообщения этого сервиса. Вы должны написать START на номер {{phone}}, а затем снова подписаться здесь.",
+  "error-unknown": "При отправке вам сообщения произошла неизвестная ошибка.",
   "notifications": {
-    "reminder1": "[RU]Reminder: {{name}} must be at the Buncombe County courthouse on {{date}}. Be sure to arrange for any needed transportation or childcare. Cases set for that day are:",
-    "reminder2": "[RU]Reminder: {{name}} must be at the Buncombe County courthouse on {{date}}. Failure to appear in court may result in an order for arrest. Here are your cases:",
-    "admin-court": "[RU]{{adminCount}} case(s) in Admin Court. This is a drop-in court that is open 8:30-11:30 AM and 1-4 PM.\n",
-    "district-court": "[RU]{{districtCount}} case(s) in District Court at 9am in room(s): ",
-    "superior-court": "[RU]{{superiorCount}} cases in Superior Court. Superior Court matters are scheduled for the whole week. Please contact your attorney to find out what date and time you should appear in Court for the week your case is scheduled.",
-    "reminder-final": "[RU]You can find more information about showing up for court at https://buncombenc.courtdates.org/tips/"
+    "reminder1": "Напоминание: {{name}} должен быть в здании суда округа Банкомб {{date}}. Обязательно позаботьтесь о любом необходимом транспорте или присмотре за детьми. На этот день установлены следующие случаи:",
+    "reminder2": "Напоминание: {{name}} должен быть в здании суда округа Банкомб {{date}}. Неявка в суд может повлечь за собой постановление об аресте. На этот день установлены следующие случаи:",
+    "admin-court": "{{adminCount}} дел[о/a] в административном суде. Вы можете приехать в любое время с 8:30 до 11:30 и с 13:00 до 16:00.",
+    "district-court": "{{DistrictCount}} дел[o/a] в районном суде в 9:00 в комнатах: ",
+    "superior-court": "{{superiorCount}} дел в высшем суде. Рассмотрение дел в высшем суде запланировано на всю неделю. Пожалуйста, свяжитесь со своим адвокатом, чтобы узнать, в какой день и в какое время вы должны явиться в суд.",
+    "reminder-final": "Дополнительную информацию о том, как явиться в суд, можно найти на сайте https://buncombenc.courtdates.org/tips/"
   }
 }
