@@ -2,14 +2,14 @@
   "signup-success": "Suscripción exitosa",
   "no-cases": "No se encontraron casos judiciales",
   "name-template": "Te has suscrito a las notificaciones de {{fname}} {{mname}} {{lname}} {{suffix}}",
-  "error-start": "[ES]You have previously unsubscribed from all messages from this service. You must text START to {{phone}} and then subscribe here again.",
-  "error-unknown": "[ES]There was an unknown error texting you.",
+  "error-start": "Se ha dado de baja previamente de todos los mensajes de este servicio. Debe enviar un mensaje de texto con la opción START a {{phone}} y luego suscribirse aquí nuevamente.",
+  "error-unknown": "Se ha producido un error desconocido al enviarle un mensaje de texto.",
   "notifications": {
-    "reminder1": "[ES]Reminder: {{name}} must be at the Buncombe County courthouse on {{date}}. Be sure to arrange for any needed transportation or childcare. Cases set for that day are:",
-    "reminder2": "[ES]Reminder: {{name}} must be at the Buncombe County courthouse on {{date}}. Failure to appear in court may result in an order for arrest. Here are your cases:",
-    "admin-court": "[ES]{{adminCount}} case(s) in Admin Court. This is a drop-in court that is open 8:30-11:30 AM and 1-4 PM.\n",
-    "district-court": "[ES]{{districtCount}} case(s) in District Court at 9am in room(s): ",
-    "superior-court": "[ES]{{superiorCount}} cases in Superior Court. Superior Court matters are scheduled for the whole week. Please contact your attorney to find out what date and time you should appear in Court for the week your case is scheduled.",
-    "reminder-final": "[ES]You can find more information about showing up for court at https://buncombenc.courtdates.org/tips/"
+    "reminder1": "Recordatorio: {{name}} debe estar en el juzgado del condado de Buncombe el {{date}}. Asegúrese de organizar cualquier transporte o cuidado de niños necesario. Los casos fijados para ese día son:",
+    "reminder2": "Recordatorio: {{nombre}} debe estar en el juzgado del condado de Buncombe el {{fecha}}. La falta de comparecencia en frente del tribunal puede dar lugar a una orden de arresto. Estos son sus casos:",
+    "admin-court": "{{adminCount}} caso(s) en el Tribunal administrativo. Puede entrar en este tribunal sin cita previa durante la semana entre las horas de 8:30 a 11:30 a.m. y de 1 a 4 p.m.\n",
+    "district-court": "{{districtCount}}  caso(s) en el Tribunal de Distrito a las 9 am en la sala (s): ",
+    "superior-court": "{{superiorCount}} Casos en el Tribunal Superior. Los asuntos de la Corte Superior están programados para toda la semana. Por favor comuníquese con su abogado para averiguar qué fecha y hora debe presentarse en la Corte para la semana que su caso está programado.",
+    "reminder-final": "Puede encontrar más información sobre cómo presentarse a la corte en https://buncombenc.courtdates.org/tips/"
   }
 }
