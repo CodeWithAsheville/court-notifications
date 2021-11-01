@@ -63,16 +63,16 @@
     "button": "Regístrese para recibir notificaciones"
   },
   "courtguide": {
-    "intro": "[ES]Failing to appear in court can result in an order for arrest and financial penalty. Here are some things to remember as your court date approaches:",
-    "item1": "[ES]Arrive at the Buncombe County Courthouse, 60 Court Plaza in Asheville, 30 minutes before your scheduled court session.",
-    "item2": "[ES]Paid parking is available at Buncombe County parking deck across the street from the courthouse, at 164 College Street.",
-    "item3": "[ES]A security checkpoint is located at the courthouse entrance. All persons must have their bags scanned and pass through a metal detector.",
-    "item4": "[ES]Make the necessary arrangements ahead of time so you can be present for court.",
-    "item5": "[ES]Dress respectfully.",
-    "item6": "[ES]You are responsible for appearing to all court dates. Be sure to know all of your court dates for any pending charges you have.",
-    "if-miss": "[ES]If you miss your court date, contact your lawyer immediately.",
-    "pd-phone": "[ES]Office of the Public Defender: (828) 259-3423",
-    "da-phone": "[ES]District Attorney’s Office: (828) 259-3410",
-    "clerk-phone": "[ES]Clerk of Superior Court: (828) 259-3400"
+    "intro": "No comparecer ante el juzgado puede resultar en una orden de arresto y sanción financiera. Aquí hay algunas cosas que debe recordar a medida que se acerca la fecha de su corte:",
+    "item1": "Llegue al juzgado del Condado de Buncombe, 60 Court Plaza en Asheville, 30 minutos antes de su sesión programada en la corte.",
+    "item2": "El estacionamiento de pago está disponible en la plataforma de estacionamiento del condado de Buncombe al otro lado de la calle del juzgado, en 164 College Street.",
+    "item3": "Un puesto de control de seguridad se encuentra en la entrada del juzgado. Todas las personas deben escanear sus bolsas y pasar por un detector de metales.",
+    "item4": "Haga los arreglos necesarios con anticipación para que pueda estar presente en la corte.",
+    "item5": "Vístete respetuosamente.",
+    "item6": "Usted es responsable de comparecer a todas las fechas de la corte. Asegúrese de conocer todas las fechas de su corte para cualquier cargo pendiente que tenga",
+    "if-miss": "Si faltas tu cita, póngase en contacto con su abogado inmediatamente",
+    "pd-phone": "Oficina del defensor público: (828) 259-3423",
+    "da-phone": "La fiscalía: (828) 259-3410",
+    "clerk-phone": "El secretario de tribunal superior: (828) 259-3400"
   }
 }
