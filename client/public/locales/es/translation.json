@@ -46,7 +46,7 @@
         "select": "Seleccione",
         "defendant": "El acusado",
         "birthDate": "La fecha de nacimiento",
-        "numberOfCases": "Número de los casos judiciales"
+        "numberOfCases": "Recuenta de los casos judiciales"
       }
   },
   "signup": {
@@ -58,7 +58,7 @@
     }, 
     "validations": {
         "isBlank": "El número de teléfono celular no puede estar en blanco",
-        "isInvalid": "No es un número de teléfono válido de 10 dígitos"
+        "isInvalid": "No es un número de teléfono válido"
     },
     "button": "Regístrese para recibir notificaciones"
   },
@@ -69,7 +69,7 @@
     "item3": "Un puesto de control de seguridad se encuentra en la entrada del juzgado. Todas las personas deben escanear sus bolsas y pasar por un detector de metales.",
     "item4": "Haga los arreglos necesarios con anticipación para que pueda estar presente en la corte.",
     "item5": "Vístete respetuosamente.",
-    "item6": "Usted es responsable de comparecer a todas las fechas de la corte. Asegúrese de conocer todas las fechas de su corte para cualquier cargo pendiente que tenga",
+    "item6": "Usted es responsable de comparecer a todas las fechas de la corte. Asegúrese de conocer todas las fechas de su corte para cualquier cargo pendiente que tenga.",
     "if-miss": "Si faltas tu cita, póngase en contacto con su abogado inmediatamente",
     "pd-phone": "Oficina del defensor público: (828) 259-3423",
     "da-phone": "La fiscalía: (828) 259-3410",

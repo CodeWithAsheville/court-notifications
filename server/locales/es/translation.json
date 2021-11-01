@@ -7,7 +7,7 @@
   "notifications": {
     "reminder1": "Recordatorio: {{name}} debe estar en el juzgado del condado de Buncombe el {{date}}. Asegúrese de organizar cualquier transporte o cuidado de niños necesario. Los casos fijados para ese día son:",
     "reminder2": "Recordatorio: {{nombre}} debe estar en el juzgado del condado de Buncombe el {{fecha}}. La falta de comparecencia en frente del tribunal puede dar lugar a una orden de arresto. Estos son sus casos:",
-    "admin-court": "{{adminCount}} caso(s) en el Tribunal administrativo. Puede entrar en este tribunal sin cita previa durante la semana entre las horas de 8:30 a 11:30 a.m. y de 1 a 4 p.m.\n",
+    "admin-court": "{{adminCount}} caso(s) en el Tribunal administrativo. Puede entrar en este tribunal sin cita previa durante la semana entre las horas de 8:30 a 11:30 a.m. y de 1 a 4 p.m.",
     "district-court": "{{districtCount}}  caso(s) en el Tribunal de Distrito a las 9 am en la sala (s): ",
     "superior-court": "{{superiorCount}} Casos en el Tribunal Superior. Los asuntos de la Corte Superior están programados para toda la semana. Por favor comuníquese con su abogado para averiguar qué fecha y hora debe presentarse en la Corte para la semana que su caso está programado.",
     "reminder-final": "Puede encontrar más información sobre cómo presentarse a la corte en https://buncombenc.courtdates.org/tips/"

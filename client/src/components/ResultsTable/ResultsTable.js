@@ -50,7 +50,7 @@ export default function ResultsTable({ state, dispatch }) {
         <p>
           <b>{t('casesTable.description')} {df} </b>&nbsp;&nbsp;&nbsp;
           <br/>
-           {t('casesTable.help')} <a href={computeFullSearchUrl(df)} target="_blank" rel="noreferrer">NC Courts site</a>.
+           {t('casesTable.help')} <a href={computeFullSearchUrl(df)} target="_blank" rel="noreferrer">NC Courts</a>.
         </p>
         {populatedTable}
       </div>
