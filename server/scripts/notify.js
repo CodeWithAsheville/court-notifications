@@ -94,7 +94,6 @@ function loadSubscribers(defendantId) {
 
 
 async function logNotification(defendant, tag) {
-  console.log('Inserting ' + JSON.stringify(defendant));
   await knex('log_notifications').insert({
     tag,
     first_name: defendant.first_name,
@@ -122,7 +121,6 @@ async function sendNotifications() {
 
     for (j = 0; j < defendants.length; ++j) {
       defendant = defendants[j];
-      console.log('Notify ' + JSON.stringify(defendant));
       const subscribers = await loadSubscribers(defendant.id)
       
       // And send out the notifications

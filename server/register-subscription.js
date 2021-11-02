@@ -161,7 +161,6 @@ function caseSummary (prev, cur) {
 }
 
 async function logSubscription(defendant, cases) {
-  console.log('Inserting ' + defendant.last_name);
   await knex('log_subscriptions').insert({
     first_name: defendant.first_name,
     middle_name: defendant.middle_name ? defendant.middle_name : '',
