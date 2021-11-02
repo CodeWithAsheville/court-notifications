@@ -93,9 +93,10 @@ function loadSubscribers(defendantId) {
 }
 
 
-async function logNotification(defendant, tag) {
+async function logNotification(defendant, notification) {
   await knex('log_notifications').insert({
-    tag,
+    tag: notification.key,
+    days_before: notification.days_before,
     first_name: defendant.first_name,
     middle_name: defendant.middle_name ? defendant.middle_name : '',
     last_name: defendant.last_name,
@@ -127,7 +128,7 @@ async function sendNotifications() {
       for (k = 0; k < subscribers.length; ++k) {
         const s = subscribers[k];
         // Log the notification
-        await logNotification(defendant, notificationSets[i].key);
+        await logNotification(defendant, notificationSets[i]);
         await i18next.changeLanguage(s.language);
         let message = Mustache.render(i18next.t(msgKey), defendant) + '\n\n';
         if (defendant.adminCount > 0) {

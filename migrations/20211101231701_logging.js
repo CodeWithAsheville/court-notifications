@@ -11,6 +11,7 @@ exports.up = async function(knex) {
   })
   .createTable('log_notifications', function (table) {
     table.string('tag');
+    table.integer('days_before');
     table.string('first_name');
     table.string('middle_name');
     table.string('last_name');
