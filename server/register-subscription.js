@@ -154,6 +154,24 @@ async function addSubscription(subscriberId, defendantId) {
   }
 }
 
+function caseSummary (prev, cur) {
+  const s = cur.caseNumber + ':' + cur.court + ':' + cur.courtRoom;
+  if (prev.length === 0) return s
+  return prev + ',' + s;
+}
+
+async function logSubscription(defendant, cases) {
+  console.log('Inserting ' + defendant.last_name);
+  await knex('log_subscriptions').insert({
+    first_name: defendant.first_name,
+    middle_name: defendant.middle_name ? defendant.middle_name : '',
+    last_name: defendant.last_name,
+    suffix: defendant.suffix ? defendant.suffix : '',
+    birth_date: defendant.birth_date,
+    cases: cases.reduce(caseSummary, '')
+  });
+}
+
 async function registerSubscription(req, callback, onError) {
   let returnMessage = req.t("signup-success");
   let returnCode = 200;
@@ -189,7 +207,10 @@ async function registerSubscription(req, callback, onError) {
             from: fromTwilioPhone,
             to: phone
           })
-          .then(message => console.log(message));
+          .then(async function(message) {
+            console.log(message);
+            logSubscription(defendant, cases);
+          });
     } catch (e) {
       if (e.code === 21610) {
         unsubscribe(phone);

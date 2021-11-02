@@ -21,11 +21,10 @@ function getFormattedDate(d) {
 async function loadDefendants(notificationDays) {
   let dateClause = 'court_date - CURRENT_DATE = ' + notificationDays
   const results = await knex('cases')
-    .select('cases.defendant_id', 'cases.case_number', 'cases.court_date', 'cases.court', 'cases.room', 'cases.session', 'defendants.first_name', 'defendants.middle_name', 'defendants.last_name', 'defendants.suffix')
+    .select('cases.defendant_id', 'cases.case_number', 'cases.court_date', 'cases.court', 'cases.room', 'cases.session', 'defendants.first_name', 'defendants.middle_name', 'defendants.last_name', 'defendants.suffix', 'defendants.birth_date')
     .leftOuterJoin('defendants', 'cases.defendant_id', 'defendants.id')
     .whereRaw(dateClause)
 
-  // First, get all the defendants and their cases and set up the text for them
   const defendantHash = {};
   const nameTemplate = '{{fname}} {{mname}} {{lname}} {{suffix}}'
   results.forEach(d => {
@@ -42,8 +41,14 @@ async function loadDefendants(notificationDays) {
       defendantHash[id] = {
         id,
         name: Mustache.render(nameTemplate, name),
+        first_name: d.first_name,
+        middle_name: d.middle_name,
+        last_name: d.last_name,
+        suffix: d.suffix,
+        birth_date: d.birth_date,
         date: getFormattedDate(courtDate),
         cases: [],
+        caseSummary: '',
         adminCount: 0,
         districtCount: 0,
         districtRooms: {},
@@ -51,6 +56,12 @@ async function loadDefendants(notificationDays) {
         superiorRooms: {}
       }
     }
+    const cs = d.case_number + ':' + d.court + ':' + d.room;
+    if (defendantHash[id].caseSummary.length > 0) {
+      defendantHash[id].caseSummary += ',';
+    }
+    defendantHash[id].caseSummary += cs;
+
     if (d.court.toLowerCase() === 'district') {
       if (d.room.toLowerCase() === 'admn') {
         ++defendantHash[id].adminCount
@@ -82,6 +93,22 @@ function loadSubscribers(defendantId) {
 }
 
 
+async function logNotification(defendant, tag) {
+  console.log('Inserting ' + JSON.stringify(defendant));
+  await knex('log_notifications').insert({
+    tag,
+    first_name: defendant.first_name,
+    middle_name: defendant.middle_name ? defendant.middle_name : '',
+    last_name: defendant.last_name,
+    suffix: defendant.suffix ? defendant.suffix : '',
+    birth_date: defendant.birth_date,
+    admin_count: defendant.adminCount,
+    district_count: defendant.districtCount,
+    superior_count: defendant.superiorCount,
+    cases: defendant.caseSummary
+  });
+}
+
 async function sendNotifications() {
   const client = require('twilio')(accountSid, authToken);
 
@@ -95,11 +122,14 @@ async function sendNotifications() {
 
     for (j = 0; j < defendants.length; ++j) {
       defendant = defendants[j];
+      console.log('Notify ' + JSON.stringify(defendant));
       const subscribers = await loadSubscribers(defendant.id)
       
       // And send out the notifications
       for (k = 0; k < subscribers.length; ++k) {
         const s = subscribers[k];
+        // Log the notification
+        await logNotification(defendant, notificationSets[i].key);
         await i18next.changeLanguage(s.language);
         let message = Mustache.render(i18next.t(msgKey), defendant) + '\n\n';
         if (defendant.adminCount > 0) {
@@ -142,7 +172,7 @@ async function notifications() {
     const notificationText = notificationSets[i].text;
     let dateClause = 'court_date - CURRENT_DATE = ' + notificationDays
     const results = await knex('cases')
-      .select('cases.defendant_id', 'cases.case_number', 'cases.court_date', 'cases.room', 'cases.session', 'defendants.first_name', 'defendants.middle_name', 'defendants.last_name', 'defendants.suffix')
+      .select('cases.defendant_id', 'cases.case_number', 'cases.court_date', 'cases.court', 'cases.room', 'cases.session', 'defendants.first_name', 'defendants.middle_name', 'defendants.last_name', 'defendants.suffix')
       .leftOuterJoin('defendants', 'cases.defendant_id', 'defendants.id')
       .whereRaw(dateClause)
 
