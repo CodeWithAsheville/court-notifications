@@ -17,12 +17,13 @@ async function updateDefendants(purgeDate, updateDays) {
   const defendantsToUpdate = await knex('records_to_update').select('defendant_id')
     .where('done', '=', 0).limit(updatesPerCall);
   const defendantIds = defendantsToUpdate.map(itm => itm.defendant_id)
-
+  console.log('Defendants to update: ', JSON.stringify(defendantIds));
   // Let's be optimistic and assume we'll succeed in updating, so just delete now
   await knex('records_to_update').delete().where('defendant_id', 'in', defendantIds);
   const defendants = await knex('defendants').select('*').where('id', 'in', defendantIds);
   for (let i = 0; i<defendants.length; ++i) {
     const d = defendants[i];
+    console.log('Update defendant ', JSON.stringify(d));
     const matches = await searchCourtRecords({lastName: d.last_name, firstName: d.first_name, middleName: d.middle_name}, null, console.log);
     let match = matches.filter(itm => (itm.defendant + '.' + itm.dob) === d.long_id);
     if (match.length > 0) {
