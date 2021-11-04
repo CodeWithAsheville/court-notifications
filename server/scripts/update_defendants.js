@@ -30,6 +30,9 @@ async function updateDefendants(purgeDate, updateDays) {
       const cases = match[0].cases
       await addCases(d.id, cases);
     }
+    let updates = d.updates + 1;
+    await knex('defendants').where('id', '=', d.id)
+      .update({ updates });
   }
 }
 
