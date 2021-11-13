@@ -1,10 +1,10 @@
 {
-  "title": "Los inscripciones para recordatorios de la corte del condado de Bumcombe",
-  "description": "Un proyecto de Code For Asheville",
+  "title": "Inscripciones recordatorias de la Corte del Condado de Buncombe",
+  "description": "Un proyecto del Código para Asheville",
   "languages": {
-      "english": "Inglés",
+      "english": "English",
       "spanish": "Español",
-      "ESssian": "Ruso"
+      "ESssian": "Русский"
   },
   "intro": {
     "description": {
@@ -14,7 +14,7 @@
 },
 "search": {
       "title": "Busque para los casos judiciales",
-      "description": "Ingresa su nombre, segundo y apellido para buscar los casos judiciales suyos. Aparecerán en la siguiente tabla.",
+      "description": "Ingrese su nombre, segundo nombre y apellido para buscar los casos judiciales suyos. Aparecerán en la siguiente tabla.",
       "inputfields": {
           "firstName" : "El nombre principal (opcional)",
           "middleName" : "El segundo nombre o la inicial (opcional)",
@@ -27,7 +27,7 @@
     }
 },
   "select": {
-      "title": "Seleccione un acusado y regístrerse",
+      "title": "Seleccione un acusado y regístrese",
       "description": "Los acusados que coinciden con su búsqueda se enumeran a continuación. Seleccione uno para registrarse."
   },
   "casesTable": {
@@ -36,29 +36,29 @@
       "columns": {
           "courtDate": "La fecha de la corte",
           "caseNumber": "Número del caso judicial",
-          "court":   "El tipo de la corte",
+          "court":   "La Corte",
           "room":    "La sala" 
       },
       "emptyTable" : "No se han encontrado resultados"
   },
   "defendantsTable": {
       "columns": {
-        "select": "Seleccione",
+        "select": "Selecione",
         "defendant": "El acusado",
         "birthDate": "La fecha de nacimiento",
-        "numberOfCases": "Recuenta de los casos judiciales"
+        "numberOfCases": "Número de los casos judiciales"
       }
   },
   "signup": {
     "title": "Regístrese para recibir notificaciones de los casos judiciales de ",
-    "description": "Ingrese su teléfono celular para suscribirse a recordatorios de mensajes de texto de cualquier fecha de la corte del Condado de Buncombe para este acusado. Usted recibirá dos recordatorios, uno por semana de anticipación y uno por un par de días antes de la fecha de la corte.",
-    "previousList": "Volver a la página anterior para todos los acusados",
+    "description": "Usted recibirá dos recordatorios, uno será la semana antes y el otro un par de días antes de la fecha de la corte.",
+    "previousList": "Regresar a todos los acusados",
     "fields": {
         "phoneNumber": "El número de teléfono celular"
     }, 
     "validations": {
         "isBlank": "El número de teléfono celular no puede estar en blanco",
-        "isInvalid": "No es un número de teléfono válido"
+        "isInvalid": "No es un número válido de teléfono"
     },
     "button": "Regístrese para recibir notificaciones"
   },
@@ -68,7 +68,7 @@
     "item2": "El estacionamiento de pago está disponible en la plataforma de estacionamiento del condado de Buncombe al otro lado de la calle del juzgado, en 164 College Street.",
     "item3": "Un puesto de control de seguridad se encuentra en la entrada del juzgado. Todas las personas deben escanear sus bolsas y pasar por un detector de metales.",
     "item4": "Haga los arreglos necesarios con anticipación para que pueda estar presente en la corte.",
-    "item5": "Vístete respetuosamente.",
+    "item5": "Vístase en forma respetuosa",
     "item6": "Usted es responsable de comparecer a todas las fechas de la corte. Asegúrese de conocer todas las fechas de su corte para cualquier cargo pendiente que tenga.",
     "if-miss": "Si faltas tu cita, póngase en contacto con su abogado inmediatamente",
     "pd-phone": "Oficina del defensor público: (828) 259-3423",
