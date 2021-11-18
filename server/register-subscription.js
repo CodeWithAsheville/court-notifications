@@ -154,21 +154,21 @@ async function addSubscription(subscriberId, defendantId) {
   }
 }
 
-function caseSummary (prev, cur) {
-  const s = cur.caseNumber + ':' + cur.court + ':' + cur.courtRoom;
-  if (prev.length === 0) return s
-  return prev + ',' + s;
-}
-
-async function logSubscription(defendant, cases) {
-  await knex('log_subscriptions').insert({
-    first_name: defendant.first_name,
-    middle_name: defendant.middle_name ? defendant.middle_name : '',
-    last_name: defendant.last_name,
-    suffix: defendant.suffix ? defendant.suffix : '',
-    birth_date: defendant.birth_date,
-    cases: cases.reduce(caseSummary, '')
+async function logSubscription(defendant, cases, language) {
+  const caseInserts = cases.map(c => {
+    return {
+      first_name: defendant.first_name,
+      middle_name: defendant.middle_name ? defendant.middle_name : '',
+      last_name: defendant.last_name,
+      suffix: defendant.suffix ? defendant.suffix : '',
+      birth_date: defendant.birth_date,
+      case_number: c.caseNumber,
+      language,
+      court: c.court,
+      room: c.courtRoom
+    };
   });
+  await knex('log_subscriptions').insert(caseInserts);
 }
 
 async function registerSubscription(req, callback, onError) {
@@ -208,7 +208,7 @@ async function registerSubscription(req, callback, onError) {
           })
           .then(async function(message) {
             console.log(message);
-            logSubscription(defendant, cases);
+            logSubscription(defendant, cases, req.language);
           });
     } catch (e) {
       if (e.code === 21610) {
