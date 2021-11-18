@@ -56,6 +56,7 @@ async function loadDefendants(notificationDays) {
         superiorRooms: {}
       }
     }
+    
     const cs = d.case_number + ':' + d.court + ':' + d.room;
     if (defendantHash[id].caseSummary.length > 0) {
       defendantHash[id].caseSummary += ',';
@@ -93,7 +94,7 @@ function loadSubscribers(defendantId) {
 }
 
 
-async function logNotification(defendant, notification) {
+async function logNotification(defendant, notification, language) {
   await knex('log_notifications').insert({
     tag: notification.key,
     days_before: notification.days_before,
@@ -105,7 +106,7 @@ async function logNotification(defendant, notification) {
     admin_count: defendant.adminCount,
     district_count: defendant.districtCount,
     superior_count: defendant.superiorCount,
-    cases: defendant.caseSummary
+    case: defendant.caseSummary
   });
 }
 
@@ -253,7 +254,6 @@ async function initTranslations() {
 (async() => {
   await initTranslations();
   console.log('Call notifications');
-//  await notifications();
   await sendNotifications();
   console.log('Done with notifications');
   process.exit();
