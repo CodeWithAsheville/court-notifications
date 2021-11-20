@@ -34,7 +34,7 @@ function computeSearchUrl(state, start, navIndex, submit) {
   return `https://www1.aoc.state.nc.us/www/calendars.Criminal.do?county=100&court=BTH+&${queryParams}&start=${start}&navindex=${navIndex}&fromcrimquery=yes&submit=${submit}`;
 }
 
-async function getCasesPage(axiosInstance, url, cases, onError) {
+async function getCasesPage(axiosInstance, url, cases) {
   let resp = await axiosInstance.get(url, {withCredentials: true});
   let content = resp.data;
 
@@ -91,7 +91,7 @@ function sortByDefendant(a, b) {
   return 0;
 }
 
-async function searchCourtRecords(body, callback, onError) {  
+async function searchCourtRecords(body, callback) {  
   const axiosInstance = axios.create();
   axiosCookieJarSupport(axiosInstance);
   axiosInstance.defaults.jar = new tough.CookieJar(); // Make sure we're using cookies
@@ -99,13 +99,13 @@ async function searchCourtRecords(body, callback, onError) {
   let url = computeSearchUrl(body, 0, 0, 'Search');
   var cases = []
 
-  let nextPage = await getCasesPage(axiosInstance, url, cases, onError, false)
+  let nextPage = await getCasesPage(axiosInstance, url, cases, false)
 
   let keepOn = nextPage.keepOn;
   let count = 0;
   while (keepOn) {
     url = computeSearchUrl(body, nextPage.start, nextPage.navindex, nextPage.submit);
-    nextPage = await getCasesPage(axiosInstance, url, cases, onError)
+    nextPage = await getCasesPage(axiosInstance, url, cases)
     keepOn = nextPage.keepOn;
     count = count + 1;
     if (count > maxPages) keepOn = false;
