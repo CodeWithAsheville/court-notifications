@@ -2,6 +2,7 @@ const knexConfig = require('../knexfile');
 var knex        = require('knex')(knexConfig);
 var Mustache = require('mustache');
 var { unsubscribe } = require('./scripts/unsubscribe');
+const { computeUrlName } = require('./scripts/computeUrlName');
 const { logger } = require('./scripts/logger');
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
@@ -192,14 +193,16 @@ async function registerSubscription(req, callback) {
     // Now send a verification message to the user
     const client = require('twilio')(accountSid, authToken);
     const nameTemplate = req.t("name-template");
-    const name = {
+    const defendantDetails = {
       fname: defendant.first_name,
       mname: defendant.middle_name ? defendant.middle_name : '',
       lname: defendant.last_name,
-      suffix: defendant.suffix ? defendant.suffix : ''
+      suffix: defendant.suffix ? defendant.suffix : '',
+      county: 100,
+      urlname: computeUrlName(defendant)
     }
 
-    let msg = Mustache.render(nameTemplate, name);
+    let msg = Mustache.render(nameTemplate, defendantDetails);
     try {
       await client.messages
           .create({
@@ -212,8 +215,8 @@ async function registerSubscription(req, callback) {
             logSubscription(defendant, cases, req.language);
           });
     } catch (e) {
+      unsubscribe(phone);
       if (e.code === 21610) {
-        unsubscribe(phone);
         msg = Mustache.render(req.t("error-start"), { phone: process.env.TWILIO_PHONE_NUMBER});
         throw msg;
       }

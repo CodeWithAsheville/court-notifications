@@ -10,6 +10,7 @@ const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const fromTwilioPhone = process.env.TWILIO_PHONE_NUMBER;
 const { logger } = require('./logger');
+const { computeUrlName } = require('./computeUrlName');
 
 const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
@@ -132,7 +133,7 @@ async function sendNotifications() {
     for (j = 0; j < defendants.length; ++j) {
       defendant = defendants[j];
       const subscribers = await loadSubscribers(defendant.id)
-      
+
       // And send out the notifications
       for (k = 0; k < subscribers.length; ++k) {
         const s = subscribers[k];
@@ -155,8 +156,11 @@ async function sendNotifications() {
         if (defendant.superiorCount > 0) {
           message += Mustache.render(i18next.t('notifications.superior-court'), defendant);
         }
-        message += '\n\n' + i18next.t('notifications.reminder-final');
-
+        const defendantDetails = {
+          county: 100,
+          urlname: computeUrlName(defendant)
+        }
+        message += '\n\n' + Mustache.render(i18next.t('notifications.reminder-final'), defendantDetails);
         const msgObject = {
           body: message,
           from: fromTwilioPhone,
@@ -185,7 +189,7 @@ async function initTranslations() {
   return i18next.loadLanguages(['en', 'es', 'ru']);
 }
 
-// 
+// Invoke
 (async() => {
   await initTranslations();
   logger.debug('Call notifications');
