@@ -11,7 +11,7 @@ const MessagingResponse = require('twilio').twiml.MessagingResponse;
 const { searchCourtRecords } = require("./server/search-court-records");
 const { registerSubscription } = require("./server/register-subscription");
 const { parseWebhook } = require('./server/scripts/twilio/webhook-parser')
-
+const { logger } = require('./server/scripts/logger');
 const path = require("path");
 
 i18next
@@ -42,7 +42,6 @@ app.use(function(req, res, next) {
   res.header('Access-Control-Allow-Origin', req.headers.origin);
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,UPDATE,OPTIONS');
   res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
-  console.log('processed header');
   next();
 });
 
@@ -62,11 +61,11 @@ if (process.env.NODE_ENV === "production") {
 }
 
 app.post("/api/court-search", (req, res) => {
-  searchCourtRecords(req.body, (cases) => res.json(cases), console.log);
+  searchCourtRecords(req.body, (cases) => res.json(cases));
 });
 
 app.post("/api/subscribe-to-defendant", (req, res) => {
-  registerSubscription(req, (signUpResult) => res.json(signUpResult), console.log);
+  registerSubscription(req, (signUpResult) => res.json(signUpResult));
 });
 
 app.post('/sms', parseWebhook);
@@ -81,4 +80,4 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
-app.listen(port, () => console.log(`Listening on port ${port}`));
+app.listen(port, () => logger.debug(`Listening on port ${port}`));

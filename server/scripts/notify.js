@@ -9,6 +9,7 @@ var Mustache = require('mustache');
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const fromTwilioPhone = process.env.TWILIO_PHONE_NUMBER;
+const { logger } = require('./logger');
 
 const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
@@ -123,7 +124,7 @@ async function sendNotifications() {
    * a specific number of days before the court date
    */
   for (i = 0; i < notificationSets.length; ++ i) {
-    console.log('Do notifications for ' + notificationSets[i].days_before + ' days');
+    logger.debug('Do notifications for ' + notificationSets[i].days_before + ' days');
     const notificationDays = notificationSets[i].days_before;
     const msgKey = notificationSets[i].key;
     const defendants = await loadDefendants(notificationDays);
@@ -163,7 +164,7 @@ async function sendNotifications() {
         };
         await client.messages
         .create(msgObject)
-        .then(message => console.log('Message sent: ', message.body));
+        .then(message => logger.debug('Message sent: ', message.body));
       }
     }
   }
@@ -187,9 +188,9 @@ async function initTranslations() {
 // 
 (async() => {
   await initTranslations();
-  console.log('Call notifications');
+  logger.debug('Call notifications');
   await sendNotifications();
-  console.log('Done with notifications');
+  logger.debug('Done with notifications');
   process.exit();
 })();
 

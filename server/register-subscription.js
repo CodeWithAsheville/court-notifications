@@ -103,7 +103,6 @@ async function addSubscriber(nextDate, phone, language) {
   }
   catch (e) {
     logger.error(e)
-//    console.log(e);
     throw 'Error in subscriber lookup';
   }
   if (subscribers.length > 0) { // We already have this subscriber, update the date if needed
@@ -132,7 +131,6 @@ async function addSubscriber(nextDate, phone, language) {
     }
     catch (e) {
       logger.error(e)
-//      console.log(e);
       throw 'Error adding subscriber';
     }
   }
@@ -174,11 +172,10 @@ async function logSubscription(defendant, cases, language) {
   await knex('log_subscriptions').insert(caseInserts);
 }
 
-async function registerSubscription(req, callback, onError) {
+async function registerSubscription(req, callback) {
   let returnMessage = req.t("signup-success");
   let returnCode = 200;
   const body = req.body;
-  console.log(logger);
   logger.debug('Adding a new subscription');
   try {
     const phone = body.phone_number.replace(/\D/g,'');
@@ -211,8 +208,7 @@ async function registerSubscription(req, callback, onError) {
             to: phone
           })
           .then(async function(message) {
-            logger.debug(message);
-//            console.log(message);
+            logger.debug('Successfully sent subscription confirmation: ' + message.body);
             logSubscription(defendant, cases, req.language);
           });
     } catch (e) {
