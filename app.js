@@ -24,7 +24,7 @@ i18next
       ignoreCase: true
     },
     saveMissing: true,
-    debug: true,
+    debug: false,
     fallbackLng: 'en',
     backend: {
       loadPath: __dirname + '/server/locales/{{lng}}/{{ns}}.json',

@@ -2,7 +2,7 @@ const knexConfig = require('../knexfile');
 var knex        = require('knex')(knexConfig);
 var Mustache = require('mustache');
 var { unsubscribe } = require('./scripts/unsubscribe');
-const logger = require('./scripts/logger');
+const { logger } = require('./scripts/logger');
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
@@ -178,6 +178,7 @@ async function registerSubscription(req, callback, onError) {
   let returnMessage = req.t("signup-success");
   let returnCode = 200;
   const body = req.body;
+  console.log(logger);
   logger.debug('Adding a new subscription');
   try {
     const phone = body.phone_number.replace(/\D/g,'');
