@@ -1,7 +1,7 @@
 {
   "signup-success": "Successfully subscribed",
   "no-cases": "No cases found",
-  "name-template": "You have subscribed to notifications for {{fname}} {{mname}} {{lname}} {{suffix}}",
+  "name-template": "You have subscribed to notifications for {{fname}} {{mname}} {{lname}} {{suffix}}. You may find details of charges on the NC Judicial Branch site: https://www1.aoc.state.nc.us/www/calendars.Criminal.do?county={{county}}&court=BTH+&defendant={{urlname}}&start=0&navindex=0&fromcrimquery=yes&submit=Search",
   "error-start": "You have previously unsubscribed from all messages from this service. You must text START to {{phone}} and then subscribe here again.",
   "error-unknown": "There was an unknown error texting you.",
   "notifications": {
@@ -10,7 +10,7 @@
     "admin-court": "{{adminCount}} case(s) in Admin Court. This is a drop-in court that is open 8:30-11:30 AM and 1-4 PM.",
     "district-court": "{{districtCount}} case(s) in District Court at 9am in room(s): ",
     "superior-court": "{{superiorCount}} cases in Superior Court. Superior Court matters are scheduled for the whole week. Please contact your attorney to find out what date and time you should appear in Court for the week your case is scheduled.",
-    "reminder-final": "You can find more information about showing up for court at https://buncombenc.courtdates.org/tips/"
+    "reminder-final": "You can find more information about showing up for court at https://buncombenc.courtdates.org/tips/. You may find details of charges on the NC Judicial Branch site: https://www1.aoc.state.nc.us/www/calendars.Criminal.do?county={{county}}&court=BTH+&defendant={{urlname}}&start=0&navindex=0&fromcrimquery=yes&submit=Search"
   },
   "unsubscribe": {
     "default": "You have been unsubscribed from Buncombe County Court Reminders. If you wish to resubscribe, visit https://buncombenc.courtdates.org.",
