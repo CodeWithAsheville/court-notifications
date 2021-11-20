@@ -2,6 +2,7 @@ const knexConfig = require('../knexfile');
 var knex        = require('knex')(knexConfig);
 var Mustache = require('mustache');
 var { unsubscribe } = require('./scripts/unsubscribe');
+const logger = require('./scripts/logger');
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
@@ -101,7 +102,8 @@ async function addSubscriber(nextDate, phone, language) {
       )
   }
   catch (e) {
-    console.log(e);
+    logger.error(e)
+//    console.log(e);
     throw 'Error in subscriber lookup';
   }
   if (subscribers.length > 0) { // We already have this subscriber, update the date if needed
@@ -129,7 +131,8 @@ async function addSubscriber(nextDate, phone, language) {
       subscriberId = retVal[0];
     }
     catch (e) {
-      console.log(e);
+      logger.error(e)
+//      console.log(e);
       throw 'Error adding subscriber';
     }
   }
@@ -175,7 +178,7 @@ async function registerSubscription(req, callback, onError) {
   let returnMessage = req.t("signup-success");
   let returnCode = 200;
   const body = req.body;
-
+  logger.debug('Adding a new subscription');
   try {
     const phone = body.phone_number.replace(/\D/g,'');
     let cases = body.details.cases;
@@ -207,7 +210,8 @@ async function registerSubscription(req, callback, onError) {
             to: phone
           })
           .then(async function(message) {
-            console.log(message);
+            logger.debug(message);
+//            console.log(message);
             logSubscription(defendant, cases, req.language);
           });
     } catch (e) {
@@ -217,6 +221,7 @@ async function registerSubscription(req, callback, onError) {
         throw msg;
       }
       msg = req.t("error-unknown") + ' ' + e.message + '(' + e.code + ')';
+      logger.error(msg);
       throw msg;
     }
   }
