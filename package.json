@@ -2,15 +2,15 @@
   "name": "court-notifications-app",
   "version": "0.1.0",
   "engines": {
-    "node": ">=15.0.0",
-    "npm": ">=6.0.0"
+    "node": ">=15.0.0 <16.0.0",
+    "npm": ">=6.0.0 <7.0.0"
   },
   "scripts": {
     "client": "cd client && yarn start",
     "server": "nodemon app.js",
     "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
     "start": "node app.js",
-    "heroku-postbuild": "cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
+    "heroku-postbuild": "cd client && yarn install --no-shrinkwrap && yarn build"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.4",
