@@ -216,7 +216,8 @@ async function registerSubscription(req, callback, onError) {
         msg = Mustache.render(req.t("error-start"), { phone: process.env.TWILIO_PHONE_NUMBER});
         throw msg;
       }
-      throw req.t("error-unknown");
+      msg = req.t("error-unknown") + ' ' + e.message + '(' + e.code + ')';
+      throw msg;
     }
   }
   catch (e) {
