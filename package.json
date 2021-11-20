@@ -1,6 +1,10 @@
 {
   "name": "court-notifications-app",
   "version": "0.1.0",
+  "engines": {
+    "node": ">=15.0.0",
+    "npm": ">=6.0.0"
+  },
   "scripts": {
     "client": "cd client && yarn start",
     "server": "nodemon app.js",
@@ -30,6 +34,6 @@
     "twilio": "^3.67.1"
   },
   "devDependencies": {
-    "concurrently": "^4.0.1"
+    "concurrently": "^6.4.0"
   }
 }
