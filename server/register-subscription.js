@@ -2,6 +2,8 @@ const knexConfig = require('../knexfile');
 var knex        = require('knex')(knexConfig);
 var Mustache = require('mustache');
 var { unsubscribe } = require('./scripts/unsubscribe');
+const { computeUrlName } = require('./scripts/computeUrlName');
+const { logger } = require('./scripts/logger');
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
@@ -101,7 +103,7 @@ async function addSubscriber(nextDate, phone, language) {
       )
   }
   catch (e) {
-    console.log(e);
+    logger.error(e)
     throw 'Error in subscriber lookup';
   }
   if (subscribers.length > 0) { // We already have this subscriber, update the date if needed
@@ -129,7 +131,7 @@ async function addSubscriber(nextDate, phone, language) {
       subscriberId = retVal[0];
     }
     catch (e) {
-      console.log(e);
+      logger.error(e)
       throw 'Error adding subscriber';
     }
   }
@@ -171,11 +173,11 @@ async function logSubscription(defendant, cases, language) {
   await knex('log_subscriptions').insert(caseInserts);
 }
 
-async function registerSubscription(req, callback, onError) {
+async function registerSubscription(req, callback) {
   let returnMessage = req.t("signup-success");
   let returnCode = 200;
   const body = req.body;
-
+  logger.debug('Adding a new subscription');
   try {
     const phone = body.phone_number.replace(/\D/g,'');
     let cases = body.details.cases;
@@ -191,14 +193,16 @@ async function registerSubscription(req, callback, onError) {
     // Now send a verification message to the user
     const client = require('twilio')(accountSid, authToken);
     const nameTemplate = req.t("name-template");
-    const name = {
+    const defendantDetails = {
       fname: defendant.first_name,
       mname: defendant.middle_name ? defendant.middle_name : '',
       lname: defendant.last_name,
-      suffix: defendant.suffix ? defendant.suffix : ''
+      suffix: defendant.suffix ? defendant.suffix : '',
+      county: 100,
+      urlname: computeUrlName(defendant)
     }
 
-    let msg = Mustache.render(nameTemplate, name);
+    let msg = Mustache.render(nameTemplate, defendantDetails);
     try {
       await client.messages
           .create({
@@ -207,16 +211,17 @@ async function registerSubscription(req, callback, onError) {
             to: phone
           })
           .then(async function(message) {
-            console.log(message);
+            logger.debug('Successfully sent subscription confirmation: ' + message.body);
             logSubscription(defendant, cases, req.language);
           });
     } catch (e) {
+      unsubscribe(phone);
       if (e.code === 21610) {
-        unsubscribe(phone);
         msg = Mustache.render(req.t("error-start"), { phone: process.env.TWILIO_PHONE_NUMBER});
         throw msg;
       }
       msg = req.t("error-unknown") + ' ' + e.message + '(' + e.code + ')';
+      logger.error(msg);
       throw msg;
     }
   }

@@ -51,7 +51,7 @@
   },
   "signup": {
     "title": "Regístrese para recibir notificaciones de los casos judiciales de ",
-    "description": "Usted recibirá dos recordatorios, uno será la semana antes y el otro un par de días antes de la fecha de la corte.",
+    "description": "Ingrese su teléfono celular para suscribirse a recordatorios de mensajes de texto de cualquier fecha de la corte del Condado de Buncombe para este acusado.  Usted recibirá dos recordatorios, uno será la semana antes y el otro un par de días antes de la fecha de la corte.",
     "previousList": "Regresar a todos los acusados",
     "fields": {
         "phoneNumber": "El número de teléfono celular"

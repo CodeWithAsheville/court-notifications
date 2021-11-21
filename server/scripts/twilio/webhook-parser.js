@@ -41,7 +41,8 @@
  *   ApiVersion: '2010-04-01'
  * }
  */
-const twilio = require('twilio')
+const twilio = require('twilio');
+const { logger } = require('../logger');
 const actions = require('./actions')
 const respondToUser = require('./respond-to-user')
 
@@ -106,7 +107,7 @@ function parseWebhook(req, res) {
     params
   );
   if (!isValid) {
-    console.log('parseWebhook: invalid incoming request - not from Twilio');
+    logger.error('parseWebhook: invalid incoming request - not from Twilio');
     return res.status(401).send('Unauthorized');
   } 
 

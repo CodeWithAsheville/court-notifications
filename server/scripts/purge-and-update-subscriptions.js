@@ -1,6 +1,6 @@
 require('dotenv').config({ path: '../../.env' })
 const knexConfig = require('../../knexfile');
-console.log(knexConfig)
+const { logger } = require('./logger');
 
 var knex        = require('knex')(knexConfig);
 
@@ -50,8 +50,8 @@ async function purgeAndUpdateSubscriptions() {
 // due to be updated. Actual updates happen in a separate
 // script
 (async() => {
-  console.log('Call purge-and-update-subscriptions');
+  logger.debug('Call purge-and-update-subscriptions');
   await purgeAndUpdateSubscriptions();
-  console.log('Done with purge');
+  logger.debug('Done with purge');
   process.exit();
 })();

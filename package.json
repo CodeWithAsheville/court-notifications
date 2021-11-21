@@ -1,12 +1,16 @@
 {
   "name": "court-notifications-app",
   "version": "0.1.0",
+  "engines": {
+    "node": ">=15.0.0 <16.0.0",
+    "npm": ">=6.0.0 <7.0.0"
+  },
   "scripts": {
     "client": "cd client && yarn start",
     "server": "nodemon app.js",
     "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
     "start": "node app.js",
-    "heroku-postbuild": "cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
+    "heroku-postbuild": "cd client && yarn install --no-shrinkwrap && yarn build"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.4",
@@ -26,10 +30,13 @@
     "mustache": "^4.2.0",
     "pg": "^8.7.1",
     "react-i18next": "^11.12.0",
+    "rollbar": "^2.24.0",
     "tough-cookie": "^4.0.0",
-    "twilio": "^3.67.1"
+    "twilio": "^3.67.1",
+    "winston": "^3.3.3",
+    "winston-transport": "^4.4.0"
   },
   "devDependencies": {
-    "concurrently": "^4.0.1"
+    "concurrently": "^6.4.0"
   }
 }
