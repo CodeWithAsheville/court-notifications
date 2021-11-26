@@ -1,5 +1,9 @@
 {
-    "title": "Buncombe County Court Reminders Sign Up",
+  "menu": {
+    "home": "Sign Up",
+    "tips": "Tips"
+  },
+  "title": "Buncombe County Court Reminders Sign Up",
     "description": "A project of Code for Asheville",
     "languages": {
         "english": "English",

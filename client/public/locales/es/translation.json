@@ -1,4 +1,8 @@
 {
+  "menu": {
+    "home": "Pagina de registro",
+    "tips": "Consejos"
+  },
   "title": "Inscripciones recordatorias de la Corte del Condado de Buncombe",
   "description": "Un proyecto del Código para Asheville",
   "languages": {
