@@ -74,5 +74,10 @@
     "pd-phone": "Oficina del defensor público: (828) 259-3423",
     "da-phone": "La fiscalía: (828) 259-3410",
     "clerk-phone": "El secretario de tribunal superior: (828) 259-3400"
+  },
+  "footer": {
+    "contact": "Contacta con nosotros",
+    "privacy-policy": "Política de privacidad",
+    "github": "Github"
   }
 }

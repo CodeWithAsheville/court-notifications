@@ -74,5 +74,10 @@
       "pd-phone": "Office of the Public Defender: (828) 259-3423",
       "da-phone": "District Attorney’s Office: (828) 259-3410",
       "clerk-phone": "Clerk of Superior Court: (828) 259-3400"
+    },
+    "footer": {
+      "contact": "Contact us",
+      "privacy-policy": "Privacy policy",
+      "github": "Github"
     }
 }

@@ -1,4 +1,7 @@
+import { useTranslation } from 'react-i18next';
+
 export default function Footer() {
+  const { t } = useTranslation();
   return (
     <footer>
       <div className="usa-footer__secondary-section">
@@ -14,10 +17,10 @@ export default function Footer() {
             </div>
               <div style={{textAlign: "center", width: "100%"}}>
                 <span style={{paddingRight: "2em"}}>
-                  <a href="https://docs.google.com/forms/d/e/1FAIpQLSfraeD1Uwlz10Mr_t4mbV96Hdwb0njm-kTQofQbNjucMw8KAQ/viewform?usp=sf_link" target="_blank" rel="noreferrer">Contact</a>
+                  <a href="https://docs.google.com/forms/d/e/1FAIpQLSfraeD1Uwlz10Mr_t4mbV96Hdwb0njm-kTQofQbNjucMw8KAQ/viewform?usp=sf_link" target="_blank" rel="noreferrer">{t('footer.contact')}</a>
                 </span>
                 <span style={{paddingRight: "2em"}}>
-                  <a href="https://docs.google.com/document/d/19M2zCxx4gICCmjgVx1bKSHlC92Gnb2SCmkmrclLIq3Y/" rel="noreferrer" target="_blank">Privacy Policy</a>
+                  <a href="https://docs.google.com/document/d/19M2zCxx4gICCmjgVx1bKSHlC92Gnb2SCmkmrclLIq3Y/" rel="noreferrer" target="_blank">{t('footer.privacy-policy')}</a>
                 </span>
                 <span>
                   <a href="https://github.com/CodeForAsheville/court-notifications" target="_blank" rel="noreferrer">Github</a>
