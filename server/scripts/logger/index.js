@@ -37,8 +37,7 @@ const logger = createLogger({
         new rollbarTransport({level: 'error'})
     ]
 })
-console.log('First time in logger!');
-logger.debug('Hello!');
+logger.debug('Initializing logger.');
 module.exports = {
   logger
 }
