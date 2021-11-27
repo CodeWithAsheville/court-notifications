@@ -3,6 +3,8 @@ const { syslog } = require('winston/lib/winston/config');
 const knexConfig = require('../../knexfile');
 const { logger } = require('./logger');
 const { twilioSendMessage } = require('./twilio/twilio_send_message');
+const i18next = require('i18next');
+var FsBackend = require('i18next-fs-backend');
 
 var knex        = require('knex')(knexConfig);
 
@@ -42,10 +44,12 @@ async function purgeAndUpdateSubscriptions() {
   // Attempt to notify them
   if (subscribers && subscribers.length > 0) {
     const client = require('twilio')(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKE);
-    subscribers.forEach(function (s) {
-      const message = 'All cases for the defendant(s) you subscribed to are complete, so we are purging your information from our system. If you need to sign up again in the future, visit https://buncombenc.courtdates.org/.';
-      twilioSendMessage(client, s.phone, message);
-    });
+    for (let i = 0; i< subscribers.length; ++i) {
+      s = subscribers[i];
+      await i18next.changeLanguage(s.language);
+      const message = i18next.t('unsubscribe.purge');
+      await twilioSendMessage(client, s.phone, message);
+    }
   }
 
   // Now actually delete them.
@@ -63,11 +67,27 @@ async function purgeAndUpdateSubscriptions() {
   }
 }
 
+async function initTranslations() {
+  await i18next
+  .use(FsBackend)
+  .init({
+    saveMissing: false,
+    debug: false,
+    fallbackLng: 'en',
+    backend: {
+      loadPath: __dirname + '/../locales/{{lng}}/{{ns}}.json',
+      addPath: __dirname + '/../locales/{{lng}}/{{ns}}.missing.json'
+    }
+  });
+  return i18next.loadLanguages(['en', 'es', 'ru']);
+}
+
 // Purge all court cases in the past and everything that 
 // depends only on them. Then set up a list of defendants 
 // due to be updated. Actual updates happen in a separate
 // script
 (async() => {
+  await initTranslations();
   logger.debug('Call purge-and-update-subscriptions');
   await purgeAndUpdateSubscriptions();
   logger.debug('Done with purge');
