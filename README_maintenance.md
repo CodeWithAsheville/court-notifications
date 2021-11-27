@@ -1,4 +1,6 @@
 # Maintaining the System
+
+## Upgrade the Postgres DB
 Assume the existing database is called _postgresql-horizontal-343434_.
 ```
   heroku login
