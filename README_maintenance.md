@@ -1,4 +1,4 @@
-#Maintaining the System
+# Maintaining the System
 Assume the existing database is called _postgresql-horizontal-343434_.
 ```
   heroku login
