@@ -16,17 +16,17 @@ cp .env.sample .env
 You will need to modify several variables, including the password and username that match your local database, the Twilio account sid, auth token and phone number for your personal Twilio account (see below), and your personal number for local testing.
 
 ```
-npm install
-npm install -g knex
+yarn install
+yarn install -g knex
 createdb court-notifications
 knex migrate:latest
-npm run dev
+yarn dev
 ```
 
 ### Setting Up Twilio For Local Testing
 You will need your own account for dev testing. Create a Twilio account and generate a phone number. Ensure you add these values to your local .env file.
 
-The gist is that you'll need to expose your localhost via ngrok, and setup your Twilio number to respond to incoming messages via webhook. Twilio posts to the `/sms` endpoint in `app.js`, which allows you to handle their incoming webhooks.
+The gist is that you'll need to expose your localhost via ngrok, and set up your Twilio number to respond to incoming messages via webhook. Twilio posts to the `/sms` endpoint in `app.js`, which allows you to handle their incoming webhooks.
 
 Follow the instructions [here](https://www.twilio.com/docs/sms/tutorials/how-to-receive-and-reply-node-js#generating-twiml-in-your-web-application)
 

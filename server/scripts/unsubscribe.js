@@ -6,7 +6,7 @@ async function unsubscribe(phone) {
       .where(
         knex.raw("PGP_SYM_DECRYPT(encrypted_phone::bytea, ?) = ?", [process.env.DB_CRYPTO_SECRET, phone])
       );
-  // Delete subscriber and any associated descriptions
+  // Delete subscriber and any associated subscriptions
   subscribers.forEach(async subscriber => {
     await knex('subscribers').delete().where('id', subscriber.id);
     const subscriptions = await knex('subscriptions').where('subscriber_id', subscriber.id);
