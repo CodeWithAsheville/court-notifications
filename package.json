@@ -1,7 +1,7 @@
 {
   "name": "court-notifications-app",
   "version": "0.1.0",
-  "license": "GPLV3",
+  "license": "GPL-3.0-only",
   "engines": {
     "node": ">=15.0.0 <16.0.0",
     "npm": ">=6.0.0 <7.0.0"
