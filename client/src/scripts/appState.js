@@ -160,8 +160,9 @@ export async function subscribeToDefendant(state) {
     const index = result.index;
     const checkUrl = "/api/check-subscription?index="+index+"&lng="+i18next.language;
     console.log('Let us check on the index ' + checkUrl);
-//    for (let i=0; i<6; i++) {
-//      await sleep(500);
+    let signupStatus = { message: 'Signup successful!' };
+    for (let i=0; i<6; i++) {
+      await sleep(500);
       const payload = {
         method: "GET",
         headers: {
@@ -172,8 +173,14 @@ export async function subscribeToDefendant(state) {
       result = await response.json();
       console.log('Back');
       console.log(result.status);
-//    }
-    return { message: result.status, code: 200};
+      // Status will be confirmed, pending or failed
+      if (result.status === 'confirmed') break;
+      if (result.status === 'failed') {
+        signupStatus = { message: 'Signup unsuccessful - an error occurred' };
+        break;
+      }
+    }
+    return signupStatus;
   }
   catch (e) {
     console.log('AppState error: ' + e);
