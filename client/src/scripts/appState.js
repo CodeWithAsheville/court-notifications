@@ -170,6 +170,10 @@ export async function subscribeToDefendant(state) {
         }
       };
       response = await fetch(checkUrl, payload);
+      // Note: .json() returns a promise because you receive the response
+      // as soon as all headers have arrived. Calling .json() gets you another
+      // promise for the body of the http response that is yet to be loaded.
+
       result = await response.json();
       console.log('Back');
       console.log(result.status);
