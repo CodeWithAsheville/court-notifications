@@ -11,10 +11,14 @@ const MessagingResponse = require('twilio').twiml.MessagingResponse;
 const { searchCourtRecords } = require("./server/search-court-records");
 const { registerSubscription } = require("./server/register-subscription");
 const { checkSubscription } = require('./server/check-subscription');
-const { parseWebhook } = require('./server/scripts/twilio/webhook-parser')
-const { subscriptionStatusWebhook } = require('./server/scripts/twilio/subscription-status-webhook');
+console.log('1');
+const { twilioWebhook } = require('./server/scripts/twilio/twilio-webhook')
+console.log('2');
+const { twilioSendStatusWebhook } = require('./server/scripts/twilio/twilio-send-status-webhook');
+console.log('3');
 const { logger } = require('./server/scripts/logger');
 const path = require("path");
+console.log('4');
 
 i18next
 .use(middleware.LanguageDetector)
@@ -61,6 +65,7 @@ if (process.env.NODE_ENV === "production") {
     }
   });
 }
+console.log('5');
 
 app.post("/api/court-search", (req, res) => {
   searchCourtRecords(req.body, (cases) => res.json(cases));
@@ -73,9 +78,11 @@ app.post("/api/subscribe-to-defendant", (req, res) => {
 app.get("/api/check-subscription", (req, res) => {
   checkSubscription(req, (checkResult) => res.json(checkResult))
 });
+console.log('6');
 
-app.post('/sms', parseWebhook);
-app.post('/subscription-status', subscriptionStatusWebhook);
+app.post('/sms', twilioWebhook);
+app.post('/send-status', twilioSendStatusWebhook);
+console.log('7');
 
 if (process.env.NODE_ENV === "production") {
   // Serve any static files

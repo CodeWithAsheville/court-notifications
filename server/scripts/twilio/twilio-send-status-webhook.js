@@ -12,14 +12,14 @@ const twilioErrorCodes = {
   '30008': 'Unknown error'
 };
 
-async function subscriptionStatusWebhook(req, res) {
+async function twilioSendStatusWebhook(req, res) {
   const failedStatus = ['delivery_unknown', 'undelivered', 'failed'];
   console.log('In subscriptionStatusWebhook!');
   console.log(req.body)
   // Make sure this is from Twilio
   const twilioSignature = req.headers['x-twilio-signature'];
   const params = req.body;
-  const url = process.env.TWILIO_SUBSCRIBEHOOK_URL;
+  const url = process.env.TWILIO_SEND_STATUS_WEBHOOK_URL;
   const isValid = twilio.validateRequest(
     process.env.TWILIO_AUTH_TOKEN,
     twilioSignature,
@@ -62,6 +62,6 @@ async function subscriptionStatusWebhook(req, res) {
 }
  
 module.exports = {
-  subscriptionStatusWebhook
+  twilioSendStatusWebhook
 }
  

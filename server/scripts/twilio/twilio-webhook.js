@@ -95,7 +95,7 @@ function identifyVerbs(body) {
   return Object.keys(verbs).find(verb => hasMatches(body, verbs[verb]))
 }
 
-function parseWebhook(req, res) {
+function twilioWebhook(req, res) {
   // Make sure this is from Twilio
   const twilioSignature = req.headers['x-twilio-signature'];
   const params = req.body;
@@ -120,5 +120,5 @@ function parseWebhook(req, res) {
 }
 
 module.exports = {
-  parseWebhook
+  twilioWebhook
 }

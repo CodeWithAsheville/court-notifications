@@ -138,7 +138,6 @@ export async function subscribeToDefendant(state) {
     return (item.defendant+'.'+item.dob === state.selectedDefendant);
   });
   const url = "/api/subscribe-to-defendant?lng="+i18next.language;
-  console.log('URL to subscribe ' + url);
   try {
     let response = await fetch(url, {
       method: "POST",
@@ -152,31 +151,25 @@ export async function subscribeToDefendant(state) {
       })
     });
     let result = await response.json();
-    console.log(result);
+
     if (result.code !== 200) { // Immediate error
       console.log('Immediate error in subscription: ' + JSON.stringify(result));
       return result;
     }
     const index = result.index;
     const checkUrl = "/api/check-subscription?index="+index+"&lng="+i18next.language;
-    console.log('Let us check on the index ' + checkUrl);
-    let signupStatus = { message: 'Signup successful!' };
-    for (let i=0; i<6; i++) {
-      await sleep(500);
-      const payload = {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        }
-      };
-      response = await fetch(checkUrl, payload);
-      // Note: .json() returns a promise because you receive the response
-      // as soon as all headers have arrived. Calling .json() gets you another
-      // promise for the body of the http response that is yet to be loaded.
+    const SLEEP_INTERVAL = 500; // How long to sleep between attempts
+    const MAX_ATTEMPTS = 6;
 
+    let signupStatus = { message: 'Signup successful!' };
+    for (let i = 0; i < MAX_ATTEMPTS; i++) {
+      await sleep(SLEEP_INTERVAL);
+      response = await fetch(checkUrl, { method: "GET", headers: { "Content-Type": "application/json" }});
+      // Note: .json() returns a promise because the response returns as soon
+      // as all headers have arrived. Calling .json() gets you another promise
+      // for the body of the http response that is yet to be loaded.
       result = await response.json();
-      console.log('Back');
-      console.log(result.status);
+
       // Status will be confirmed, pending or failed
       if (result.status === 'confirmed') break;
       if (result.status === 'failed') {
@@ -188,6 +181,6 @@ export async function subscribeToDefendant(state) {
   }
   catch (e) {
     console.log('AppState error: ' + e);
-    return { message: 'Error verifying subscription' };
+    return { message: 'Error attempting to verify subscription: ' + e };
   }
 }

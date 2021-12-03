@@ -210,7 +210,7 @@ async function registerSubscription(req, callback) {
           .create({
             body: msg,
             from: fromTwilioPhone,
-            statusCallback: process.env.TWILIO_SUBSCRIBEHOOK_URL,
+            statusCallback: process.env.TWILIO_SEND_STATUS_WEBHOOK_URL,
             to: phone
           })
           .then(async function(message) {
