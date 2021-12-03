@@ -145,5 +145,8 @@ export async function subscribeToDefendant(state) {
       details: filteredCases[0],
     })
   });
-  return response.json();
+  const result = response.json();
+  console.log(result);
+  return result;
+//  return response.json();
 }

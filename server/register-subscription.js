@@ -126,6 +126,7 @@ async function addSubscriber(nextDate, phone, language) {
           encrypted_phone: knex.raw("PGP_SYM_ENCRYPT(?::text, ?)", [phone, process.env.DB_CRYPTO_SECRET]),
           language,
           next_notify: nextNotify,
+          status: 'pending',
         })
         .returning('id');
       subscriberId = retVal[0];
@@ -178,6 +179,7 @@ async function registerSubscription(req, callback) {
   let returnCode = 200;
   const body = req.body;
   logger.debug('Adding a new subscription');
+  let subscriberId = null;
   try {
     const phone = body.phone_number.replace(/\D/g,'');
     let cases = body.details.cases;
@@ -186,7 +188,7 @@ async function registerSubscription(req, callback) {
     const defendant  = initializeDefendant(body);
     let defendantId  = await addDefendant(defendant);
     const nextDate   = await addCases(defendantId, cases);
-    let subscriberId = await addSubscriber(nextDate, phone, req.language);
+    subscriberId = await addSubscriber(nextDate, phone, req.language);
 
     await addSubscription(subscriberId, defendantId);
 
@@ -208,6 +210,7 @@ async function registerSubscription(req, callback) {
           .create({
             body: msg,
             from: fromTwilioPhone,
+            statusCallback: process.env.TWILIO_SUBSCRIBEHOOK_URL,
             to: phone
           })
           .then(async function(message) {
@@ -229,8 +232,8 @@ async function registerSubscription(req, callback) {
     returnMessage = (typeof e === 'string') ? e : e.message;
     returnCode = 500;
   }
-
-  callback({message: returnMessage, code: returnCode });
+  console.log('Calling back');
+  callback({message: returnMessage, code: returnCode, index: subscriberId });
 }
 module.exports = {
   registerSubscription,
