@@ -232,7 +232,6 @@ async function registerSubscription(req, callback) {
     returnMessage = (typeof e === 'string') ? e : e.message;
     returnCode = 500;
   }
-  console.log('Calling back');
   callback({message: returnMessage, code: returnCode, index: subscriberId });
 }
 module.exports = {

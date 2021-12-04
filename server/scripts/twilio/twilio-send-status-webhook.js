@@ -14,8 +14,6 @@ const twilioErrorCodes = {
 
 async function twilioSendStatusWebhook(req, res) {
   const failedStatus = ['delivery_unknown', 'undelivered', 'failed'];
-  console.log('In subscriptionStatusWebhook!');
-  console.log(req.body)
   // Make sure this is from Twilio
   const twilioSignature = req.headers['x-twilio-signature'];
   const params = req.body;
