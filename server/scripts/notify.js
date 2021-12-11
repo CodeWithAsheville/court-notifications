@@ -168,7 +168,7 @@ async function sendNotifications() {
         };
         await client.messages
         .create(msgObject)
-        .then(message => logger.debug('Message sent: ', message.body));
+        .then(sentMessage => logger.debug(JSON.stringify(sentMessage.body)));
       }
     }
   }
