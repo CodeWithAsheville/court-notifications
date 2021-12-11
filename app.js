@@ -12,7 +12,9 @@ const MessagingResponse = require('twilio').twiml.MessagingResponse;
 
 const { searchCourtRecords } = require("./server/search-court-records");
 const { registerSubscription } = require("./server/register-subscription");
-const { twilioIncomingWebhook } = require('./server/twilio-incoming-webhook')
+const { twilioIncomingWebhook } = require('./server/twilio-incoming-webhook');
+const { twilioSendStatusWebhook } = require('./server/twilio-send-status-webhook');
+
 const { logger } = require('./server/util/logger');
 const path = require("path");
 
@@ -71,6 +73,7 @@ app.post("/api/subscribe-to-defendant", (req, res) => {
 });
 
 app.post('/sms', twilioIncomingWebhook);
+app.post('/send-status', twilioSendStatusWebhook);
 
 if (process.env.NODE_ENV === "production") {
   // Serve any static files
