@@ -1,5 +1,5 @@
 const fromTwilioPhone = process.env.TWILIO_PHONE_NUMBER;
-const { logger } = require('../logger');
+const { logger } = require('./logger');
 
 async function twilioSendMessage(client, phone, inMessage) {
   const msgObject = {

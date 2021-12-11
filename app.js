@@ -8,10 +8,11 @@ var middleware = require('i18next-http-middleware');
 
 
 const MessagingResponse = require('twilio').twiml.MessagingResponse;
+
 const { searchCourtRecords } = require("./server/search-court-records");
 const { registerSubscription } = require("./server/register-subscription");
-const { parseWebhook } = require('./server/scripts/twilio/webhook-parser')
-const { logger } = require('./server/scripts/logger');
+const { twilioIncomingWebhook } = require('./server/twilio-incoming-webhook')
+const { logger } = require('./server/util/logger');
 const path = require("path");
 
 i18next
@@ -36,7 +37,7 @@ i18next
 
 const app = express();
 const port = process.env.PORT || 5000;
-
+console.log('headers')
 app.use(function(req, res, next) {
   res.header('Access-Control-Allow-Credentials', true);
   res.header('Access-Control-Allow-Origin', req.headers.origin);
@@ -68,7 +69,7 @@ app.post("/api/subscribe-to-defendant", (req, res) => {
   registerSubscription(req, (signUpResult) => res.json(signUpResult));
 });
 
-app.post('/sms', parseWebhook);
+app.post('/sms', twilioIncomingWebhook);
 
 if (process.env.NODE_ENV === "production") {
   // Serve any static files

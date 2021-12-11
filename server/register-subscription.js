@@ -1,9 +1,9 @@
 const knexConfig = require('../knexfile');
 var knex        = require('knex')(knexConfig);
 var Mustache = require('mustache');
-var { unsubscribe } = require('./scripts/unsubscribe');
-const { computeUrlName } = require('./scripts/computeUrlName');
-const { logger } = require('./scripts/logger');
+var { unsubscribe } = require('./util/unsubscribe');
+const { computeUrlName } = require('./util/computeUrlName');
+const { logger } = require('./util/logger');
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;

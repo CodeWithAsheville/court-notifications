@@ -1,8 +1,8 @@
-const knexConfig = require('../../../knexfile');
+const knexConfig = require('../../knexfile');
 const knex = require('knex')(knexConfig);
-const respondToUser = require('./respond-to-user')
-const doUnsubscribe = require('../unsubscribe').unsubscribe;
-const { logger } = require('../logger');
+const respondToUser = require('./twilio-respond-to-user')
+const doUnsubscribe = require('../util/unsubscribe').unsubscribe;
+const { logger } = require('./logger');
 
 async function unsubscribe(req, res) {
   // Use req.body.From to get the number, 

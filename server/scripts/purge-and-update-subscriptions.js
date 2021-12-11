@@ -1,8 +1,7 @@
 require('dotenv').config({ path: '../../.env' })
-const { syslog } = require('winston/lib/winston/config');
 const knexConfig = require('../../knexfile');
-const { logger } = require('./logger');
-const { twilioSendMessage } = require('./twilio/twilio_send_message');
+const { logger } = require('../util/logger');
+const { twilioSendMessage } = require('../util/twilio-send-message');
 const i18next = require('i18next');
 var FsBackend = require('i18next-fs-backend');
 

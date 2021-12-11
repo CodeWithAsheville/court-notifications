@@ -42,9 +42,9 @@
  * }
  */
 const twilio = require('twilio');
-const { logger } = require('../logger');
-const actions = require('./actions')
-const respondToUser = require('./respond-to-user')
+const { twilioRespondToUser } = require('./util/twilio-respond-to-user');
+const { logger } = require('./util/logger');
+const twilioActions = require('./util/twilio-actions');
 
 const verbs = {
   unsubscribe: ['stop', 'stopall', 'unsubscribe', 'cancel', 'end', 'quit'],
@@ -95,7 +95,7 @@ function identifyVerbs(body) {
   return Object.keys(verbs).find(verb => hasMatches(body, verbs[verb]))
 }
 
-function parseWebhook(req, res) {
+function twilioIncomingWebhook(req, res) {
   // Make sure this is from Twilio
   const twilioSignature = req.headers['x-twilio-signature'];
   const params = req.body;
@@ -113,12 +113,12 @@ function parseWebhook(req, res) {
 
   const verb = identifyVerbs(req.body.Body)
   if (verb === undefined) {
-    respondToUser(res, 'Unknown request. Text STOP to unsubscribe.')
+    twilioRespondToUser(res, 'Unknown request. Text STOP to unsubscribe.')
   } else {
-    return actions[verb](req, res)
+    return twilioActions[verb](req, res)
   }
 }
 
 module.exports = {
-  parseWebhook
+  twilioIncomingWebhook
 }

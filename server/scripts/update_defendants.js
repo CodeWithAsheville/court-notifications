@@ -4,7 +4,7 @@ var env         = 'development';
 var knex        = require('knex')(knexConfig);
 const { searchCourtRecords } = require('../search-court-records');
 const { addCases } = require('../register-subscription');
-const { logger } = require('./logger');
+const { logger } = require('../util/logger');
 
 async function updateDefendants(purgeDate, updateDays) {
 
