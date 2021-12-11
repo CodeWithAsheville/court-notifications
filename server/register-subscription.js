@@ -125,6 +125,7 @@ async function addSubscriber(nextDate, phone, language) {
           encrypted_phone: knex.raw("PGP_SYM_ENCRYPT(?::text, ?)", [phone, process.env.DB_CRYPTO_SECRET]),
           language,
           next_notify: nextNotify,
+          status: 'pending',
         })
         .returning('id');
       subscriberId = retVal[0];
@@ -176,6 +177,7 @@ async function registerSubscription(req, callback) {
   let returnMessage = req.t("signup-success");
   let returnCode = 200;
   const body = req.body;
+  let subscriberId = null;
   logger.debug('Adding a new subscription');
   try {
     const phone = body.phone_number.replace(/\D/g,'');
@@ -185,7 +187,7 @@ async function registerSubscription(req, callback) {
     const defendant  = initializeDefendant(body);
     let defendantId  = await addDefendant(defendant);
     const nextDate   = await addCases(defendantId, cases);
-    let subscriberId = await addSubscriber(nextDate, phone, req.language);
+    subscriberId = await addSubscriber(nextDate, phone, req.language);
 
     await addSubscription(subscriberId, defendantId);
 
@@ -230,7 +232,7 @@ async function registerSubscription(req, callback) {
     returnCode = 500;
   }
 
-  callback({message: returnMessage, code: returnCode });
+  callback({message: returnMessage, code: returnCode, index: subscriberId });
 }
 module.exports = {
   registerSubscription,

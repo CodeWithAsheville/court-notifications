@@ -128,13 +128,17 @@ export async function getCaseData(state) {
   return mergedCases;
 }
 
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 export async function subscribeToDefendant(state) {
   const filteredCases = state.cases.filter(item => {
     return (item.defendant+'.'+item.dob === state.selectedDefendant);
   });
   const url = "/api/subscribe-to-defendant?lng="+i18next.language;
   console.log('URL to subscribe ' + url);
-  const response = await fetch(url, {
+  let response = await fetch(url, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -145,5 +149,34 @@ export async function subscribeToDefendant(state) {
       details: filteredCases[0],
     })
   });
-  return response.json();
+  let result = await response.json();
+  if (result.code !== 200) { // Immediate error
+    console.log('Immediate error in subscription: ' + JSON.stringify(result));
+    return result;
+  }
+  const index = result.index;
+  const checkUrl = "/api/check-subscription?index="+index+"&lng="+i18next.language;
+  const SLEEP_INTERVAL = 500; // How long to sleep between attempts
+  const MAX_ATTEMPTS = 6;
+
+  let signupStatus = { message: 'Signup timed out. Please try again later.' };
+  for (let i = 0; i < MAX_ATTEMPTS; i++) {
+    await sleep(SLEEP_INTERVAL);
+    response = await fetch(checkUrl, { method: "GET", headers: { "Content-Type": "application/json" }});
+    // Note: .json() returns a promise because the response returns as soon
+    // as all headers have arrived. Calling .json() gets you another promise
+    // for the body of the http response that is yet to be loaded.
+    result = await response.json();
+
+    // Status will be confirmed, pending or failed
+    if (result.status === 'confirmed') {
+      signupStatus = { message: 'Signup successful!' };
+      break;
+    }
+    if (result.status === 'failed') {
+      signupStatus = { message: 'Signup unsuccessful - ' + result.errormessage };
+      break;
+    }
+  }
+  return Promise.resolve(signupStatus);
 }
