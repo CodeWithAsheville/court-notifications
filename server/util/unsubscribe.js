@@ -1,5 +1,4 @@
-const knexConfig = require('../../knexfile');
-const knex = require('knex')(knexConfig);
+const { knex } = require('./db');
 
 async function unsubscribe(phone) {
   const subscribers = await knex('subscribers').select()

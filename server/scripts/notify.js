@@ -2,8 +2,8 @@ require('dotenv').config({ path: '../../.env'});
 const i18next = require('i18next');
 var FsBackend = require('i18next-fs-backend');
 
-const knexConfig = require('../../knexfile');
-var knex        = require('knex')(knexConfig);
+const { knex } = require('../util/db');
+
 var Mustache = require('mustache');
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;

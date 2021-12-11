@@ -1,11 +1,10 @@
 require('dotenv').config({ path: '../../.env' })
-const knexConfig = require('../../knexfile');
 const { logger } = require('../util/logger');
 const { twilioSendMessage } = require('../util/twilio-send-message');
 const i18next = require('i18next');
 var FsBackend = require('i18next-fs-backend');
 
-var knex        = require('knex')(knexConfig);
+const { knex } = require('../util/db');
 
 function getPreviousDate(days) {
   const d = new Date();

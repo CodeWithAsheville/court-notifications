@@ -6,6 +6,7 @@ var i18next = require('i18next');
 var FsBackend = require('i18next-fs-backend');
 var middleware = require('i18next-http-middleware');
 
+const { knex } = require('./server/util/db');
 
 const MessagingResponse = require('twilio').twiml.MessagingResponse;
 

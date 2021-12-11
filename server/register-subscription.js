@@ -1,5 +1,4 @@
-const knexConfig = require('../knexfile');
-var knex        = require('knex')(knexConfig);
+const { knex } = require('./util/db');
 var Mustache = require('mustache');
 var { unsubscribe } = require('./util/unsubscribe');
 const { computeUrlName } = require('./util/computeUrlName');
