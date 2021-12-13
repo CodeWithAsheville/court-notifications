@@ -2,7 +2,7 @@ require('dotenv').config({ path: '../../.env' })
 var env         = 'development';
 const { knex } = require('../util/db');
 const { searchCourtRecords } = require('../search-court-records');
-const { addCases } = require('../register-subscription');
+const { addCases } = require('../util/subscribe');
 const { logger } = require('../util/logger');
 
 async function updateDefendants(purgeDate, updateDays) {
