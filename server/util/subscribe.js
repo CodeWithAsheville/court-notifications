@@ -148,14 +148,11 @@ async function addSubscription(subscriberId, defendantId) {
 async function subscribe(phone, defendantLongId, details, t, language) {
   let cases = details.cases;
   if (cases == null || cases.length == 0) throw t("no-cases");
-
   const defendant  = initializeDefendant(defendantLongId, details);
   let defendantId  = await addDefendant(defendant);
   const nextDate   = await addCases(defendantId, cases);
   const subscriberId = await addSubscriber(nextDate, phone, language);
-
   await addSubscription(subscriberId, defendantId);
-
   return { defendant, subscriberId, cases };
 }
 
