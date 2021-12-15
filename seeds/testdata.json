@@ -110,6 +110,34 @@
           }
         ]
       }
+    },
+    {
+      "selectedDefendant":"SMITH,AMBER,ROSE.07/27",
+      "phone_number":null,
+      "details": {
+        "defendant":"SMITH,AMBER,ROSE",
+        "dob":"07/27",
+        "cases":[
+          {
+              "court":"District",
+              "courtDate":"02/11/2022",
+              "courtRoom":"ADMN",
+              "session":"AM",
+              "caseNumber":"21CR705582",
+              "linkToCaseDetails":"http://www1.aoc.state.nc.us/www/calendars.Offense.do?submit=submit&case=1002021707143&court=IF",
+              "citationNumber":"x21H866"
+          },
+          {
+            "court":"District",
+            "courtDate":"02/11/2022",
+            "courtRoom":"ADMN",
+            "session":"AM",
+            "caseNumber":"21CR707148",
+            "linkToCaseDetails":"http://www1.aoc.state.nc.us/www/calendars.Offense.do?submit=submit&case=1002021707143&court=IF",
+            "citationNumber":"y21H866"
+        }
+      ]
+      }
     }
   ]
 }

@@ -17,18 +17,21 @@ exports.seed = async function(knex) {
   courtDates[0].setDate(today.getDate() + 2);
   courtDates[1].setDate(today.getDate() + 7);
   courtDates[2].setDate(today.getDate() - 3);
-
+  let failed = null;
   for (let i = 0; i<testData.subscriptions.length; ++i) {
     let itm = testData.subscriptions[i];
     let d = courtDates[i%3];
     for (let j=0; j<itm.details.cases.length; ++j) {
       itm.details.cases[j].courtDate = d.getMonth() + 1 + '/' + d.getDate() + '/' + d.getFullYear();
     }
-    const defendant = await subscribe(process.env.TEST_PHONE_NUMBER, itm.selectedDefendant, itm.details);
-
+    let phone = process.env.TEST_PHONE_NUMBER;
+    if (i === testData.subscriptions.length-1) phone = '8285551212'
+    const result = await subscribe(phone, itm.selectedDefendant, itm.details);
+    failed = result.subscriberId;
     console.log('Seeded data:');
-    console.log(JSON.stringify(defendant));
+    console.log(JSON.stringify(result));
   }
 
   await knex('subscribers').update('status', 'confirmed');
+  await knex('subscribers').update({status: 'failed', failed: 1}).where('id', failed);
 };

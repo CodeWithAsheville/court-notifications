@@ -5,7 +5,7 @@ const i18next = require('i18next');
 var FsBackend = require('i18next-fs-backend');
 
 const { knex } = require('../util/db');
-const { subscribe } = require('../util/subscribe');
+const { unsubscribe } = require('../util/unsubscribe');
 
 function getPreviousDate(days) {
   const d = new Date();
@@ -25,12 +25,14 @@ async function purgeAndUpdateSubscriptions() {
   // Do a rolling delete of expired cases, then anything that depends only on them.
   const daysBeforePurge = await getConfigurationIntValue('days_before_purge', 1);
   const daysBeforeUpdate = await getConfigurationIntValue('days_before_update', 7);
+
   const purgeDate = getPreviousDate(daysBeforePurge);
   let count = await knex('cases').delete().where('court_date', '<', purgeDate);
   if (count > 0) logger.debug(count + ' cases purged');
   count = await knex('defendants').delete().whereNotExists(function() {
     this.select('*').from('cases').whereRaw('cases.defendant_id = defendants.id');
   });
+
   if (count > 0) logger.debug(count + ' defendants purged');
   count = await knex('subscriptions').delete().whereNotExists(function() {
     this.select('*').from('defendants').whereRaw('defendants.id = subscriptions.defendant_id');
@@ -43,10 +45,11 @@ async function purgeAndUpdateSubscriptions() {
   .whereNotExists(function() {
     this.select('*').from('subscriptions').whereRaw('subscriptions.subscriber_id = subscribers.id');
   });
+
   // Attempt to notify them
   if (subscribers && subscribers.length > 0) {
-    looger.debug(subscribers.length + ' subscribers purged');
-    const client = require('twilio')(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKE);
+    logger.debug(subscribers.length + ' subscribers purged');
+    const client = require('twilio')(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
     for (let i = 0; i< subscribers.length; ++i) {
       s = subscribers[i];
       await i18next.changeLanguage(s.language);
@@ -59,6 +62,17 @@ async function purgeAndUpdateSubscriptions() {
   await knex('subscribers').delete().whereNotExists(function() {
     this.select('*').from('subscriptions').whereRaw('subscriptions.subscriber_id = subscribers.id');
   });
+
+  // Delete all the subscribers with status failed
+  let failedSubscribers = await knex('subscribers')
+    .select('subscribers.id',
+    knex.raw('PGP_SYM_DECRYPT("subscribers"."encrypted_phone"::bytea, ?) as phone', [process.env.DB_CRYPTO_SECRET]))
+    .where('status', '=', 'failed');
+
+  while (failedSubscribers.length > 0) {
+    const s = failedSubscribers.pop();
+    await unsubscribe(s.phone);
+  }
 
   // Now we need to prepare to update information on remaining subscribers
   const updateDate = getPreviousDate(daysBeforeUpdate);
