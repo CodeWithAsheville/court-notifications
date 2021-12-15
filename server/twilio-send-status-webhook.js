@@ -2,6 +2,7 @@ const twilio = require('twilio');
 const { knex } = require('./util/db');
 
 const { logger } = require('./util/logger');
+const MAX_FAILED_DELIVERIES = 2;
 
 async function twilioSendStatusWebhook(req, res) {
   const failedStatus = ['delivery_unknown', 'undelivered', 'failed'];
@@ -31,12 +32,12 @@ async function twilioSendStatusWebhook(req, res) {
       .where(
         knex.raw("PGP_SYM_DECRYPT(encrypted_phone::bytea, ?) = ?", [process.env.DB_CRYPTO_SECRET, phone])
       );
-      if (subscribers && subscribers.length > 0 && subscribers[0].status === 'pending') {
+      if (subscribers && subscribers.length > 0) {
         await knex('subscribers')
         .where(
           knex.raw("PGP_SYM_DECRYPT(encrypted_phone::bytea, ?) = ?", [process.env.DB_CRYPTO_SECRET, phone])
         )
-        .update({ status: 'confirmed' });
+        .update({ status: 'confirmed', failed: 0 }); // Reset status & failed always
       }
     }
     else if (failedStatus.includes(status)) {
@@ -45,23 +46,21 @@ async function twilioSendStatusWebhook(req, res) {
         knex.raw("PGP_SYM_DECRYPT(encrypted_phone::bytea, ?) = ?", [process.env.DB_CRYPTO_SECRET, phone])
       );
       if (subscribers && subscribers.length > 0) {
+        let newStatus = subscribers[0].status;
         console.log(JSON.stringify(subscribers[0]))
         if (subscribers[0].status === 'pending') {
-          subscribers = await knex('subscribers')
-          .where(
-            knex.raw("PGP_SYM_DECRYPT(encrypted_phone::bytea, ?) = ?", [process.env.DB_CRYPTO_SECRET, phone])
-          )
-          .update({ status: 'failed', failed: subscribers[0].failed + 1, errorcode: params['ErrorCode'] });
+          newStatus = 'failed';
           logger.error('Failed subscription - error code ' + params['ErrorCode']);
         }
         else {
-          await knex('subscribers')
-          .where(
-            knex.raw("PGP_SYM_DECRYPT(encrypted_phone::bytea, ?) = ?", [process.env.DB_CRYPTO_SECRET, phone])
-          )
-          .update({ failed: subscribers[0].failed + 1, errorcode: params['ErrorCode'] });
-          logger.error('Failed subscription - error code ' + params['ErrorCode']);
+          if (subscribers[0].failed >= MAX_FAILED_DELIVERIES) newStatus = 'failed';
+          logger.error('Subscriber exceeded max delivery failures - marking failed: ' + params['ErrorCode']);
         }
+        await knex('subscribers')
+        .where(
+          knex.raw("PGP_SYM_DECRYPT(encrypted_phone::bytea, ?) = ?", [process.env.DB_CRYPTO_SECRET, phone])
+        )
+        .update({ status: newStatus, failed: subscribers[0].failed + 1, errorcode: params['ErrorCode'] });
       }
     }
     else {
