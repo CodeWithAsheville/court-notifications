@@ -25,7 +25,10 @@ exports.seed = async function(knex) {
       itm.details.cases[j].courtDate = d.getMonth() + 1 + '/' + d.getDate() + '/' + d.getFullYear();
     }
     const defendant = await subscribe(process.env.TEST_PHONE_NUMBER, itm.selectedDefendant, itm.details);
+
     console.log('Seeded data:');
     console.log(JSON.stringify(defendant));
   }
+
+  await knex('subscribers').update('status', 'confirmed');
 };
