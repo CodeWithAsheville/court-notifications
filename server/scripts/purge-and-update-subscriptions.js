@@ -74,6 +74,13 @@ async function purgeAndUpdateSubscriptions() {
     await unsubscribe(s.phone);
   }
 
+  // There is an edge case where we don't catch the notification
+  // of failure on a subscriber and the status could stay pending.
+  // I don't think we need special logic for this - there will be an 
+  // attempt to notify at some point and whether it succeeds or fails,
+  // the status will be properly set and the record set to either 'failed'
+  // or 'confirmed'.
+
   // Now we need to prepare to update information on remaining subscribers
   const updateDate = getPreviousDate(daysBeforeUpdate);
   const defendantsToUpdate = await knex('defendants').select('id as defendant_id')
