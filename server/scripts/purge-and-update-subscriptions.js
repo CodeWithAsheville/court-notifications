@@ -48,15 +48,17 @@ async function purgeAndUpdateSubscriptions() {
       s = subscribers[i];
       await i18next.changeLanguage(s.language);
       const message = i18next.t('unsubscribe.purge');
-      await twilioSendMessage(client, s.phone, message);
+      console.log('Send to phone ' + s.phone);
+      const rr = await twilioSendMessage(client, s.phone, message);
+      console.log(JSON.stringify(rr));
     }
   }
-
+  console.log('Delete');
   // Now actually delete them.
   await knex('subscribers').delete().whereNotExists(function() {
     this.select('*').from('subscriptions').whereRaw('subscriptions.subscriber_id = subscribers.id');
   });
-
+  console.log('done');
   // Now we need to prepare to update information on remaining subscribers
   const updateDate = getPreviousDate(daysBeforeUpdate);
   const defendantsToUpdate = await knex('defendants').select('id as defendant_id')
@@ -65,6 +67,7 @@ async function purgeAndUpdateSubscriptions() {
   if (defendantsToUpdate && defendantsToUpdate.length > 0) {
     await knex('records_to_update').insert(defendantsToUpdate);
   }
+  console.log('leaving routine');
 }
 
 async function initTranslations() {
