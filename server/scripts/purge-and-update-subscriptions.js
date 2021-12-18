@@ -45,12 +45,18 @@ async function purgeAndUpdateSubscriptions() {
   if (subscribers && subscribers.length > 0) {
     const client = require('twilio')(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKE);
     for (let i = 0; i< subscribers.length; ++i) {
-      s = subscribers[i];
-      await i18next.changeLanguage(s.language);
-      const message = i18next.t('unsubscribe.purge');
-      console.log('Send to phone ' + s.phone);
-      const rr = await twilioSendMessage(client, s.phone, message);
-      console.log(JSON.stringify(rr));
+      console.log('Alert subscriber ' + i);
+      try {
+        s = subscribers[i];
+        await i18next.changeLanguage(s.language);
+        const message = i18next.t('unsubscribe.purge');
+        console.log('Send to phone ' + s.phone);
+        const rr = await twilioSendMessage(client, s.phone, message);
+        console.log(JSON.stringify(rr));
+      } 
+      catch (err) {
+        console.log('Hit an error! ' + err);
+      }
     }
   }
   console.log('Delete');
