@@ -180,3 +180,26 @@ export async function subscribeToDefendant(state) {
   }
   return Promise.resolve(signupStatus);
 }
+
+export async function unsubscribe(state) {
+  const url = "/api/unsubscribe?lng="+i18next.language;
+  let response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      phone_number: state.phone_number
+    })
+  });
+  console.log(response);
+  let result = await response.json();
+  console.log(JSON.stringify(result));
+  if (result.code !== 200) { // Immediate error
+    console.log('Immediate error unsubscribing: ' + JSON.stringify(result));
+    return Promise.resolve({ message: result });
+  }
+
+  let signupStatus = { message: 'Unsubscribe request sent.' };
+  return Promise.resolve(signupStatus);
+}

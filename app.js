@@ -77,6 +77,10 @@ app.get("/api/check-subscription", (req, res) => {
   checkSubscription(req, (checkResult) => res.json(checkResult))
 });
 
+app.post("/api/unsubscribe", (req, res) => {
+  return res.json("hi");
+});
+
 app.post('/sms', twilioIncomingWebhook);
 app.post('/send-status', twilioSendStatusWebhook);
 
