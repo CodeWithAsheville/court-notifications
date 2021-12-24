@@ -6,12 +6,17 @@ var i18next = require('i18next');
 var FsBackend = require('i18next-fs-backend');
 var middleware = require('i18next-http-middleware');
 
+const { knex } = require('./server/util/db');
 
 const MessagingResponse = require('twilio').twiml.MessagingResponse;
+
 const { searchCourtRecords } = require("./server/search-court-records");
 const { registerSubscription } = require("./server/register-subscription");
-const { parseWebhook } = require('./server/scripts/twilio/webhook-parser')
-const { logger } = require('./server/scripts/logger');
+const { checkSubscription } = require('./server/check-subscription');
+const { twilioIncomingWebhook } = require('./server/twilio-incoming-webhook');
+const { twilioSendStatusWebhook } = require('./server/twilio-send-status-webhook');
+
+const { logger } = require('./server/util/logger');
 const path = require("path");
 
 i18next
@@ -68,7 +73,12 @@ app.post("/api/subscribe-to-defendant", (req, res) => {
   registerSubscription(req, (signUpResult) => res.json(signUpResult));
 });
 
-app.post('/sms', parseWebhook);
+app.get("/api/check-subscription", (req, res) => {
+  checkSubscription(req, (checkResult) => res.json(checkResult))
+});
+
+app.post('/sms', twilioIncomingWebhook);
+app.post('/send-status', twilioSendStatusWebhook);
 
 if (process.env.NODE_ENV === "production") {
   // Serve any static files

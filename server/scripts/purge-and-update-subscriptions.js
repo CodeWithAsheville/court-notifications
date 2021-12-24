@@ -1,12 +1,11 @@
 require('dotenv').config({ path: '../../.env' })
-const { syslog } = require('winston/lib/winston/config');
-const knexConfig = require('../../knexfile');
-const { logger } = require('./logger');
-const { twilioSendMessage } = require('./twilio/twilio_send_message');
+const { logger } = require('../util/logger');
+const { twilioSendMessage } = require('../util/twilio-send-message');
 const i18next = require('i18next');
 var FsBackend = require('i18next-fs-backend');
 
-var knex        = require('knex')(knexConfig);
+const { knex } = require('../util/db');
+const { unsubscribe } = require('../util/unsubscribe');
 
 function getPreviousDate(days) {
   const d = new Date();
@@ -26,14 +25,19 @@ async function purgeAndUpdateSubscriptions() {
   // Do a rolling delete of expired cases, then anything that depends only on them.
   const daysBeforePurge = await getConfigurationIntValue('days_before_purge', 1);
   const daysBeforeUpdate = await getConfigurationIntValue('days_before_update', 7);
+
   const purgeDate = getPreviousDate(daysBeforePurge);
-  await knex('cases').delete().where('court_date', '<', purgeDate);
-  await knex('defendants').delete().whereNotExists(function() {
+  let count = await knex('cases').delete().where('court_date', '<', purgeDate);
+  if (count > 0) logger.debug(count + ' cases purged');
+  count = await knex('defendants').delete().whereNotExists(function() {
     this.select('*').from('cases').whereRaw('cases.defendant_id = defendants.id');
   });
-  await knex('subscriptions').delete().whereNotExists(function() {
+
+  if (count > 0) logger.debug(count + ' defendants purged');
+  count = await knex('subscriptions').delete().whereNotExists(function() {
     this.select('*').from('defendants').whereRaw('defendants.id = subscriptions.defendant_id');
   });
+  if (count > 0) logger.debug(count + ' subscriptions purged');
 
   subscribers = await knex('subscribers')
   .select('subscribers.id', 'subscribers.language',
@@ -41,9 +45,11 @@ async function purgeAndUpdateSubscriptions() {
   .whereNotExists(function() {
     this.select('*').from('subscriptions').whereRaw('subscriptions.subscriber_id = subscribers.id');
   });
+
   // Attempt to notify them
   if (subscribers && subscribers.length > 0) {
-    const client = require('twilio')(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKE);
+    logger.debug(subscribers.length + ' subscribers purged');
+    const client = require('twilio')(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
     for (let i = 0; i< subscribers.length; ++i) {
       try {
         s = subscribers[i];
@@ -61,6 +67,24 @@ async function purgeAndUpdateSubscriptions() {
   await knex('subscribers').delete().whereNotExists(function() {
     this.select('*').from('subscriptions').whereRaw('subscriptions.subscriber_id = subscribers.id');
   });
+
+  // Delete all the subscribers with status failed
+  let failedSubscribers = await knex('subscribers')
+    .select('subscribers.id',
+    knex.raw('PGP_SYM_DECRYPT("subscribers"."encrypted_phone"::bytea, ?) as phone', [process.env.DB_CRYPTO_SECRET]))
+    .where('status', '=', 'failed');
+
+  while (failedSubscribers.length > 0) {
+    const s = failedSubscribers.pop();
+    await unsubscribe(s.phone);
+  }
+
+  // There is an edge case where we don't catch the notification
+  // of failure on a subscriber and the status could stay pending.
+  // I don't think we need special logic for this - there will be an 
+  // attempt to notify at some point and whether it succeeds or fails,
+  // the status will be properly set and the record set to either 'failed'
+  // or 'confirmed'.
 
   // Now we need to prepare to update information on remaining subscribers
   const updateDate = getPreviousDate(daysBeforeUpdate);

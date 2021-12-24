@@ -1,12 +1,12 @@
 // NOTE: You need to do this with the updated path
 // for any file you want to run in isolation. 
 // Yet another reason to add an actual test runner...
-require('dotenv').config({ path: '../../../.env'})
+require('dotenv').config({ path: '../../.env'})
 
-const knexConfig = require('../../../knexfile');
+const knexConfig = require('../../knexfile');
 const knex = require('knex')(knexConfig);
 
-const { parseWebhook } = require('./webhook-parser')
+const { twilioIncomingWebhook } = require('../twilio-incoming-webhook');
 
 /**
  * We should get an actual test library...
@@ -44,7 +44,7 @@ const req = {
   }
 }
 
-test('Should be able to parse webhook', () => parseWebhook(req, res))
+test('Should be able to parse webhook', () => twilioIncomingWebhook(req, res))
 test('What will happen?', () => (true === true))
 
 successess.forEach(success => console.log('\x1b[32m%s\x1b[0m', success.description + '\n'))
