@@ -197,9 +197,6 @@ export async function unsubscribe(state) {
   console.log(JSON.stringify(result));
   if (result.code !== 200) { // Immediate error
     console.log('Immediate error unsubscribing: ' + JSON.stringify(result));
-    return Promise.resolve({ message: result });
   }
-
-  let signupStatus = { message: 'Unsubscribe request sent.' };
-  return Promise.resolve(signupStatus);
+  return Promise.resolve({ message: result.message });
 }
