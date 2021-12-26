@@ -40,7 +40,24 @@ async function resubscribe(req, res) {
   respondToUser(res, message)
 }
 
+async function confirmUnsubscribe(req, res) {
+  let message = 'Unsubscribe successful.';
+  try {
+    console.log('CALL UNSUBSCRIBE')
+    let phone = req.body.From;
+    if (phone && phone.startsWith('+1')) {
+      phone = phone.substring(2);
+    }
+    doUnsubscribe(phone);
+  }
+  catch(err) {
+    logger.error('Error unsubscribing: ' + err);
+  }
+  respondToUser(res, message)
+}
+
 module.exports = {
   unsubscribe,
-  resubscribe
+  resubscribe,
+  confirmUnsubscribe
 }
