@@ -10,6 +10,7 @@ import Header from "./components/Header/Header";
 import Footer from "./components/Footer";
 import Intro from "./components/Intro/Intro";
 import Tips from "./components/Tips/Tips";
+import Unsubscribe from "./components/Unsubscribe/Unsubscribe";
 import stepper from "./scripts/stepper";
 import {
   BrowserRouter as Router,
@@ -63,7 +64,7 @@ function reducer(state, action) {
         ...state,
         signupSuccess: action.value,
       };
-    case "reload-cases":
+      case "reload-cases":
       return {
         ...state,
         cases: action.value,
@@ -98,15 +99,19 @@ function reducer(state, action) {
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
+  
   return (
     <Router>
       <div className="App">
         <Header state={state} dispatch={dispatch} />
         <Switch>
-          <Route path="/tips">
+          <Route path='/unsubscribe' >
+            <Unsubscribe state={state} dispatch={dispatch} />
+          </Route>
+          <Route path='/tips'>
             <Tips />
           </Route>
-          <Route exact={true} path="/">
+          <Route exact={true} path='/'>
             <Home state={state} dispatch={dispatch} />
           </Route>
         </Switch>
