@@ -22,7 +22,9 @@ async function getConfigurationIntValue(name, defaultValue = 0) {
 }
 
 async function purgeAndUpdateSubscriptions() {
-  // Do a rolling delete of expired cases, then anything that depends only on them.
+  /*
+   * Do a rolling delete of expired cases, then anything that depends only on them.
+   */
   const daysBeforePurge = await getConfigurationIntValue('days_before_purge', 1);
   const daysBeforeUpdate = await getConfigurationIntValue('days_before_update', 7);
 
@@ -68,7 +70,9 @@ async function purgeAndUpdateSubscriptions() {
     this.select('*').from('subscriptions').whereRaw('subscriptions.subscriber_id = subscribers.id');
   });
 
-  // Delete all the subscribers with status failed
+  /*
+   * Delete all the subscribers with status failed
+   */
   let failedSubscribers = await knex('subscribers')
     .select('subscribers.id',
     knex.raw('PGP_SYM_DECRYPT("subscribers"."encrypted_phone"::bytea, ?) as phone', [process.env.DB_CRYPTO_SECRET]))
@@ -78,6 +82,17 @@ async function purgeAndUpdateSubscriptions() {
     const s = failedSubscribers.pop();
     await unsubscribe(s.phone);
   }
+
+  /*
+   * Change 'unsubscribe' status back to 'confirmed' if there's been no
+   * confirmation for > 2 days
+   */
+
+  const expiredUnsubscribeDate = getPreviousDate(1);
+  await knex('subscribers')
+    .where('status', '=', 'unsubscribe')
+    .andWhere('updated_at', '<', expiredUnsubscribeDate)
+    .update({ status: 'confirmed' });
 
   // There is an edge case where we don't catch the notification
   // of failure on a subscriber and the status could stay pending.
