@@ -88,7 +88,7 @@ async function purgeAndUpdateSubscriptions() {
    * confirmation for > 2 days
    */
 
-  const expiredUnsubscribeDate = getPreviousDate(1);
+  const expiredUnsubscribeDate = getPreviousDate(2);
   await knex('subscribers')
     .where('status', '=', 'unsubscribe')
     .andWhere('updated_at', '<', expiredUnsubscribeDate)
