@@ -116,6 +116,7 @@ async function twilioIncomingWebhook(req, res) {
   const verb = identifyVerbs(req.body.Body)
   logger.debug('Incoming message: ' + verb);
   if (verb === undefined) {
+    logger.error('Undefined verb in message ' + req.body.Body);
     twilioRespondToUser(res, 'Unknown request. Text STOP to unsubscribe.')
   } else {
     if (verb in twilioActions) {

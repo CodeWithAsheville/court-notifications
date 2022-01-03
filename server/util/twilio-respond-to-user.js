@@ -7,4 +7,6 @@ function respondToUser(res, message) {
   res.end(twiml.toString());
 }
 
-module.exports = respondToUser
+module.exports = {
+  respondToUser
+}
