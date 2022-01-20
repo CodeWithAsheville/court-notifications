@@ -27,7 +27,7 @@ async function unsubscribe(phone) {
     }
   }
   catch (err) {
-    logger.error('Error in unsubscribe: ' + err);
+    logger.error('Error in util/unsubscribe: ' + err);
   }
 }
 

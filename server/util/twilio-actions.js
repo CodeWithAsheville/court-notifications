@@ -16,7 +16,7 @@ async function unsubscribe(req, res) {
     }
     doUnsubscribe(phone);
   } catch(e) {
-    logger.error(e)
+    logger.error('twilio-actions.unsubscribe: ' + e)
     message = 'An error occurred. Unsubscribe unsuccessful'
   }
 
@@ -34,7 +34,7 @@ async function resubscribe(req, res) {
       phone = phone.substring(2);
     }
   } catch(e) {
-    logger.error(e)
+    logger.error('twilio-actions.resubscribe: ' + e)
     message = 'An error occurred. Resubscribe unsuccessful.'
   }
 

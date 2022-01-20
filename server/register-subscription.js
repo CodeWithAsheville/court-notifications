@@ -69,7 +69,7 @@ async function registerSubscription(req, callback) {
         throw msg;
       }
       msg = req.t("error-unknown") + ' ' + e.message + '(' + e.code + ')';
-      logger.error(msg);
+      logger.error('Error in register-subscription.js: ' + e.message + '(' + e.code + ')');
       throw msg;
     }
   }

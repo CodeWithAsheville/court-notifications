@@ -17,7 +17,7 @@ async function twilioSendStatusWebhook(req, res) {
     params
   );
   if (!isValid) {
-    logger.error('sendStatusWebhook: invalid incoming request - not from Twilio');
+    logger.error('twilioSendStatusWebhook: invalid incoming request - not from Twilio');
     return res.status(401).send('Unauthorized');
   }
   const status = params['SmsStatus'];
@@ -50,11 +50,11 @@ async function twilioSendStatusWebhook(req, res) {
         console.log(JSON.stringify(subscribers[0]))
         if (subscribers[0].status === 'pending') {
           newStatus = 'failed';
-          logger.error('Failed subscription - error code ' + params['ErrorCode']);
+          logger.error('twilioSendStatusWebhook: Failed subscription - error code ' + params['ErrorCode']);
         }
         else {
           if (subscribers[0].failed >= MAX_FAILED_DELIVERIES) newStatus = 'failed';
-          logger.error('Subscriber exceeded max delivery failures - marking failed: ' + params['ErrorCode']);
+          logger.error('twilioSendStatusWebhook: Subscriber exceeded max delivery failures - marking failed: ' + params['ErrorCode']);
         }
         await knex('subscribers')
         .where(
@@ -68,7 +68,7 @@ async function twilioSendStatusWebhook(req, res) {
     }
   } 
   catch (e) {
-    logger.error('Error updating status in subscriptionStatusWebhook: ' + e);
+    logger.error('Error updating status in twilioSendStatusWebhook: ' + e);
   }
   return res.status(200).send('OK');
 }

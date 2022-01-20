@@ -91,7 +91,7 @@ async function addSubscriber(nextDate, phone, language) {
       )
   }
   catch (e) {
-    logger.error(e)
+    logger.error('util/subscribe.addSubscriber lookup: ' + e)
     throw 'Error in subscriber lookup';
   }
   if (subscribers.length > 0) { // We already have this subscriber, update the date if needed
@@ -120,7 +120,7 @@ async function addSubscriber(nextDate, phone, language) {
       subscriberId = retVal[0];
     }
     catch (e) {
-      logger.error(e)
+      logger.error('util/subscribe.addSubscriber add: ' + e)
       throw 'Error adding subscriber';
     }
   }
