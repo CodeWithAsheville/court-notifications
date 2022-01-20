@@ -1,6 +1,7 @@
 const { knex } = require('./db');
-const respondToUser = require('./twilio-respond-to-user')
-const doUnsubscribe = require('../util/unsubscribe').unsubscribe;
+const { twilioRespondToUser } = require('./twilio-respond-to-user');
+const unsubscribeImport = require('../util/unsubscribe');
+const doUnsubscribe = unsubscribeImport.unsubscribe;
 const { logger } = require('./logger');
 
 async function unsubscribe(req, res) {
@@ -19,7 +20,7 @@ async function unsubscribe(req, res) {
     message = 'An error occurred. Unsubscribe unsuccessful'
   }
 
-  respondToUser(res, message)
+  twilioRespondToUser(res, message)
 }
 
 async function resubscribe(req, res) {
@@ -37,7 +38,7 @@ async function resubscribe(req, res) {
     message = 'An error occurred. Resubscribe unsuccessful.'
   }
 
-  respondToUser(res, message)
+  twilioRespondToUser(res, message)
 }
 
 async function confirmUnsubscribe(req, res) {
