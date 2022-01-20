@@ -35,7 +35,7 @@ async function checkSubscription(req, callback) {
     }
   }
   catch (e) {
-    logger.error('Error in checkSubscription: ' + e);
+    logger.error('Error in check-subscription.js: ' + e);
   }
   callback({code: 200, status, errormessage });
 }
