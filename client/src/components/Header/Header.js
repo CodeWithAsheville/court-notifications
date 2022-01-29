@@ -15,7 +15,6 @@ export default function Header({ state, dispatch }) {
           <ul>
             <li><NavLink exact={true} activeClassName="active-link" to="/">Home</NavLink></li>
             <li><NavLink activeClassName="active-link" to="tips">Tips</NavLink></li>
-            <li><NavLink activeClassName="active-link" to="unsubscribe">Unsubscribe</NavLink></li>
           </ul>
         </div>
         <div className="language-toggles">

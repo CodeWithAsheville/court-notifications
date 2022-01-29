@@ -45,12 +45,10 @@ const twilio = require('twilio');
 const { twilioRespondToUser } = require('./util/twilio-respond-to-user');
 const { logger } = require('./util/logger');
 const twilioActions = require('./util/twilio-actions');
-//const { getSubscriberStatus } = require('./util/get-subscriber-status');
 
 const verbs = {
   unsubscribe: ['stop', 'stopall', 'unsubscribe', 'cancel', 'end', 'quit'],
-  resubscribe: ['start', 'unstop'],
-  yes:         ['yes']
+  resubscribe: ['start', 'yes', 'unstop']
 }
 
 /**
@@ -97,7 +95,7 @@ function identifyVerbs(body) {
   return Object.keys(verbs).find(verb => hasMatches(body, verbs[verb]))
 }
 
-async function twilioIncomingWebhook(req, res) {
+function twilioIncomingWebhook(req, res) {
   // Make sure this is from Twilio
   const twilioSignature = req.headers['x-twilio-signature'];
   const params = req.body;
@@ -119,32 +117,7 @@ async function twilioIncomingWebhook(req, res) {
     logger.error('parseWebhook: Undefined verb - ' + req.body.Body);
     twilioRespondToUser(res, 'Unknown request. Text STOP to unsubscribe.')
   } else {
-    if (verb in twilioActions) {
-      return twilioActions[verb](req, res)
-    }
-    try {
-      if (verb === 'yes') {
-        let phone = req.body.From;
-        if (phone && phone.startsWith('+1')) {
-          phone = phone.substring(2);
-        }
-        const { getSubscriberStatus } = require('./util/get-subscriber-status');
-        const status = await getSubscriberStatus(phone);
-        logger.debug('Subscriber status: ' + status);
-        if (status === 'unsubscribe') {
-          return twilioActions['confirmUnsubscribe'](req, res);
-        }
-        else if (status === 'unknown') {
-          logger.error('Incoming message from unknown subscriber');
-        }
-        else {
-          return twilioActions['resubscribe'](req, res);
-        }
-      }
-    }
-    catch (err) {
-      logger.error('Error processing incoming message: ' + err)
-    }
+    return twilioActions[verb](req, res)
   }
 }
 

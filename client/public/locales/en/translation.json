@@ -79,10 +79,6 @@
       "da-phone": "District Attorney’s Office: (828) 259-3410",
       "clerk-phone": "Clerk of Superior Court: (828) 259-3400"
     },
-    "unsubscribe": {
-      "intro": "Enter your phone number below to unsubscribe from all notifications. You will receive a text message asking you to confirm. To complete the action you must reply YES.",
-      "button": "Unsubscribe Phone Number"
-    },
     "footer": {
       "contact": "Contact us",
       "privacy-policy": "Privacy policy",

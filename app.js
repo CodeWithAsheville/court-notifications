@@ -13,7 +13,6 @@ const MessagingResponse = require('twilio').twiml.MessagingResponse;
 const { searchCourtRecords } = require("./server/search-court-records");
 const { registerSubscription } = require("./server/register-subscription");
 const { checkSubscription } = require('./server/check-subscription');
-const { unsubscribeWithConfirmation } = require('./server/unsubscribe-with-confirmation');
 const { twilioIncomingWebhook } = require('./server/twilio-incoming-webhook');
 const { twilioSendStatusWebhook } = require('./server/twilio-send-status-webhook');
 
@@ -75,11 +74,7 @@ app.post("/api/subscribe-to-defendant", (req, res) => {
 });
 
 app.get("/api/check-subscription", (req, res) => {
-  checkSubscription(req, (checkResult) => res.json(checkResult));
-});
-
-app.post("/api/unsubscribe", (req, res) => {
-  unsubscribeWithConfirmation(req, (result) => res.json(result));
+  checkSubscription(req, (checkResult) => res.json(checkResult))
 });
 
 app.post('/sms', twilioIncomingWebhook);
