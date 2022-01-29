@@ -32,13 +32,13 @@ i18next
     debug: false,
     fallbackLng: 'en',
     backend: {
-      loadPath: __dirname + '/server/locales/{{lng}}/{{ns}}.json',
-      addPath: __dirname + '/server/locales/{{lng}}/{{ns}}.missing.json'
+      loadPath: __dirname + '/locales/{{lng}}/{{ns}}.json',
+      addPath: __dirname + '/locales/{{lng}}/{{ns}}.missing.json'
     },
     nsSeparator: '#||#',
     keySeparator: '#|#'
   });
-
+console.log('dirname: ' + __dirname)
 const app = express();
 const port = process.env.PORT || 5000;
 
