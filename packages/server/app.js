@@ -6,17 +6,17 @@ var i18next = require('i18next');
 var FsBackend = require('i18next-fs-backend');
 var middleware = require('i18next-http-middleware');
 
-const { knex } = require('./server/util/db');
+const { knex } = require('./util/db');
 
 const MessagingResponse = require('twilio').twiml.MessagingResponse;
 
-const { searchCourtRecords } = require("./server/search-court-records");
-const { registerSubscription } = require("./server/register-subscription");
-const { checkSubscription } = require('./server/check-subscription');
-const { twilioIncomingWebhook } = require('./server/twilio-incoming-webhook');
-const { twilioSendStatusWebhook } = require('./server/twilio-send-status-webhook');
+const { searchCourtRecords } = require("./search-court-records");
+const { registerSubscription } = require("./register-subscription");
+const { checkSubscription } = require('./check-subscription');
+const { twilioIncomingWebhook } = require('./twilio-incoming-webhook');
+const { twilioSendStatusWebhook } = require('./twilio-send-status-webhook');
 
-const { logger } = require('./server/util/logger');
+const { logger } = require('./util/logger');
 const path = require("path");
 
 i18next
@@ -32,13 +32,13 @@ i18next
     debug: false,
     fallbackLng: 'en',
     backend: {
-      loadPath: __dirname + '/server/locales/{{lng}}/{{ns}}.json',
-      addPath: __dirname + '/server/locales/{{lng}}/{{ns}}.missing.json'
+      loadPath: __dirname + '/locales/{{lng}}/{{ns}}.json',
+      addPath: __dirname + '/locales/{{lng}}/{{ns}}.missing.json'
     },
     nsSeparator: '#||#',
     keySeparator: '#|#'
   });
-
+console.log('dirname: ' + __dirname)
 const app = express();
 const port = process.env.PORT || 5000;
 
