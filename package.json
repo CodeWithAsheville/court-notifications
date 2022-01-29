@@ -1,43 +1,22 @@
 {
-  "name": "court-notifications-app",
-  "version": "1.1.0",
-  "license": "GPL-3.0-only",
-  "engines": {
-    "node": ">=15.0.0 <16.0.0",
-    "npm": ">=6.0.0 <7.0.0"
-  },
+  "name": "court-notifications",
+  "version": "0.0.1",
+  "main": "index.js",
+  "private": true,
+  "author": "Code for Asheville",
+  "license": "GNU GENERAL PUBLIC LICENSE",
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "client": "cd client && yarn start",
-    "server": "nodemon app.js",
+    "client": "cd packages/client && yarn start",
+    "server": "cd packages/server && nodemon app.js",
     "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
     "start": "node app.js",
     "heroku-postbuild": "cd client && yarn install --no-shrinkwrap && yarn build"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.15.4",
-    "axios": "^0.21.1",
-    "axios-cookiejar-support": "^1.0.1",
-    "body-parser": "^1.18.3",
-    "copy-to-clipboard": "^3.3.1",
-    "dotenv": "^10.0.0",
-    "express": "^4.16.4",
-    "i18next": "^21.1.0",
-    "i18next-browser-languagedetector": "^6.1.2",
-    "i18next-fs-backend": "^1.1.1",
-    "i18next-http-backend": "^1.3.1",
-    "i18next-http-middleware": "^3.1.4",
-    "jsdom": "^16.4.0",
-    "knex": "^0.95.8",
-    "mustache": "^4.2.0",
-    "pg": "^8.7.1",
-    "react-i18next": "^11.12.0",
-    "rollbar": "^2.24.0",
-    "tough-cookie": "^4.0.0",
-    "twilio": "^3.67.1",
-    "winston": "^3.3.3",
-    "winston-transport": "^4.4.0"
-  },
-  "devDependencies": {
-    "concurrently": "^6.4.0"
+    "concurrently": "^7.0.0",
+    "nodemon": "^2.0.15"
   }
 }

@@ -1,5 +1,5 @@
 require('dotenv').config()
-const { subscribe } = require('../server/util/subscribe');
+const { subscribe } = require('../util/subscribe');
 const testData = require('./testdata.json');
 
 if (!process.env.TEST_PHONE_NUMBER) {

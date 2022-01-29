@@ -1,6 +1,6 @@
 const { knex } = require('./db');
 const { twilioRespondToUser } = require('./twilio-respond-to-user');
-const unsubscribeImport = require('../util/unsubscribe');
+const unsubscribeImport = require('./unsubscribe');
 const doUnsubscribe = unsubscribeImport.unsubscribe;
 const { logger } = require('./logger');
 
