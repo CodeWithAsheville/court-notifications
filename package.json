@@ -13,11 +13,15 @@
     "server": "cd packages/server && nodemon app.js",
     "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
     "start": "node app.js",
-    "heroku-postbuild": "cd client && yarn install --no-shrinkwrap && yarn build"
+    "heroku-postbuild": "cd packages/client && yarn build",
+    "migrate": "npx knex migrate:latest --knexfile \"packages/server/knexfile.js\""
   },
   "dependencies": {
     "concurrently": "^7.0.0",
     "nodemon": "^2.0.15"
   },
-  "packageManager": "yarn@3.1.1"
+  "packageManager": "yarn@3.1.1",
+  "devDependencies": {
+    "knex": "^1.0.1"
+  }
 }
