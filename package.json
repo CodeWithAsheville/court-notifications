@@ -14,7 +14,8 @@
     "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
     "start": "node app.js",
     "heroku-postbuild": "cd packages/client && yarn build",
-    "migrate": "npx knex migrate:latest --knexfile \"packages/server/knexfile.js\""
+    "migrate": "npx knex migrate:latest --knexfile \"packages/server/knexfile.js\"",
+    "testserver": "cd packages/server && yarn test"
   },
   "dependencies": {
     "concurrently": "^7.0.0",
