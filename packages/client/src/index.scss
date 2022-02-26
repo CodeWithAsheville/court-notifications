@@ -1,13 +1,13 @@
-@import '~uswds/src/stylesheets/theme/_uswds-theme-general.scss';
-@import '~uswds/src/stylesheets/theme/_uswds-theme-typography.scss';
-@import '~uswds/src/stylesheets/theme/_uswds-theme-spacing.scss';
-@import '~uswds/src/stylesheets/theme/_uswds-theme-color.scss';
-@import '~uswds/src/stylesheets/theme/_uswds-theme-utilities.scss';
-
-$theme-image-path: '~uswds/src/img';
-$theme-font-path: '~uswds/src/fonts';
-$theme-hero-image: '~uswds/src/img/hero.png';
-
-@import '~uswds/src/stylesheets/packages/_required.scss';
-
-@import 'uswds';
+// NOTE: As of now, we don't have any need to customize the 
+// sass variables from uswds. If we need to do so in the future,
+// we'd need to import the sass version of this. To do so, 
+// we'll need to add a new --load-path for dart-sass, because
+// our app is structured as a monorepo, and the uswds dep
+// is installed in the top level node_modules outside the 
+// packages directory. I'm not sure how to do this atm without
+// ejecting create-react-app, and I always want to avoid that on
+// this simple and small and volunteer led project. Another solution
+// might be forcing the uswds dependency to be installed in the 
+// client directory's node_modules. For now, this is the fastest
+// solution.
+@use '../../../node_modules/uswds/dist/css/uswds.min.css'
