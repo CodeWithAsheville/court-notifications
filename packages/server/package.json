@@ -11,7 +11,8 @@
     "server": "nodemon app.js",
     "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
     "start": "node app.js",
-    "heroku-postbuild": "cd client && yarn install --no-shrinkwrap && yarn build"
+    "heroku-postbuild": "cd client && yarn install --no-shrinkwrap && yarn build",
+    "test": "jest --env=node"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.4",
@@ -38,6 +39,8 @@
     "winston-transport": "^4.4.0"
   },
   "devDependencies": {
-    "concurrently": "^6.4.0"
+    "concurrently": "^6.4.0",
+    "jest": "26.6.0",
+    "supertest": "^6.2.2"
   }
 }
