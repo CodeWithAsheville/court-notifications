@@ -12,7 +12,7 @@
     "client": "cd packages/client && yarn start",
     "server": "cd packages/server && nodemon app.js",
     "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
-    "start": "node app.js",
+    "start": "cd packages/server && node app.js",
     "heroku-postbuild": "cd packages/client && yarn build",
     "migrate": "npx knex migrate:latest --knexfile \"packages/server/knexfile.js\"",
     "testserver": "cd packages/server && yarn test"
