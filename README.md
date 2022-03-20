@@ -1,7 +1,16 @@
 # Court Notifications
 A project through Code for Asheville to help streamline the process to sign up for court date notifications.
 
-Supposedly online at [https://code-4-avl-court-notifications.herokuapp.com/](https://code-4-avl-court-notifications.herokuapp.com/), but probably crashed already.
+Production instance online at [https://buncombenc.courtdates.org/](https://buncombenc.courtdates.org/). 
+
+Staging instance online at [https://bc-court-reminders-dev.herokuapp.com/](https://bc-court-reminders-dev.herokuapp.com/).
+
+We maintain three active branches: 
+- main (auto-deployed to production instance)
+- staging (autodeployed to staging instance)
+- development (default branch where changes are accepted for eventual deployment to staging and then production)
+
+Standard development approach is to fork this repository and work in a branch off the latest version of development. When ready, submit a pull request into development for review.
 
 ## Getting Started with Local Development
 
