@@ -6,7 +6,6 @@ const { addCases } = require('../util/subscribe');
 const { logger } = require('../util/logger');
 
 async function updateDefendants(purgeDate, updateDays) {
-  console.log('here1 ');
   let updatesPerCall = 5
   const config = await knex('cn_configuration')
     .select('value').where('name', '=', 'updates_per_call');
@@ -17,12 +16,10 @@ async function updateDefendants(purgeDate, updateDays) {
   const defendantsToUpdate = await knex('records_to_update').select('defendant_id')
     .where('done', '=', 0).limit(updatesPerCall);
   const defendantIds = defendantsToUpdate.map(itm => itm.defendant_id)
-  console.log('Defendants to update: ', JSON.stringify(defendantIds));
   logger.debug('Defendants to update: ', JSON.stringify(defendantIds));
   // Let's be optimistic and assume we'll succeed in updating, so just delete now
   await knex('records_to_update').delete().where('defendant_id', 'in', defendantIds);
   const defendants = await knex('defendants').select('*').where('id', 'in', defendantIds);
-  console.log('here2 ');
   for (let i = 0; i<defendants.length; ++i) {
     const d = defendants[i];
     logger.debug('Update defendant ', JSON.stringify(d));
@@ -36,7 +33,6 @@ async function updateDefendants(purgeDate, updateDays) {
     await knex('defendants').where('id', '=', d.id)
       .update({ updates });
   }
-  console.log('here3 ');
 }
 
 // Purge all court cases in the past and everything that 
