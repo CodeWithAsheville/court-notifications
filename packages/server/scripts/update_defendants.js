@@ -6,7 +6,6 @@ const { addCases } = require('../util/subscribe');
 const { logger } = require('../util/logger');
 
 async function updateDefendants(purgeDate, updateDays) {
-
   let updatesPerCall = 5
   const config = await knex('cn_configuration')
     .select('value').where('name', '=', 'updates_per_call');

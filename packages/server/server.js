@@ -6,17 +6,16 @@ var i18next = require('i18next');
 var FsBackend = require('i18next-fs-backend');
 var middleware = require('i18next-http-middleware');
 
-const { knex } = require('./server/util/db');
+const { knex } = require('./util/db');
 
 const MessagingResponse = require('twilio').twiml.MessagingResponse;
 
-const { searchCourtRecords } = require("./server/search-court-records");
-const { registerSubscription } = require("./server/register-subscription");
-const { checkSubscription } = require('./server/check-subscription');
-const { twilioIncomingWebhook } = require('./server/twilio-incoming-webhook');
-const { twilioSendStatusWebhook } = require('./server/twilio-send-status-webhook');
+const { searchCourtRecords } = require("./search-court-records");
+const { registerSubscription } = require("./register-subscription");
+const { checkSubscription } = require('./check-subscription');
+const { twilioIncomingWebhook } = require('./twilio-incoming-webhook');
+const { twilioSendStatusWebhook } = require('./twilio-send-status-webhook');
 
-const { logger } = require('./server/util/logger');
 const path = require("path");
 
 i18next
@@ -32,15 +31,13 @@ i18next
     debug: false,
     fallbackLng: 'en',
     backend: {
-      loadPath: __dirname + '/server/locales/{{lng}}/{{ns}}.json',
-      addPath: __dirname + '/server/locales/{{lng}}/{{ns}}.missing.json'
+      loadPath: __dirname + '/locales/{{lng}}/{{ns}}.json',
+      addPath: __dirname + '/locales/{{lng}}/{{ns}}.missing.json'
     },
     nsSeparator: '#||#',
     keySeparator: '#|#'
   });
-
 const app = express();
-const port = process.env.PORT || 5000;
 
 app.use(function(req, res, next) {
   res.header('Access-Control-Allow-Credentials', true);
@@ -82,12 +79,12 @@ app.post('/send-status', twilioSendStatusWebhook);
 
 if (process.env.NODE_ENV === "production") {
   // Serve any static files
-  app.use(express.static(path.join(__dirname, "client/build")));
+  app.use(express.static(path.join(__dirname, "../client/build")));
 
   // Handle React routing, return all requests to React app
   app.get("*", function (req, res) {
-    res.sendFile(path.join(__dirname, "/", "client/build", "index.html"));
+    res.sendFile(path.join(__dirname, "..", "client/build", "index.html"));
   });
 }
 
-app.listen(port, () => logger.debug(`Listening on port ${port}`));
+module.exports = app;

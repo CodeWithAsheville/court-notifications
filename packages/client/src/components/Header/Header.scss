@@ -3,14 +3,14 @@ header {
   background-color: #252f3e;
   color: white;
   padding: 0.36em 0.6em;
+
   div.language-toggles {
     float: right;
-    // border-style: solid;
-    // border-width: 5px;
-    // border-color: white;
   }
+
   .language-toggles {
     text-align: right;
+
     .language-button {
       color: white;
       margin-left: .3em;
@@ -26,9 +26,16 @@ header {
   .header-container {
     display: block;
     max-width: 900px;
-    margin-left: auto;
-    margin-right: auto;
+    margin: 0.8em auto;
     text-align: center;
+
+    .header-logo {
+      height: 100px;
+      width: 110px;
+      margin: auto;
+    }
+
+    .header-text {}
   }
 
   div.basic-nav {
@@ -47,6 +54,7 @@ header {
       overflow: hidden;
       text-decoration: none;
     }
+
     li a {
       float: left;
       text-align: center;
@@ -56,10 +64,11 @@ header {
       padding-left:10px;
       padding-right:10px;
     }
+
     li a:hover {
       background-color: #777;
-//      color: rgb(106, 189, 235);
     }
+
     li a.active-link {
       text-decoration:underline;
       outline: none;
