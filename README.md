@@ -10,7 +10,7 @@ Supposedly online at [https://code-4-avl-court-notifications.herokuapp.com/](htt
 First, setup your environment variables before attempting to run the app
 
 ```
-cp .env.sample .env
+cp packages/server/.env.sample packages/server/.env
 ```
 
 You will need to modify several variables, including the password and username that match your local database, the Twilio account sid, auth token and phone number for your personal Twilio account (see below), and your personal number for local testing.
@@ -59,13 +59,13 @@ The application has been set to redeploy when changes are committed to the selec
 ### Set Up Scheduled Jobs
 In the _Resources_ tab of the application, search for and add the _Heroku Scheduler_ add-on. Go to the add-on and click _Add Job_ to add a scheduled task. You will need to create three jobs:
 - Purge expired jobs and generate a list of defendents due for updates
-  - Command: ```node server/scripts/purge-and-update-subscriptions.js```
+  - Command: ```node packages/server/scripts/purge-and-update-subscriptions.js```
   - Schedule: Once per day
 - Update defendant cases. Cases are drawn from a table populated by the previous command and run a few at a time (the value of _updates_per_call_ in the _cn_configuration_ table).
-  - Command ```node server/scripts/update_defendants.js```
+  - Command ```node packages/server/scripts/update_defendants.js```
   - Schedule: Once every 10 minutes
 - Send notifications. Notifications are configured in the _notify_configuration_ table. A configuration consists of the number of days prior to the court date that the notifications hould be sent and the text of the notification (i.e., you may send distinct reminders 7 days, 3 days and 1 day before the date, for example). The notification text may contain variables enclosed in {{_variable_name_}}. Allowed variables are name and date. Case information will be added automatically.
-  - Command ```node server/scripts/notify.js```
+  - Command ```node packages/server/scripts/notify.js```
   - Schedule: Once per day _after_ purge
 
 
