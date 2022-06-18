@@ -14,6 +14,6 @@
   },
   "unsubscribe": {
     "default": "Se ha dado de baja del recordatorio del Tribunal del Condado de Buncombe. Si usted desea inscribirse de nuevo,visítenos al https://buncombenc.courtdates.org.",
-    "purge": "Usted no tiene ninguna fecha pendiente en la Corte Criminal del Condado de Buncombe. Nosotros estamos quitando su número de teléfono y toda la información relacionada con eso de nuestros registros. Si usted quiere inscribirse nuevamente visítenos al https://buncombenc.courtdates.org."
+    "purge": "No podemos encontrar más fechas de corte programadas para usted. Si esto no es correcto o si tiene preguntas, llame a su abogado. Si no tiene abogado, llame a la Oficina del Defensor Público al 828-259-3423. Nosotros estamos quitando su número de teléfono y toda la información relacionada con eso de nuestros registros. Si usted quiere inscribirse nuevamente visítenos al https://buncombenc.courtdates.org."
   }
 }

@@ -35,10 +35,6 @@ async function updateDefendants(purgeDate, updateDays) {
   }
 }
 
-// Purge all court cases in the past and everything that 
-// depends only on them. Then set up a list of defendants 
-// due to be updated. Actual updates happen in a separate
-// script
 (async() => {
   logger.debug('Call updateDefendants');
   await updateDefendants('2021-08-09', -1);

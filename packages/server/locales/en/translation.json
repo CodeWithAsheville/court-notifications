@@ -14,6 +14,7 @@
   },
   "unsubscribe": {
     "default": "You have been unsubscribed from Buncombe County Court Reminders. If you wish to resubscribe, visit https://buncombenc.courtdates.org.",
-    "purge": "You have no more upcoming court dates in Buncombe County criminal court. We are removing your phone number and all information associated with it from our records. If you wish to resubscribe, visit https://buncombenc.courtdates.org."
+    "purge": "We are unable to find any more scheduled court dates for you. If this is wrong or you have questions, call your lawyer. If you do not have a lawyer, call the Public Defender's Office at 828-259-3423. All of your information is being removed from our records. To resubscribe, visit https://buncombenc.courtdates.org."
   }
 }
+
