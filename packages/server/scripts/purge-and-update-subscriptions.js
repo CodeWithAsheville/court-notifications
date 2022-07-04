@@ -20,17 +20,13 @@ async function getConfigurationIntValue(name, defaultValue = 0) {
   if (result.length > 0) value = parseInt(result[0].value)
   return value;
 }
-
-async function purgeAndUpdateSubscriptions() {
-  // Do a rolling delete of expired cases, then anything that depends only on them.
+async function purgeSubscriptions() {
   const daysBeforePurge = await getConfigurationIntValue('days_before_purge', 1);
-  const daysBeforeUpdate = await getConfigurationIntValue('days_before_update', 7);
-
   const purgeDate = getPreviousDate(daysBeforePurge);
-  let count = await knex('cases').delete().where('court_date', '<', purgeDate);
-  if (count > 0) logger.debug(count + ' cases purged');
-  count = await knex('defendants').delete().whereNotExists(function() {
-    this.select('*').from('cases').whereRaw('cases.defendant_id = defendants.id');
+
+//  .where('done', '=', 0).limit(updatesPerCall);
+
+  count = await knex('defendants').delete().where('last_valid_cases_date', '<', );
   });
 
   if (count > 0) logger.debug(count + ' defendants purged');
@@ -67,6 +63,11 @@ async function purgeAndUpdateSubscriptions() {
   await knex('subscribers').delete().whereNotExists(function() {
     this.select('*').from('subscriptions').whereRaw('subscriptions.subscriber_id = subscribers.id');
   });
+
+}
+
+async function purgeAndUpdateSubscriptions() {
+  const daysBeforeUpdate = await getConfigurationIntValue('days_before_update', 7);
 
   // Delete all the subscribers with status failed
   let failedSubscribers = await knex('subscribers')
