@@ -21,52 +21,55 @@ async function getConfigurationIntValue(name, defaultValue = 0) {
   return value;
 }
 
-async function purgeAndUpdateSubscriptions() {
-  // Do a rolling delete of expired cases, then anything that depends only on them.
-  const daysBeforePurge = await getConfigurationIntValue('days_before_purge', 1);
-  const daysBeforeUpdate = await getConfigurationIntValue('days_before_update', 7);
-
+async function purgeSubscriptions() {
+  const daysBeforePurge = await getConfigurationIntValue('days_before_purge', 30);
   const purgeDate = getPreviousDate(daysBeforePurge);
-  let count = await knex('cases').delete().where('court_date', '<', purgeDate);
-  if (count > 0) logger.debug(count + ' cases purged');
-  count = await knex('defendants').delete().whereNotExists(function() {
-    this.select('*').from('cases').whereRaw('cases.defendant_id = defendants.id');
-  });
 
-  if (count > 0) logger.debug(count + ' defendants purged');
-  count = await knex('subscriptions').delete().whereNotExists(function() {
-    this.select('*').from('defendants').whereRaw('defendants.id = subscriptions.defendant_id');
-  });
-  if (count > 0) logger.debug(count + ' subscriptions purged');
+//  .where('done', '=', 0).limit(updatesPerCall);
+  let count = await knex('defendants').delete().where('last_valid_cases_date', '<', purgeDate);
 
-  subscribers = await knex('subscribers')
-  .select('subscribers.id', 'subscribers.language',
-  knex.raw('PGP_SYM_DECRYPT("subscribers"."encrypted_phone"::bytea, ?) as phone', [process.env.DB_CRYPTO_SECRET]))
-  .whereNotExists(function() {
-    this.select('*').from('subscriptions').whereRaw('subscriptions.subscriber_id = subscribers.id');
-  });
+  if (count > 0) {
+    logger.debug(count + ' defendants purged');
+    count = await knex('subscriptions').delete().whereNotExists(function() {
+      this.select('*').from('defendants').whereRaw('defendants.id = subscriptions.defendant_id');
+    });
+    if (count > 0) logger.debug(count + ' subscriptions purged');
 
-  // Attempt to notify them
-  if (subscribers && subscribers.length > 0) {
-    logger.debug(subscribers.length + ' subscribers purged');
-    const client = require('twilio')(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
-    for (let i = 0; i< subscribers.length; ++i) {
-      try {
-        s = subscribers[i];
-        await i18next.changeLanguage(s.language);
-        const message = i18next.t('unsubscribe.purge');
-        await twilioSendMessage(client, s.phone, message);
-      } 
-      catch (err) {
-        logger.error('Error sending final unsubscribe notification: ' + err);
+    subscribers = await knex('subscribers')
+    .select('subscribers.id', 'subscribers.language',
+    knex.raw('PGP_SYM_DECRYPT("subscribers"."encrypted_phone"::bytea, ?) as phone', [process.env.DB_CRYPTO_SECRET]))
+    .whereNotExists(function() {
+      this.select('*').from('subscriptions').whereRaw('subscriptions.subscriber_id = subscribers.id');
+    });
+
+    // Attempt to notify them
+    if (subscribers && subscribers.length > 0) {
+      logger.debug(subscribers.length + ' subscribers purged');
+      const client = require('twilio')(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
+      for (let i = 0; i< subscribers.length; ++i) {
+        try {
+          s = subscribers[i];
+          await i18next.changeLanguage(s.language);
+          const message = i18next.t('unsubscribe.purge');
+          await twilioSendMessage(client, s.phone, message);
+        } 
+        catch (err) {
+          logger.error('Error sending final unsubscribe notification: ' + err);
+        }
       }
     }
+    // Now actually delete them.
+    await knex('subscribers').delete().whereNotExists(function() {
+      this.select('*').from('subscriptions').whereRaw('subscriptions.subscriber_id = subscribers.id');
+    });
   }
+  else {
+    logger.debug('No defendants purged');
+  }
+}
 
-  // Now actually delete them.
-  await knex('subscribers').delete().whereNotExists(function() {
-    this.select('*').from('subscriptions').whereRaw('subscriptions.subscriber_id = subscribers.id');
-  });
+async function updateSubscriptions() {
+  const daysBeforeUpdate = await getConfigurationIntValue('days_before_update', 7);
 
   // Delete all the subscribers with status failed
   let failedSubscribers = await knex('subscribers')
@@ -118,8 +121,12 @@ async function initTranslations() {
 // script
 (async() => {
   await initTranslations();
-  logger.debug('Call purge-and-update-subscriptions');
-  await purgeAndUpdateSubscriptions();
-  logger.debug('Done with purge');
+  // Uncomment when ready to use the new purge code.
+  // logger.debug('Call purgeSubscriptions');
+  // await purgeSubscriptions();
+  // logger.debug('Done with purge');
+  logger.debug('Call updateSubscriptions');
+  await updateSubscriptions();
+  logger.debug('Done with update setup');
   process.exit();
 })();
