@@ -14,12 +14,12 @@ export default function Header({ state, dispatch }) {
           <ul>
             <li>
               <NavLink exact={true} activeClassName="active-link" to="/">
-                Home
+                {t("menu.home")}
               </NavLink>
             </li>
             <li>
               <NavLink activeClassName="active-link" to="tips">
-                Tips
+              {t("menu.tips")}
               </NavLink>
             </li>
           </ul>

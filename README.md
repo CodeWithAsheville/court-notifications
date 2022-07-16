@@ -19,7 +19,7 @@ Standard development approach is to fork this repository and work in a branch of
 First, setup your environment variables before attempting to run the app
 
 ```
-cp packages/server/.env.sample packages/server/.env
+cp packages/server/sample.env packages/server/.env
 ```
 
 You will need to modify several variables, including the password and username that match your local database, the Twilio account sid, auth token and phone number for your personal Twilio account (see below), and your personal number for local testing.

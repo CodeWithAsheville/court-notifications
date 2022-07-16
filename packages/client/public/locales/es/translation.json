@@ -1,10 +1,10 @@
 {
   "menu": {
-    "home": "Pagina de registro",
+    "home": "Página de registro",
     "tips": "Consejos"
   },
-  "title": "Inscripciones recordatorias de la Corte del Condado de Buncombe",
-  "description": "Un proyecto del Código para Asheville",
+  "title": "Inscripción de recordatorios de la Corte del Condado de Buncombe",
+  "description": "Un proyecto de Code for Asheville",
   "languages": {
       "english": "English",
       "spanish": "Español",
@@ -12,17 +12,17 @@
   },
   "intro": {
     "description": {
-        "paragraph1": "Este sitio le permite inscribirse para recordatorios de mensajes de texto acerca de las próximas fechas de la corte criminal en el Condado de Buncombe. Es gratis para uso de cualquier persona. Simplemente busque un nombre, seleccione uno de los acusados y proporcione un número de teléfono que pueda recibir mensajes de texto. Nota: los casos de pago de manutención infantil no se incluyen aquí.",
+        "paragraph1": "Este sitio le permite inscribirse para recordatorios por mensajes de texto acerca de las próximas fechas de la corte criminal en el Condado de Buncombe. Es gratis para uso de cualquier persona. Simplemente busque un nombre, seleccione uno de los acusados y proporcione un número de teléfono que pueda recibir mensajes de texto. Nota: los casos de pago de manutención infantil no se incluyen aquí.",
         "paragraph2": "El sitio es mantenido por voluntarios para el beneficio de la comunidad. Su intención es ayudar a la gente a presentarse ante la corte en el Condado de Buncombe, pero no se garantiza. El comparecer ante la corte sigue siendo su responsabilidad."
     }
 },
 "search": {
-      "title": "Busque para los casos judiciales",
-      "description": "Ingrese su nombre, segundo nombre y apellido para buscar los casos judiciales suyos. Aparecerán en la siguiente tabla.",
+      "title": "Busque sus casos judiciales",
+      "description": "Ingrese su primer nombre, segundo nombre y apellido(s) para buscar los casos judiciales suyos. Aparecerán en la siguiente tabla.",
       "inputfields": {
-          "firstName" : "El nombre principal (opcional)",
-          "middleName" : "El segundo nombre o la inicial (opcional)",
-          "lastName" : "El (los) apellido(s)"
+          "firstName" : "Primer nombre (opcional)",
+          "middleName" : "Segundo nombre o inicial (opcional)",
+          "lastName" : "Apellido(s)"
       },
       "submitButton": "Enviar",
       "inProgress": "Búsqueda en progreso",
@@ -72,9 +72,9 @@
     "item2": "El estacionamiento de pago está disponible en la plataforma de estacionamiento del condado de Buncombe al otro lado de la calle del juzgado, en 164 College Street.",
     "item3": "Un puesto de control de seguridad se encuentra en la entrada del juzgado. Todas las personas deben escanear sus bolsas y pasar por un detector de metales.",
     "item4": "Haga los arreglos necesarios con anticipación para que pueda estar presente en la corte.",
-    "item5": "Vístase en forma respetuosa",
+    "item5": "Vístase de forma respetuosa.",
     "item6": "Usted es responsable de comparecer a todas las fechas de la corte. Asegúrese de conocer todas las fechas de su corte para cualquier cargo pendiente que tenga.",
-    "if-miss": "Si faltas tu cita, póngase en contacto con su abogado inmediatamente",
+    "if-miss": "Si falta a su cita, póngase en contacto con su abogado inmediatamente.",
     "pd-phone": "Oficina del defensor público: (828) 259-3423",
     "da-phone": "La fiscalía: (828) 259-3410",
     "clerk-phone": "El secretario de tribunal superior: (828) 259-3400"
