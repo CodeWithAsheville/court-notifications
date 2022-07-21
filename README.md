@@ -27,12 +27,12 @@ yarn && yarn dev
 This will bring up the main page of the site and should allow you to perform a by-name search. Any further steps require setting up connections to a database and to a Twilio account (you will need to re-run ```yarn dev``` after changing any environment variables).
 
 ### Set Up a Database Connection
-The court notifications system assumes the use of PostgreSQL. As of this writing the production instance is running on version 13. Once you have a database ready, edit the ```packages/server/.env``` and set the ```DB_USER```,```DB_PASSWORD```, ```DB_HOST```, and ```DATABASE_NAME``` environment variables. If you are setting up a production instance you should change ```DB_CRYPTO_SECRET```, but you can leave as is for development.
+The court notifications system assumes the use of PostgreSQL. As of this writing the production instance is running on version 13. Once you have a PostgreSQL instance ready, edit the ```packages/server/.env``` and set the ```DB_USER```,```DB_PASSWORD```, ```DB_HOST```, and ```DATABASE_NAME``` environment variables. If you are setting up a production instance you should change ```DB_CRYPTO_SECRET```, but you can leave as is for development.
 
-If the database has been set up for the first time, you need to initialize tables by running
+If the database has been set up for the first time, you need to create the database and initialize tables by running
 
 ````
-createdb court-notifications
+createdb court-notifications      # This assumes you have PostgreSQL installed locally
 yarn dlx knex migrate:latest
 ````
 
