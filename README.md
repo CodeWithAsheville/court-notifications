@@ -16,6 +16,7 @@ Standard development approach is to fork this repository and work in a branch of
 
 You will need to install ```node``` and ```yarn```. As of this writing we are on Node 16, but you can check the latest requirement by looking at the _engine_ in ```package.json``` in the top-level directory.
 
+### Initial Build
 To verify that you are able to build and run the front-end, run the following commands, starting in the top-level directory:
 
 ````
@@ -23,25 +24,24 @@ cp packages/server/sample.env packages/server/.env
 yarn && yarn dev
 ````
 
-This will bring up the main page of the site and should allow you to perform a by-name search. Any further steps require setting up connections to a database and to a Twilio account.
+This will bring up the main page of the site and should allow you to perform a by-name search. Any further steps require setting up connections to a database and to a Twilio account (you will need to re-run ```yarn dev``` after changing any environment variables).
 
-[TODO] Add environment notes (postgres version, nvm, etc)
+### Set Up a Database Connection
+The court notifications system assumes the use of PostgreSQL. As of this writing the production instance is running on version 13. Once you have a database ready, edit the ```packages/server/.env``` and set the ```DB_USER```,```DB_PASSWORD```, ```DB_HOST```, and ```DATABASE_NAME``` environment variables. If you are setting up a production instance you should change ```DB_CRYPTO_SECRET```, but you can leave as is for development.
 
-First, setup your environment variables before attempting to run the app
+If the database has been set up for the first time, you need to initialize tables by running
 
-```
-cp packages/server/sample.env packages/server/.env
-```
+````
+createdb court-notifications
+yarn dlx knex migrate:latest
+````
+
+At this point you should be able to actually subscribe, although no text messages will be sent without setting up Twilio.
+
+### Set Up Twilio to Send Text Messages
 
 You will need to modify several variables, including the password and username that match your local database, the Twilio account sid, auth token and phone number for your personal Twilio account (see below), and your personal number for local testing.
 
-```
-yarn install
-yarn install -g knex
-createdb court-notifications
-knex migrate:latest
-yarn dev
-```
 
 ### Setting Up Twilio For Local Testing
 You will need your own account for dev testing. Create a Twilio account and generate a phone number. Ensure you add these values to your local .env file.
