@@ -14,7 +14,7 @@ Standard development approach is to fork this repository and work in a branch of
 
 ## Getting Started with Local Development
 
-You will need to install ```node``` and ```yarn```. As of this writing we are on Node 16, but you can check the latest requirement by looking at the _engine_ in ```package.json``` in the top-level directory.
+You will need to install ```node``` and ```yarn``` (instructions below are for Yarn 2). As of this writing we are on Node 16, but you can check the latest requirement by looking at the _engine_ in ```package.json``` in the top-level directory.
 
 ### Initial Build
 To verify that you are able to build and run the front-end, run the following commands, starting in the top-level directory:
@@ -29,14 +29,14 @@ This will bring up the main page of the site and should allow you to perform a b
 ### Set Up a Database Connection
 The court notifications system assumes the use of PostgreSQL. As of this writing the production instance is running on version 13. Once you have a PostgreSQL instance ready, edit the ```packages/server/.env``` and set the ```DB_USER```,```DB_PASSWORD```, ```DB_HOST```, and ```DATABASE_NAME``` environment variables. If you are setting up a production instance you should change ```DB_CRYPTO_SECRET```, but you can leave as is for development.
 
-If the database has been set up for the first time, you need to create the database and initialize tables by running
+If the database has been set up for the first time, you need to initialize tables by running
 
 ````
-createdb court-notifications      # This assumes you have PostgreSQL installed locally
+cd packages/server
 yarn dlx knex migrate:latest
+cd ../..
 ````
-
-At this point you should be able to actually subscribe, although no text messages will be sent without setting up Twilio.
+At this point you should be able to search _and_ subscribe, but you will although no text messages will be sent without setting up Twilio.
 
 ### Set Up Twilio to Send Text Messages
 
