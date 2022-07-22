@@ -1,6 +1,8 @@
 # Court Notifications
 A project through Code for Asheville to help streamline the process to sign up for court date notifications.
 
+Latest update of this documentation: July 2022.
+
 Production instance online at [https://buncombenc.courtdates.org/](https://buncombenc.courtdates.org/). 
 
 Staging instance online at [https://bc-court-reminders-dev.herokuapp.com/](https://bc-court-reminders-dev.herokuapp.com/).
@@ -46,7 +48,7 @@ cd packages/server
 yarn dlx knex migrate:latest
 cd ../..
 ````
-At this point you should be able to search _and_ subscribe, although no text messages will be sent without setting up Twilio.
+At this point you should be able to search _and_ start the subscription process, although no text messages can be sent without setting up Twilio so you will get an error (something like ```accountSid must start with AC```).
 
 ### Set Up Twilio to Send Text Messages
 
