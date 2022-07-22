@@ -27,16 +27,26 @@ yarn && yarn dev
 This will bring up the main page of the site and should allow you to perform a by-name search. Any further steps require setting up connections to a database and to a Twilio account (you will need to re-run ```yarn dev``` after changing any environment variables).
 
 ### Set Up a Database Connection
-The court notifications system assumes the use of PostgreSQL. As of this writing the production instance is running on version 13. Once you have a PostgreSQL instance ready, edit the ```packages/server/.env``` and set the ```DB_USER```,```DB_PASSWORD```, ```DB_HOST```, and ```DATABASE_NAME``` environment variables. If you are setting up a production instance you should change ```DB_CRYPTO_SECRET```, but you can leave as is for development.
+The court notifications system assumes the use of PostgreSQL. As of this writing the production instance is running on version 13. Once you have a PostgreSQL instance ready, edit the ```packages/server/.env``` and set the ```DB_USER```,```DB_PASSWORD```, ```DB_HOST```, and ```DATABASE_NAME``` environment variables. 
 
-If the database has been set up for the first time, you need to initialize tables by running
+If the database has been set up for the first time, you will need to do two additional set-up steps. 
+
+First, you will also need to enable the ```pgcrypto``` PostgreSQL extension to allow encrypting of phone numbers by running the query:
+
+````
+CREATE EXTENSION pgcrypto
+````
+
+ If you are setting up a production instance you should also change ```DB_CRYPTO_SECRET```, but you can leave as is for development.
+
+Next you need to initialize tables by running:
 
 ````
 cd packages/server
 yarn dlx knex migrate:latest
 cd ../..
 ````
-At this point you should be able to search _and_ subscribe, but you will although no text messages will be sent without setting up Twilio.
+At this point you should be able to search _and_ subscribe, although no text messages will be sent without setting up Twilio.
 
 ### Set Up Twilio to Send Text Messages
 
