@@ -1,6 +1,8 @@
 # Court Notifications
 A project through Code for Asheville to help streamline the process to sign up for court date notifications.
 
+Latest update of this documentation: July 2022.
+
 Production instance online at [https://buncombenc.courtdates.org/](https://buncombenc.courtdates.org/). 
 
 Staging instance online at [https://bc-court-reminders-dev.herokuapp.com/](https://bc-court-reminders-dev.herokuapp.com/).
@@ -14,25 +16,45 @@ Standard development approach is to fork this repository and work in a branch of
 
 ## Getting Started with Local Development
 
-[TODO] Add environment notes (postgres version, nvm, etc)
+You will need to install ```node``` and ```yarn``` (instructions below are for Yarn 2). As of this writing we are on Node 16, but you can check the latest requirement by looking at the _engine_ in ```package.json``` in the top-level directory.
 
-First, setup your environment variables before attempting to run the app
+### Initial Build
+To verify that you are able to build and run the front-end, run the following commands, starting in the top-level directory:
 
-```
+````
 cp packages/server/sample.env packages/server/.env
-```
+yarn && yarn dev
+````
 
-You will need to modify several variables, including the password and username that match your local database, the Twilio account sid, auth token and phone number for your personal Twilio account (see below), and your personal number for local testing.
+This will bring up the main page of the site and should allow you to perform a by-name search. Any further steps require setting up connections to a database and to a Twilio account (you will need to re-run ```yarn dev``` after changing any environment variables).
 
-```
-yarn install
-yarn install -g knex
-createdb court-notifications
-knex migrate:latest
-yarn dev
-```
+### Set Up a Database Connection
+The court notifications system assumes the use of PostgreSQL. As of this writing the production instance is running on version 13. Once you have a PostgreSQL instance ready, edit the ```packages/server/.env``` and set the ```DB_USER```,```DB_PASSWORD```, ```DB_HOST```, and ```DATABASE_NAME``` environment variables. 
 
-### Setting Up Twilio For Local Testing
+If the database has been set up for the first time, you will need to do two additional set-up steps. 
+
+First, you will also need to enable the ```pgcrypto``` PostgreSQL extension to allow encrypting of phone numbers by running the query:
+
+````
+CREATE EXTENSION pgcrypto
+````
+
+ If you are setting up a production instance you should also change ```DB_CRYPTO_SECRET```, but you can leave as is for development.
+
+Next you need to initialize tables by running:
+
+````
+cd packages/server
+yarn dlx knex migrate:latest
+cd ../..
+````
+At this point you should be able to search _and_ start the subscription process, although no text messages can be sent without setting up Twilio so you will get an error (something like ```accountSid must start with AC```).
+
+### Set Up Twilio to Send Text Messages
+
+You will need to set up a Twilio account and phone number (it's free for testing purposes) and then modify all the ```TWILIO_*``` environment variables appropriately. The ```TEST_PHONE_NUMBER``` environment variable is only used in testing scripts.
+
+#### Setting Up Twilio For Local Testing
 You will need your own account for dev testing. Create a Twilio account and generate a phone number. Ensure you add these values to your local .env file.
 
 The gist is that you'll need to expose your localhost via ngrok, and set up your Twilio number to respond to incoming messages via webhook. Twilio posts to the `/sms` endpoint in `app.js`, which allows you to handle their incoming webhooks.

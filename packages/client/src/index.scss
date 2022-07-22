@@ -10,4 +10,17 @@
 // might be forcing the uswds dependency to be installed in the 
 // client directory's node_modules. For now, this is the fastest
 // solution.
-@use '../../../node_modules/uswds/dist/css/uswds.min.css'
+
+// For some reason the line below started causing an error when
+// running 'yarn client' with the message 
+//
+//       SassError: Operators aren't allowed in plain CSS
+//
+// Decided for now to just comment out the line below, copy
+// suwds.min.css into the public folder and add
+//
+//           <link  rel="stylesheet"  href="./uswds.min.css" />
+//
+// to index.html.
+
+//@use '../../../node_modules/uswds/dist/css/uswds.min.css'
