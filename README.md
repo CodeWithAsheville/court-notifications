@@ -52,10 +52,9 @@ At this point you should be able to search _and_ start the subscription process,
 
 ### Set Up Twilio to Send Text Messages
 
-You will need to modify several variables, including the password and username that match your local database, the Twilio account sid, auth token and phone number for your personal Twilio account (see below), and your personal number for local testing.
+You will need to set up a Twilio account and phone number (it's free for testing purposes) and then modify all the ```TWILIO_*``` environment variables appropriately. The ```TEST_PHONE_NUMBER``` environment variable is only used in testing scripts.
 
-
-### Setting Up Twilio For Local Testing
+#### Setting Up Twilio For Local Testing
 You will need your own account for dev testing. Create a Twilio account and generate a phone number. Ensure you add these values to your local .env file.
 
 The gist is that you'll need to expose your localhost via ngrok, and set up your Twilio number to respond to incoming messages via webhook. Twilio posts to the `/sms` endpoint in `app.js`, which allows you to handle their incoming webhooks.
