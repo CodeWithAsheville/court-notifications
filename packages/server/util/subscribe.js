@@ -1,4 +1,5 @@
 const { knex } = require('./db');
+const { logger } = require('./logger');
 
 function initializeDefendant(longDefendantId, details) {
   const defendant = {
