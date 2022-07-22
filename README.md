@@ -16,7 +16,7 @@ Standard development approach is to fork this repository and work in a branch of
 
 ## Getting Started with Local Development
 
-You will need to install ```node``` and ```yarn``` (instructions below are for Yarn 2). As of this writing we are on Node 16, but you can check the latest requirement by looking at the _engine_ in ```package.json``` in the top-level directory.
+You will need to install ```node``` and ```yarn``` (instructions below are for Yarn 3). As of this writing we are on Node 16, but you can check the latest requirement by looking at the _engine_ in ```package.json``` in the top-level directory.
 
 ### Initial Build
 To verify that you are able to build and run the front-end, run the following commands, starting in the top-level directory:
