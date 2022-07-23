@@ -70,6 +70,7 @@ async function purgeSubscriptions() {
 
 async function updateSubscriptions() {
   const daysBeforeUpdate = await getConfigurationIntValue('days_before_update', 7);
+
   // Delete all the subscribers with status failed
   let failedSubscribers = await knex('subscribers')
     .select('subscribers.id',
@@ -119,7 +120,7 @@ async function initTranslations() {
 // due to be updated. Actual updates happen in a separate
 // script
 (async() => {
-  console.log('initTranslations')
+
   await initTranslations();
   // Uncomment when ready to use the new purge code.
   // logger.debug('Call purgeSubscriptions');
