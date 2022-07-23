@@ -20,6 +20,13 @@ async function updateDefendants(purgeDate, updateDays) {
   // Let's be optimistic and assume we'll succeed in updating, so just delete now
   await knex('records_to_update').delete().where('defendant_id', 'in', defendantIds);
   const defendants = await knex('defendants').select('*').where('id', 'in', defendantIds);
+
+  const dt = new Date();
+  const updateObject = {
+    last_valid_cases_date: dt.getFullYear() + '-' + (dt.getMonth()+1) + '-' + dt.getDate(),
+    updates: 0
+  };
+
   for (let i = 0; i<defendants.length; ++i) {
     const d = defendants[i];
     logger.debug('Update defendant ', JSON.stringify(d));
@@ -29,9 +36,9 @@ async function updateDefendants(purgeDate, updateDays) {
       const cases = match[0].cases
       await addCases(d.id, cases);
     }
-    let updates = d.updates + 1;
+    updateObject['updates'] = d.updates + 1;
     await knex('defendants').where('id', '=', d.id)
-      .update({ updates });
+      .update(updateObject);
   }
 }
 
