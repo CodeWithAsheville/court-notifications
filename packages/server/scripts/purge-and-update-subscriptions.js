@@ -1,11 +1,17 @@
+console.log('a')
 require('dotenv').config({ path: '../../.env' })
+console.log('b')
 const { logger } = require('../util/logger');
+console.log('c')
 const { twilioSendMessage } = require('../util/twilio-send-message');
 const i18next = require('i18next');
 var FsBackend = require('i18next-fs-backend');
+console.log('d')
 
 const { knex } = require('../util/db');
+console.log('e')
 const { unsubscribe } = require('../util/unsubscribe');
+console.log('f')
 
 function getPreviousDate(days) {
   const d = new Date();
@@ -69,8 +75,8 @@ async function purgeSubscriptions() {
 }
 
 async function updateSubscriptions() {
-  const daysBeforeUpdate = await getConfigurationIntValue('days_before_update', 7);
-
+  const daysBeforeUpdate = await getConfigurationIntValue('days_before_update', 1);
+  console.log('Days before update: '  + daysBeforeUpdate);
   // Delete all the subscribers with status failed
   let failedSubscribers = await knex('subscribers')
     .select('subscribers.id',
@@ -93,6 +99,7 @@ async function updateSubscriptions() {
   const updateDate = getPreviousDate(daysBeforeUpdate);
   const defendantsToUpdate = await knex('defendants').select('id as defendant_id')
     .where('updated_at', '<', updateDate);
+  console.log('Defendants to update: ' + defendantsToUpdate.length);
   await knex('records_to_update').delete(); // Delete all 
   if (defendantsToUpdate && defendantsToUpdate.length > 0) {
     await knex('records_to_update').insert(defendantsToUpdate);
@@ -120,6 +127,7 @@ async function initTranslations() {
 // due to be updated. Actual updates happen in a separate
 // script
 (async() => {
+  console.log('initTranslations')
   await initTranslations();
   // Uncomment when ready to use the new purge code.
   // logger.debug('Call purgeSubscriptions');
