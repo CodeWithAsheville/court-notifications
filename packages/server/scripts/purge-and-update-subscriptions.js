@@ -120,7 +120,7 @@ async function initTranslations() {
 // due to be updated. Actual updates happen in a separate
 // script
 (async() => {
-
+  
   await initTranslations();
   // Uncomment when ready to use the new purge code.
   // logger.debug('Call purgeSubscriptions');
