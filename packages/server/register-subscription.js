@@ -49,7 +49,7 @@ async function registerSubscription(req, callback) {
       urlname: computeUrlName(defendant)
     }
 
-    if (String(process.env.NODE_ENV) !== "development") {
+    if (Boolean(process.env.TWILIO_NO_SMS)) {
       let msg = Mustache.render(nameTemplate, defendantDetails);
       try {
         await client.messages
@@ -61,10 +61,10 @@ async function registerSubscription(req, callback) {
             })
             .then(async function (message) {
               logger.debug('Successfully sent subscription confirmation: ' + message.body);
-             await logSubscription(defendant, cases, req.language);
+            logSubscription(defendant, cases, req.language);
             });
       } catch (e) {
-        await unsubscribe(phone);
+        unsubscribe(phone);
         if (e.code === 21610) {
           msg = Mustache.render(req.t("error-start"), {phone: process.env.TWILIO_PHONE_NUMBER});
           throw msg;
