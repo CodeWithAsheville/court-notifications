@@ -49,7 +49,7 @@ async function registerSubscription(req, callback) {
       urlname: computeUrlName(defendant)
     }
 
-    if (process.env.NODE_ENV == 'production' || process.env.ENABLE_TWILIO_SMS == 'true') {
+    if (process.env.NODE_ENV == 'production' || process.env.DISABLE_SMS !== 'true') {
       let msg = Mustache.render(nameTemplate, defendantDetails);
       try {
         await client.messages
