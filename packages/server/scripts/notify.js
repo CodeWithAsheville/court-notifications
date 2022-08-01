@@ -79,7 +79,7 @@ async function loadDefendants(notificationDays) {
     }
   });
   const defendants = [];
-  for (dID in defendantHash) {
+  for (let dID in defendantHash) {
     defendants.push(defendantHash[dID]);
   }
   return defendants
@@ -124,18 +124,18 @@ async function sendNotifications() {
    * Each notificationSet is a specific message to be sent
    * a specific number of days before the court date
    */
-  for (i = 0; i < notificationSets.length; ++ i) {
+  for (let i = 0; i < notificationSets.length; ++ i) {
     logger.debug('Do notifications for ' + notificationSets[i].days_before + ' days');
     const notificationDays = notificationSets[i].days_before;
     const msgKey = notificationSets[i].key;
     const defendants = await loadDefendants(notificationDays);
 
-    for (j = 0; j < defendants.length; ++j) {
-      defendant = defendants[j];
+    for (let j = 0; j < defendants.length; ++j) {
+      const defendant = defendants[j];
       const subscribers = await loadSubscribers(defendant.id)
 
       // And send out the notifications
-      for (k = 0; k < subscribers.length; ++k) {
+      for (let k = 0; k < subscribers.length; ++k) {
         const s = subscribers[k];
         // Log the notification
         await logNotification(defendant, notificationSets[i], s.language);

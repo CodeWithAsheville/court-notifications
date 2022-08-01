@@ -35,7 +35,7 @@ async function purgeSubscriptions() {
     });
     if (count > 0) logger.debug(count + ' subscriptions purged');
 
-    subscribers = await knex('subscribers')
+    const subscribers = await knex('subscribers')
     .select('subscribers.id', 'subscribers.language',
     knex.raw('PGP_SYM_DECRYPT("subscribers"."encrypted_phone"::bytea, ?) as phone', [process.env.DB_CRYPTO_SECRET]))
     .whereNotExists(function() {
@@ -48,7 +48,7 @@ async function purgeSubscriptions() {
       const client = require('twilio')(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
       for (let i = 0; i< subscribers.length; ++i) {
         try {
-          s = subscribers[i];
+          const s = subscribers[i];
           await i18next.changeLanguage(s.language);
           const message = i18next.t('unsubscribe.purge');
           await twilioSendMessage(client, s.phone, message);

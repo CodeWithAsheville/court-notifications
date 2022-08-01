@@ -28,7 +28,7 @@ async function twilioSendStatusWebhook(req, res) {
   logger.debug('sendStatusWebhook: incoming with status ' + status);
   try {
     if (status === 'delivered') {
-      subscribers = await knex('subscribers')
+      const subscribers = await knex('subscribers')
       .where(
         knex.raw("PGP_SYM_DECRYPT(encrypted_phone::bytea, ?) = ?", [process.env.DB_CRYPTO_SECRET, phone])
       );
@@ -41,7 +41,7 @@ async function twilioSendStatusWebhook(req, res) {
       }
     }
     else if (failedStatus.includes(status)) {
-      subscribers = await knex('subscribers')
+      const subscribers = await knex('subscribers')
       .where(
         knex.raw("PGP_SYM_DECRYPT(encrypted_phone::bytea, ?) = ?", [process.env.DB_CRYPTO_SECRET, phone])
       );

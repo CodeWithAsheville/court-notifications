@@ -14,5 +14,5 @@ exports.up = async function(knex) {
 };
 
 exports.down = async function(knex) {
-  return await knex.schema.dropTable('notify_configuration');
+  return knex.schema.dropTable('notify_configuration');
 };
