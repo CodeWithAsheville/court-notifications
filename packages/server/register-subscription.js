@@ -61,7 +61,7 @@ async function registerSubscription(req, callback) {
             })
             .then(async function (message) {
               logger.debug('Successfully sent subscription confirmation: ' + message.body);
-              await logSubscription(defendant, cases, req.language);
+            await logSubscription(defendant, cases, req.language);
             });
       } catch (e) {
         await unsubscribe(phone);
@@ -69,8 +69,12 @@ async function registerSubscription(req, callback) {
           msg = Mustache.render(req.t("error-start"), {phone: process.env.TWILIO_PHONE_NUMBER});
           throw msg;
         }
+        msg = req.t("error-unknown") + ' ' + e.message + '(' + e.code + ')';
+        logger.error('Error in register-subscription.js: ' + e.message + '(' + e.code + ')');
+        throw msg;
       }
     }
+
   }
   catch (e) {
     returnMessage = (typeof e === 'string') ? e : e.message;
