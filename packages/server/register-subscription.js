@@ -49,28 +49,27 @@ async function registerSubscription(req, callback) {
       urlname: computeUrlName(defendant)
     }
 
-    let msg = Mustache.render(nameTemplate, defendantDetails);
-    try {
-      await client.messages
-          .create({
-            body: msg,
-            from: fromTwilioPhone,
-            statusCallback: process.env.TWILIO_SEND_STATUS_WEBHOOK_URL,
-            to: phone
-          })
-          .then(async function(message) {
-            logger.debug('Successfully sent subscription confirmation: ' + message.body);
-            await logSubscription(defendant, cases, req.language);
-          });
-    } catch (e) {
-      await unsubscribe(phone);
-      if (e.code === 21610) {
-        msg = Mustache.render(req.t("error-start"), { phone: process.env.TWILIO_PHONE_NUMBER});
-        throw msg;
+    if (process.env.NODE_ENV == 'production' || process.env.DISABLE_SMS !== 'true') {
+      let msg = Mustache.render(nameTemplate, defendantDetails);
+      try {
+        await client.messages
+            .create({
+              body: msg,
+              from: fromTwilioPhone,
+              statusCallback: process.env.TWILIO_SEND_STATUS_WEBHOOK_URL,
+              to: phone
+            })
+            .then(async function (message) {
+              logger.debug('Successfully sent subscription confirmation: ' + message.body);
+              await logSubscription(defendant, cases, req.language);
+            });
+      } catch (e) {
+        await unsubscribe(phone);
+        if (e.code === 21610) {
+          msg = Mustache.render(req.t("error-start"), {phone: process.env.TWILIO_PHONE_NUMBER});
+          throw msg;
+        }
       }
-      msg = req.t("error-unknown") + ' ' + e.message + '(' + e.code + ')';
-      logger.error('Error in register-subscription.js: ' + e.message + '(' + e.code + ')');
-      throw msg;
     }
   }
   catch (e) {
