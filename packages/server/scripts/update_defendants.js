@@ -5,7 +5,7 @@ const { searchCourtRecords } = require('../search-court-records');
 const { addCases } = require('../util/subscribe');
 const { logger } = require('../util/logger');
 
-async function updateDefendants(purgeDate, updateDays) {
+async function updateDefendants() {
 	let updatesPerCall = 5;
 	const config = await knex('cn_configuration')
 		.select('value')
