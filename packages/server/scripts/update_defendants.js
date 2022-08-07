@@ -46,7 +46,7 @@ async function updateDefendants() {
 			},
 			null,
 		);
-		let match = matches.filter(
+		const match = matches.filter(
 			(itm) => itm.defendant + '.' + itm.dob === d.long_id,
 		);
 		if (match.length > 0) {
