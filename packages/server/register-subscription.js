@@ -1,5 +1,5 @@
 const { knex } = require('./util/db');
-var Mustache = require('mustache');
+const Mustache = require('mustache');
 const { unsubscribe } = require('./util/unsubscribe');
 const { subscribe } = require('./util/subscribe');
 const { computeUrlName } = require('./util/computeUrlName');
@@ -10,7 +10,7 @@ const authToken = process.env.TWILIO_AUTH_TOKEN;
 const fromTwilioPhone = process.env.TWILIO_PHONE_NUMBER;
 
 async function logSubscription(defendant, cases, language) {
-  const caseInserts = cases.map(c => {
+  const caseInserts = cases.map((c) => {
     return {
       first_name: defendant.first_name,
       middle_name: defendant.middle_name ? defendant.middle_name : '',
@@ -20,14 +20,14 @@ async function logSubscription(defendant, cases, language) {
       case_number: c.caseNumber,
       language,
       court: c.court,
-      room: c.courtRoom
+      room: c.courtRoom,
     };
   });
   await knex('log_subscriptions').insert(caseInserts);
 }
 
 async function registerSubscription(req, callback) {
-  let returnMessage = req.t("signup-success");
+  let returnMessage = req.t('signup-success');
   let returnCode = 200;
   const body = req.body;
   let subscriberId = null;
@@ -36,12 +36,18 @@ async function registerSubscription(req, callback) {
   logger.debug('Adding a new subscription');
   try {
     const phone = body.phone_number.replace(/\D/g,'');
-    ({ defendant, subscriberId, cases } = await subscribe(phone, body.selectedDefendant, body.details, req.t, req.language));
+    ({ defendant, subscriberId, cases } = await subscribe(
+      phone,
+      body.selectedDefendant,
+      body.details,
+      req.t,
+      req.language
+      ));
     // Now send a verification message to the user
     const client = require('twilio')(accountSid, authToken);
     const nameTemplate = req.t('name-template');
     const unsubInfo = req.t('unsubscribe.signup')
-    console.log(unsubInfo);
+
     const defendantDetails = {
       fname: defendant.first_name,
       mname: defendant.middle_name ? defendant.middle_name : '',
@@ -50,16 +56,18 @@ async function registerSubscription(req, callback) {
       county: 100,
       urlname: computeUrlName(defendant)
     }
-    if (process.env.NODE_ENV == 'production' || process.env.DISABLE_SMS !== 'true') {
+    if (
+      process.env.NODE_ENV == 'production' ||
+      process.env.DISABLE_SMS !== 'true'
+    ) {
       let msg = Mustache.render(nameTemplate, defendantDetails) + '\n\n' + unsubInfo;
-      console.log("And message is " + msg);
       try {
         await client.messages
             .create({
               body: msg,
               from: fromTwilioPhone,
               statusCallback: process.env.TWILIO_SEND_STATUS_WEBHOOK_URL,
-              to: phone
+              to: phone,
             })
             .then(async function (message) {
               logger.debug('Successfully sent subscription confirmation: ' + message.body);
