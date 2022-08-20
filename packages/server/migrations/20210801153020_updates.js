@@ -8,5 +8,5 @@ exports.up = async function(knex) {
 };
 
 exports.down = async function(knex) {
-  return await knex.schema.dropTable('records_to_update');
+  return knex.schema.dropTable('records_to_update');
 };

@@ -62,16 +62,16 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
-app.post("/api/court-search", (req, res) => {
-  searchCourtRecords(req.body, (cases) => res.json(cases));
+app.post("/api/court-search", async (req, res) => {
+  await searchCourtRecords(req.body, (cases) => res.json(cases));
 });
 
-app.post("/api/subscribe-to-defendant", (req, res) => {
-  registerSubscription(req, (signUpResult) => res.json(signUpResult));
+app.post("/api/subscribe-to-defendant", async (req, res) => {
+  await registerSubscription(req, (signUpResult) => res.json(signUpResult));
 });
 
-app.get("/api/check-subscription", (req, res) => {
-  checkSubscription(req, (checkResult) => res.json(checkResult))
+app.get("/api/check-subscription", async (req, res) => {
+  await checkSubscription(req, (checkResult) => res.json(checkResult))
 });
 
 app.post('/sms', twilioIncomingWebhook);
