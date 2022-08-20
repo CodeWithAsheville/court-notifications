@@ -4,6 +4,7 @@ const { unsubscribe } = require('./util/unsubscribe');
 const { subscribe } = require('./util/subscribe');
 const { computeUrlName } = require('./util/computeUrlName');
 const { logger } = require('./util/logger');
+const i18next = require("i18next");
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
@@ -48,9 +49,10 @@ async function registerSubscription(req, callback) {
       county: 100,
       urlname: computeUrlName(defendant)
     }
-
     if (process.env.NODE_ENV == 'production' || process.env.DISABLE_SMS !== 'true') {
-      let msg = Mustache.render(nameTemplate, defendantDetails);
+      await i18next.changeLanguage(req.language)
+      const unsubInfo = i18next.t('unsubscribe.info')
+      let msg = Mustache.render(nameTemplate, defendantDetails) + '\n\n' + unsubInfo;
       try {
         await client.messages
             .create({
