@@ -4,7 +4,6 @@ const { unsubscribe } = require('./util/unsubscribe');
 const { subscribe } = require('./util/subscribe');
 const { computeUrlName } = require('./util/computeUrlName');
 const { logger } = require('./util/logger');
-const i18next = require("i18next");
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
@@ -40,7 +39,9 @@ async function registerSubscription(req, callback) {
     ({ defendant, subscriberId, cases } = await subscribe(phone, body.selectedDefendant, body.details, req.t, req.language));
     // Now send a verification message to the user
     const client = require('twilio')(accountSid, authToken);
-    const nameTemplate = req.t("name-template");
+    const nameTemplate = req.t('name-template');
+    const unsubInfo = req.t('unsubscribe.signup')
+    console.log(unsubInfo);
     const defendantDetails = {
       fname: defendant.first_name,
       mname: defendant.middle_name ? defendant.middle_name : '',
@@ -50,9 +51,8 @@ async function registerSubscription(req, callback) {
       urlname: computeUrlName(defendant)
     }
     if (process.env.NODE_ENV == 'production' || process.env.DISABLE_SMS !== 'true') {
-      await i18next.changeLanguage(req.language)
-      const unsubInfo = i18next.t('unsubscribe.info')
       let msg = Mustache.render(nameTemplate, defendantDetails) + '\n\n' + unsubInfo;
+      console.log("And message is " + msg);
       try {
         await client.messages
             .create({

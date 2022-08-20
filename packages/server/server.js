@@ -35,7 +35,7 @@ i18next
       addPath: __dirname + '/locales/{{lng}}/{{ns}}.missing.json'
     },
     nsSeparator: '#||#',
-    keySeparator: '#|#'
+    keySeparator: '.'
   });
 const app = express();
 
