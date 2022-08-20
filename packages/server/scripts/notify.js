@@ -1,10 +1,10 @@
-require('dotenv').config({ path: '../../.env'});
+require('dotenv').config({ path: '../../.env' });
 const i18next = require('i18next');
-var FsBackend = require('i18next-fs-backend');
+const FsBackend = require('i18next-fs-backend');
 
 const { knex } = require('../util/db');
 
-var Mustache = require('mustache');
+const Mustache = require('mustache');
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
@@ -12,7 +12,20 @@ const fromTwilioPhone = process.env.TWILIO_PHONE_NUMBER;
 const { logger } = require('../util/logger');
 const { computeUrlName } = require('../util/computeUrlName');
 
-const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const months = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+];
 
 function getFormattedDate(d) {
   const dString = months[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();

@@ -1,6 +1,6 @@
-const https = require("https");
-const { JSDOM } = require("jsdom");
-const { CourtCase } = require("./court-case")
+const https = require('https');
+const { JSDOM } = require('jsdom');
+const { CourtCase } = require('./court-case');
 const axios = require('axios');
 const axiosCookieJarSupport = require('axios-cookiejar-support').default;
 const tough = require('tough-cookie');
@@ -25,11 +25,11 @@ function createCaseFromHtml(tr) {
 }
 
 function computeSearchUrl(state, start, navIndex, submit) {
-  let queryParams = `defendant=${state.lastName}`
+  let queryParams = `defendant=${state.lastName}`;
 
-  if (state.firstName) queryParams += `%2C${state.firstName}`
+  if (state.firstName) queryParams += `%2C${state.firstName}`;
 
-  if (state.middleName) queryParams += `%2C${state.middleName}`
+  if (state.middleName) queryParams += `%2C${state.middleName}`;
 
   return `https://www1.aoc.state.nc.us/www/calendars.Criminal.do?county=100&court=BTH+&${queryParams}&start=${start}&navindex=${navIndex}&fromcrimquery=yes&submit=${submit}`;
 }
@@ -39,10 +39,10 @@ async function getCasesPage(axiosInstance, url, cases) {
   let content = resp.data;
 
   const dom = new JSDOM(content);
-  const table = dom.window.document.querySelector(".criminalquery-table");
+  const table = dom.window.document.querySelector('.criminalquery-table');
 
   if (table) {
-    const rows = table.querySelectorAll("tbody > tr");
+    const rows = table.querySelectorAll('tbody > tr');
     if (rows.length > 0) {
       rows.forEach((row) => {
         cases.push(createCaseFromHtml(row))
@@ -58,11 +58,11 @@ async function getCasesPage(axiosInstance, url, cases) {
   };
 
   // Check to see if there are more pages of results
-  const forms = dom.window.document.querySelectorAll("form")
+  const forms = dom.window.document.querySelectorAll('form')
   if (forms) {
     forms.forEach((searchagain) => {
       if (!nextPage.keepOn) { // Skip if we already found it
-        const inputs = searchagain.querySelectorAll("input")
+        const inputs = searchagain.querySelectorAll('input')
         const formValues = {};
         inputs.forEach((ip) => {
           if (ip.getAttribute('TYPE') === 'HIDDEN') {
@@ -105,7 +105,7 @@ async function searchCourtRecords(body, callback) {
   let count = 0;
   while (keepOn) {
     url = computeSearchUrl(body, nextPage.start, nextPage.navindex, nextPage.submit);
-    nextPage = await getCasesPage(axiosInstance, url, cases)
+    nextPage = await getCasesPage(axiosInstance, url, cases);
     keepOn = nextPage.keepOn;
     count = count + 1;
     if (count > maxPages) keepOn = false;
@@ -128,7 +128,7 @@ async function searchCourtRecords(body, callback) {
       dob: first.dob,
       cases: caselist.map(c => {
         const detailsUrl = new URL(c.linkToCaseDetails);
-        detailsUrl.searchParams.delete("prev");
+        detailsUrl.searchParams.delete('prev');
         return {
           court: c.court,
           courtDate: c.courtDate,
@@ -150,5 +150,5 @@ async function searchCourtRecords(body, callback) {
 }
 
 module.exports = {
-  searchCourtRecords
+  searchCourtRecords,
 }

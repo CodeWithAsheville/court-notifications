@@ -1,15 +1,15 @@
-require('dotenv').config({ path: '../../.env' })
+require('dotenv').config({ path: '../../.env' });
 const { logger } = require('../util/logger');
 const { twilioSendMessage } = require('../util/twilio-send-message');
 const i18next = require('i18next');
-var FsBackend = require('i18next-fs-backend');
+const FsBackend = require('i18next-fs-backend');
 
 const { knex } = require('../util/db');
 const { unsubscribe } = require('../util/unsubscribe');
 
 function getPreviousDate(days) {
   const d = new Date();
-  d.setDate(d.getDate()-days);
+  d.setDate(d.getDate() - days);
   const dString = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
   return dString;
 }
@@ -84,7 +84,7 @@ async function updateSubscriptions() {
 
   // There is an edge case where we don't catch the notification
   // of failure on a subscriber and the status could stay pending.
-  // I don't think we need special logic for this - there will be an 
+  // I don't think we need special logic for this - there will be an
   // attempt to notify at some point and whether it succeeds or fails,
   // the status will be properly set and the record set to either 'failed'
   // or 'confirmed'.
@@ -109,14 +109,14 @@ async function initTranslations() {
     fallbackLng: 'en',
     backend: {
       loadPath: __dirname + '/../locales/{{lng}}/{{ns}}.json',
-      addPath: __dirname + '/../locales/{{lng}}/{{ns}}.missing.json'
-    }
+      addPath: __dirname + '/../locales/{{lng}}/{{ns}}.missing.json',
+    },
   });
   return i18next.loadLanguages(['en', 'es', 'ru']);
 }
 
-// Purge all court cases in the past and everything that 
-// depends only on them. Then set up a list of defendants 
+// Purge all court cases in the past and everything that
+// depends only on them. Then set up a list of defendants
 // due to be updated. Actual updates happen in a separate
 // script
 (async() => {

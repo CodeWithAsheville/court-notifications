@@ -1,22 +1,22 @@
 require('dotenv').config()
 
-const express = require("express");
+const express = require('express');
 
-var i18next = require('i18next');
-var FsBackend = require('i18next-fs-backend');
-var middleware = require('i18next-http-middleware');
+const i18next = require('i18next');
+const FsBackend = require('i18next-fs-backend');
+const middleware = require('i18next-http-middleware');
 
 const { knex } = require('./util/db');
 
 const MessagingResponse = require('twilio').twiml.MessagingResponse;
 
-const { searchCourtRecords } = require("./search-court-records");
-const { registerSubscription } = require("./register-subscription");
+const { searchCourtRecords } = require('./search-court-records');
+const { registerSubscription } = require('./register-subscription');
 const { checkSubscription } = require('./check-subscription');
 const { twilioIncomingWebhook } = require('./twilio-incoming-webhook');
 const { twilioSendStatusWebhook } = require('./twilio-send-status-webhook');
 
-const path = require("path");
+const path = require('path');
 
 i18next
 .use(middleware.LanguageDetector)
@@ -52,7 +52,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(middleware.handle(i18next, {}));
 
-if (process.env.NODE_ENV === "production") {
+if (process.env.NODE_ENV === 'production') {
   app.use(function(req, resp, next){
     if (req.headers['x-forwarded-proto'] == 'http') {
         return resp.redirect(301, 'https://' + req.headers.host + '/');
@@ -62,28 +62,28 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
-app.post("/api/court-search", async (req, res) => {
+app.post('/api/court-search', async (req, res) => {
   await searchCourtRecords(req.body, (cases) => res.json(cases));
 });
 
-app.post("/api/subscribe-to-defendant", async (req, res) => {
+app.post('/api/subscribe-to-defendant', async (req, res) => {
   await registerSubscription(req, (signUpResult) => res.json(signUpResult));
 });
 
-app.get("/api/check-subscription", async (req, res) => {
+app.get('/api/check-subscription', async (req, res) => {
   await checkSubscription(req, (checkResult) => res.json(checkResult))
 });
 
 app.post('/sms', twilioIncomingWebhook);
 app.post('/send-status', twilioSendStatusWebhook);
 
-if (process.env.NODE_ENV === "production") {
+if (process.env.NODE_ENV === 'production') {
   // Serve any static files
-  app.use(express.static(path.join(__dirname, "../client/build")));
+  app.use(express.static(path.join(__dirname, '../client/build')));
 
   // Handle React routing, return all requests to React app
-  app.get("*", function (req, res) {
-    res.sendFile(path.join(__dirname, "..", "client/build", "index.html"));
+  app.get('*', function (req, res) {
+    res.sendFile(path.join(__dirname, '..', 'client/build', 'index.html'));
   });
 }
 

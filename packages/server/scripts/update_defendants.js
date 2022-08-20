@@ -1,5 +1,4 @@
-require('dotenv').config({ path: '../../.env' })
-var env         = 'development';
+require('dotenv').config({ path: '../../.env' });
 const { knex } = require('../util/db');
 const { searchCourtRecords } = require('../search-court-records');
 const { addCases } = require('../util/subscribe');
@@ -42,7 +41,7 @@ async function updateDefendants(purgeDate, updateDays) {
   }
 }
 
-(async() => {
+(async () => {
   logger.debug('Call updateDefendants');
   await updateDefendants('2021-08-09', -1);
   logger.debug('Done with update');

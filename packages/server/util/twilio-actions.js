@@ -7,7 +7,7 @@ const { logger } = require('./logger');
 async function unsubscribe(req, res) {
   // Use req.body.From to get the number, 
   // look it up the database
-  let message = 'Successfully unsubscribed!'
+  let message = 'Successfully unsubscribed!';
 
  try {
     let phone = req.body.From;
@@ -16,11 +16,11 @@ async function unsubscribe(req, res) {
     }
     doUnsubscribe(phone);
   } catch(e) {
-    logger.error('twilio-actions.unsubscribe: ' + e)
-    message = 'An error occurred. Unsubscribe unsuccessful'
+    logger.error('twilio-actions.unsubscribe: ' + e);
+    message = 'An error occurred. Unsubscribe unsuccessful';
   }
 
-  twilioRespondToUser(res, message)
+  twilioRespondToUser(res, message);
 }
 
 async function resubscribe(req, res) {
@@ -34,14 +34,14 @@ async function resubscribe(req, res) {
       phone = phone.substring(2);
     }
   } catch(e) {
-    logger.error('twilio-actions.resubscribe: ' + e)
-    message = 'An error occurred. Resubscribe unsuccessful.'
+    logger.error('twilio-actions.resubscribe: ' + e);
+    message = 'An error occurred. Resubscribe unsuccessful.';
   }
 
-  twilioRespondToUser(res, message)
+  twilioRespondToUser(res, message);
 }
 
 module.exports = {
   unsubscribe,
-  resubscribe
+  resubscribe,
 }
