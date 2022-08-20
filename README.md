@@ -14,7 +14,9 @@ We maintain three active branches:
 
 Standard development approach is to fork this repository and work in a branch off the latest version of development. When ready, submit a pull request into development for review.
 
-## Getting Started with Local Development
+## Getting Started with Development
+**Warning**
+This project uses the ```yarn``` package manager. Please ensure that pull requests correctly build with yarn and do not include a ```package-lock.json``` file
 
 You will need to install ```node``` and ```yarn``` (instructions below are for Yarn 3). As of this writing we are on Node 16, but you can check the latest requirement by looking at the _engine_ in ```package.json``` in the top-level directory.
 
