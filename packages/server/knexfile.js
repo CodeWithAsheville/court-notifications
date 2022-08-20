@@ -28,6 +28,7 @@ module.exports = {
     max
   },
   migrations: {
-    tableName
+    tableName,
+    schemaName: 'public'
   }
 };
