@@ -2,13 +2,15 @@ const { knex } = require('./db');
 const { logger } = require('./logger');
 
 function initializeDefendant(longDefendantId, details) {
+  const dt = new Date();
   const defendant = {
     long_id: longDefendantId,
     last_name: '',
     first_name: '',
     middle_name: null,
     suffix: null,
-    birth_date: ''
+    birth_date: '',
+    last_valid_cases_date: dt.getFullYear() + '-' + (dt.getMonth()+1) + '-' + dt.getDate()
   };
   defendant.birth_date = details.dob;
   const d = details.defendant.split(',');
