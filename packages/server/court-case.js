@@ -8,11 +8,9 @@ function CourtCase([
   [caseNumber, caseDetailsUri],
   citationNumber,
 ]) {
-  const caseDetailsURLPrefix = `http://www1.aoc.state.nc.us`;
+  const caseDetailsURLPrefix = 'http://www1.aoc.state.nc.us';
 
-  const generateLinkToCaseDetails = (uri) => {
-    return caseDetailsURLPrefix + uri;
-  };
+  const generateLinkToCaseDetails = (uri) => caseDetailsURLPrefix + uri;
 
   return {
     court,
@@ -28,5 +26,5 @@ function CourtCase([
 }
 
 module.exports = {
-  CourtCase
-}
+  CourtCase,
+};

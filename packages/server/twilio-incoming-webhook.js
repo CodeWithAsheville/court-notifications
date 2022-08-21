@@ -1,22 +1,22 @@
 /**
  * How this works:
- * 
+ *
  * Parses the request body of any incoming webhooks, and
  * attempts to identify any verbs. If a verb is identified
- * in the text body, the corresponding action function 
+ * in the text body, the corresponding action function
  * executes any business logic.
- * 
+ *
  * To add new actions, create a new file inside of `/actions`
- * with the name of your action. Export the function, and 
+ * with the name of your action. Export the function, and
  * add it to the default export object inside `/actions/index.js`.
  * Write your business logic inside your new action function.
- * 
+ *
  * Finally, add a new verb to the verbs enum. They key should
  * match your action name, and the value should contain the name
  * of the action and any synonyms you desire.
- * 
+ *
  * Here's an example of the request body
- * 
+ *
  * For reference, here's an example request body from Twilio
  * {
  *   ToCountry: 'US',
@@ -42,31 +42,30 @@
  * }
  */
 const twilio = require('twilio');
-const { twilioRespondToUser } = require('./util/twilio-respond-to-user');
 const { logger } = require('./util/logger');
 const twilioActions = require('./util/twilio-actions');
 
 const verbs = {
   unsubscribe: ['stop', 'stopall', 'unsubscribe', 'cancel', 'end', 'quit'],
-  resubscribe: ['start', 'yes', 'unstop']
-}
+  resubscribe: ['start', 'yes', 'unstop'],
+};
 
 /**
- * Given a verb and a string of words, 
+ * Given a verb and a string of words,
  * identify any words that match the verb.
- * 
- * @param {String} verb 
- * @param {String} words 
+ *
+ * @param {String} verb
+ * @param {String} words
  * @returns {String[]}
  */
-function matchWords(verb, words) {
+function matchWords(verb, inWords) {
   const regexMetachars = /[(){[*+?.\\^$|]/g;
-
-  for (let i = 0; i < words.length; i++) {
-      words[i] = words[i].replace(regexMetachars, "\\$&");
+  const words = [];
+  for (let i = 0; i < words.length; i += 1) {
+    words[i] = inWords[i].replace(regexMetachars, '\\$&');
   }
 
-  const regex = new RegExp("\\b(?:" + words.join("|") + ")\\b", "gi");
+  const regex = new RegExp(`\\b(?:${words.join('|')})\\b`, 'gi');
 
   return verb.toLowerCase().match(regex) || [];
 }
@@ -75,24 +74,24 @@ function matchWords(verb, words) {
  * Given a verb and a string of words,
  * determine if the words contains a match
  * for the verb.
- * 
- * @param {String} verb 
- * @param {String} words 
+ *
+ * @param {String} verb
+ * @param {String} words
  * @returns {Boolean}
  */
 function hasMatches(verb, words) {
-  return matchWords(verb, words).length > 0
+  return matchWords(verb, words).length > 0;
 }
 
 /**
  * Finds the first matching verb in the message
  * body
- * 
- * @param {String} body 
+ *
+ * @param {String} body
  * @returns {String}
  */
 function identifyVerbs(body) {
-  return Object.keys(verbs).find(verb => hasMatches(body, verbs[verb]))
+  return Object.keys(verbs).find((verb) => hasMatches(body, verbs[verb]));
 }
 
 function twilioIncomingWebhook(req, res) {
@@ -104,23 +103,22 @@ function twilioIncomingWebhook(req, res) {
     process.env.TWILIO_AUTH_TOKEN,
     twilioSignature,
     url,
-    params
+    params,
   );
   if (!isValid) {
     logger.error('parseWebhook: invalid incoming request - not from Twilio');
     return res.status(401).send('Unauthorized');
-  } 
-
-  const verb = identifyVerbs(req.body.Body)
-  logger.debug('Incoming message: ' + verb);
-  if (verb === undefined) {
-    logger.error('parseWebhook: Undefined verb - ' + req.body.Body);
-    twilioRespondToUser(res, 'Unknown request. Text STOP to unsubscribe.')
-  } else {
-    return twilioActions[verb](req, res)
   }
+
+  let verb = identifyVerbs(req.body.Body);
+  logger.debug(`Incoming message: ${verb}`);
+  if (verb === undefined) {
+    logger.error(`parseWebhook: Undefined verb - ${req.body.Body}`);
+    verb = 'unknown';
+  }
+  return twilioActions[verb](req, res);
 }
 
 module.exports = {
-  twilioIncomingWebhook
-}
+  twilioIncomingWebhook,
+};
