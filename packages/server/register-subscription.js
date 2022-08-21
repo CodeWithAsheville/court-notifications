@@ -31,7 +31,7 @@ async function logSubscription(defendant, cases, language) {
 async function registerSubscription(req, callback) {
   let returnMessage = req.t('signup-success');
   let returnCode = 200;
-  const body = { req };
+  const { body } = req;
   let subscriberId = null;
   let defendant = null;
   let cases = [];
