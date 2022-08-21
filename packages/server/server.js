@@ -64,7 +64,6 @@ app.post('/api/subscribe-to-defendant', async (req, res) => {
 });
 
 app.get('/api/check-subscription', async (req, res) => {
-  console.log('Yes I am here');
   await checkSubscription(req, (checkResult) => res.json(checkResult));
 });
 
