@@ -1,5 +1,5 @@
 const { logger } = require('./util/logger');
-const app = require('./server.js')
+const app = require('./server');
 
 const port = process.env.PORT || 5000;
 
