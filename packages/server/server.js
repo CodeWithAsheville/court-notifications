@@ -1,14 +1,10 @@
-require('dotenv').config()
+require('dotenv').config();
 
 const express = require('express');
-
+const path = require('path');
 const i18next = require('i18next');
 const FsBackend = require('i18next-fs-backend');
 const middleware = require('i18next-http-middleware');
-
-const { knex } = require('./util/db');
-
-const MessagingResponse = require('twilio').twiml.MessagingResponse;
 
 const { searchCourtRecords } = require('./search-court-records');
 const { registerSubscription } = require('./register-subscription');
@@ -16,30 +12,28 @@ const { checkSubscription } = require('./check-subscription');
 const { twilioIncomingWebhook } = require('./twilio-incoming-webhook');
 const { twilioSendStatusWebhook } = require('./twilio-send-status-webhook');
 
-const path = require('path');
-
 i18next
-.use(middleware.LanguageDetector)
-.use(FsBackend)
+  .use(middleware.LanguageDetector)
+  .use(FsBackend)
   .init({
     detection: {
       lookupQueryString: 'lng',
       order: ['querystring'],
-      ignoreCase: true
+      ignoreCase: true,
     },
     saveMissing: true,
     debug: false,
     fallbackLng: 'en',
     backend: {
-      loadPath: __dirname + '/locales/{{lng}}/{{ns}}.json',
-      addPath: __dirname + '/locales/{{lng}}/{{ns}}.missing.json'
+      loadPath: path.join(__dirname, '/locales/{{lng}}/{{ns}}.json'),
+      addPath: path.join(__dirname, '/locales/{{lng}}/{{ns}}.missing.json'),
     },
     nsSeparator: '#||#',
-    keySeparator: '.'
+    keySeparator: '.',
   });
 const app = express();
 
-app.use(function(req, res, next) {
+app.use((req, res, next) => {
   res.header('Access-Control-Allow-Credentials', true);
   res.header('Access-Control-Allow-Origin', req.headers.origin);
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,UPDATE,OPTIONS');
@@ -53,12 +47,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use(middleware.handle(i18next, {}));
 
 if (process.env.NODE_ENV === 'production') {
-  app.use(function(req, resp, next){
-    if (req.headers['x-forwarded-proto'] == 'http') {
-        return resp.redirect(301, 'https://' + req.headers.host + '/');
-    } else {
-        return next();
+  app.use((req, resp, next) => {
+    if (req.headers['x-forwarded-proto'] === 'http') {
+      return resp.redirect(301, `https://${req.headers.host}/`);
     }
+    return next();
   });
 }
 
@@ -71,7 +64,7 @@ app.post('/api/subscribe-to-defendant', async (req, res) => {
 });
 
 app.get('/api/check-subscription', async (req, res) => {
-  await checkSubscription(req, (checkResult) => res.json(checkResult))
+  await checkSubscription(req, (checkResult) => res.json(checkResult));
 });
 
 app.post('/sms', twilioIncomingWebhook);
@@ -82,7 +75,7 @@ if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../client/build')));
 
   // Handle React routing, return all requests to React app
-  app.get('*', function (req, res) {
+  app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'client/build', 'index.html'));
   });
 }

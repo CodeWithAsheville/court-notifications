@@ -1,12 +1,14 @@
-require('dotenv').config()
+/* eslint-disable no-console */
+require('dotenv').config();
 const { subscribe } = require('../util/subscribe');
 const testData = require('./testdata.json');
 
 if (!process.env.TEST_PHONE_NUMBER) {
-  throw new Error('You must set the TEST_PHONE_NUMBER environment variable to an SMS-capable phone.')
+  throw new Error('You must set the TEST_PHONE_NUMBER environment variable to an SMS-capable phone.');
 }
 
-exports.seed = async function(knex) {
+// eslint-disable-next-line func-names
+exports.seed = async function (knex) {
   // Clear out all the tables
   await knex('cases').del();
   await knex('subscriptions').del();
@@ -18,14 +20,15 @@ exports.seed = async function(knex) {
   courtDates[1].setDate(today.getDate() + 7);
   courtDates[2].setDate(today.getDate() - 3);
   let failed = null;
-  for (let i = 0; i<testData.subscriptions.length; ++i) {
-    let itm = testData.subscriptions[i];
-    let d = courtDates[i%3];
-    for (let j=0; j<itm.details.cases.length; ++j) {
-      itm.details.cases[j].courtDate = d.getMonth() + 1 + '/' + d.getDate() + '/' + d.getFullYear();
+  for (let i = 0; i < testData.subscriptions.length; i += 1) {
+    const itm = testData.subscriptions[i];
+    const d = courtDates[i % 3];
+    for (let j = 0; j < itm.details.cases.length; j += 1) {
+      itm.details.cases[j].courtDate = `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`;
     }
     let phone = process.env.TEST_PHONE_NUMBER;
-    if (i === testData.subscriptions.length-1) phone = '8285551212'
+    if (i === testData.subscriptions.length - 1) phone = '8285551212';
+    // eslint-disable-next-line no-await-in-loop
     const result = await subscribe(phone, itm.selectedDefendant, itm.details);
     failed = result.subscriberId;
     console.log('Seeded data:');
@@ -33,5 +36,5 @@ exports.seed = async function(knex) {
   }
 
   await knex('subscribers').update('status', 'confirmed');
-  await knex('subscribers').update({status: 'failed', failed: 1}).where('id', failed);
+  await knex('subscribers').update({ status: 'failed', failed: 1 }).where('id', failed);
 };
