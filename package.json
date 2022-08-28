@@ -20,7 +20,7 @@
     "migrate": "npx knex migrate:latest --knexfile \"packages/server/knexfile.js\"",
     "testserver": "cd packages/server && yarn test"
   },
-  "packageManager": "yarn@3.1.1",
+  "packageManager": "yarn@3.2.3",
   "devDependencies": {
     "concurrently": "^7.0.0",
     "knex": "^1.0.1",
