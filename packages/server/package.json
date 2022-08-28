@@ -3,8 +3,7 @@
   "version": "1.1.0",
   "license": "GPL-3.0-only",
   "engines": {
-    "node": "16.x",
-    "yarn": "3.x"
+    "node": "16.x"
   },
   "scripts": {
     "client": "cd client && yarn start",
