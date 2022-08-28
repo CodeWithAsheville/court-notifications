@@ -21,10 +21,6 @@ async function updateDefendants() {
   const defendants = await knex('defendants').select('*').where('id', 'in', defendantIds);
 
   const dt = new Date();
-  const updateObject = {
-    last_valid_cases_date: `${dt.getFullYear()}-${(dt.getMonth() + 1)}-${dt.getDate()}`,
-    updates: 0,
-  };
 
   for (let i = 0; i < defendants.length; i += 1) {
     const d = defendants[i];
@@ -36,12 +32,20 @@ async function updateDefendants() {
       middleName: d.middle_name,
     }, null);
     const match = matches.filter((itm) => (`${itm.defendant}.${itm.dob}`) === d.long_id);
+    let updateObject;
     if (match.length > 0) {
       const { cases } = match[0];
       // eslint-disable-next-line no-await-in-loop
       await addCases(d.id, cases);
+      updateObject = {
+        updates: d.updates + 1,
+        last_valid_cases_date: `${dt.getFullYear()}-${(dt.getMonth() + 1)}-${dt.getDate()}`,
+      };
+    } else {
+      updateObject = {
+        updates: d.updates + 1,
+      };
     }
-    updateObject.updates = d.updates + 1;
     // eslint-disable-next-line no-await-in-loop
     await knex('defendants').where('id', '=', d.id)
       .update(updateObject);
