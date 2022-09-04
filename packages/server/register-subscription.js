@@ -1,14 +1,12 @@
 const Mustache = require('mustache');
-
-const accountSid = process.env.TWILIO_ACCOUNT_SID;
-const authToken = process.env.TWILIO_AUTH_TOKEN;
-const fromTwilioPhone = process.env.TWILIO_PHONE_NUMBER;
-const client = require('twilio')(accountSid, authToken);
 const { knex } = require('./util/db');
 const { unsubscribe } = require('./util/unsubscribe');
 const { subscribe } = require('./util/subscribe');
 const { computeUrlName } = require('./util/computeUrlName');
 const { logger } = require('./util/logger');
+const { twilioClient } = require('./util/twilio-client');
+
+const fromTwilioPhone = process.env.TWILIO_PHONE_NUMBER;
 
 async function logSubscription(defendant, cases, language) {
   const caseInserts = cases.map((c) => {
@@ -64,7 +62,7 @@ async function registerSubscription(req, callback) {
       const defMessage = Mustache.render(nameTemplate, defendantDetails);
       let msg = `${defMessage}\n\n ${unsubInfo}`;
       try {
-        await client.messages
+        await twilioClient.messages
           .create({
             body: msg,
             from: fromTwilioPhone,
