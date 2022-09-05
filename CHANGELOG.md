@@ -1,6 +1,8 @@
 # Court Reminders Change Log
 
-## 1.1.? - TBD
+## 1.2.0 - TBD
+### New features
+- Agency subscriptions
 
 
 ## 1.1.0 - September 5, 2022
