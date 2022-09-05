@@ -110,7 +110,8 @@ function loadSubscribers(defendantId) {
       knex.raw('PGP_SYM_DECRYPT("subscribers"."encrypted_phone"::bytea, ?) as phone', [process.env.DB_CRYPTO_SECRET])
     )
     .leftOuterJoin('subscribers', 'subscriptions.subscriber_id', 'subscribers.id')
-    .where('subscriptions.defendant_id', '=', defendantId);
+    .where('subscriptions.defendant_id', '=', defendantId)
+    .whereNull('subscribers.agency');
 }
 
 async function logNotification(defendant, notification, language) {
