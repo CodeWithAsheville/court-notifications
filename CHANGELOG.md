@@ -1,6 +1,9 @@
 # Court Reminders Change Log
 
-## 1.1.0 - TBD
+## 1.1.? - TBD
+
+
+## 1.1.0 - September 5, 2022
 ### New features
 - Only delete subscriptions 30 days after ```last_valid_cases_date```
 
