@@ -67,15 +67,13 @@ async function getAgencies() {
   await initTranslations();
   const agencies = await getAgencies();
   const today = new Date().getDay();
-  agencies.forEach((agency) => {
-    console.log(agency);
+  agencies.forEach(async (agency) => {
     if (agency.notification_day === today) {
-      console.log('And today is the day!');
+      logger.debug(`Generating notification for ${agency.agency_name}`);
+      await sendMessage(msg);
     }
   });
 
-  logger.debug('Call sendMessage');
-  await sendMessage(msg);
   logger.debug('Done with agency notifications');
   process.exit();
 })();
