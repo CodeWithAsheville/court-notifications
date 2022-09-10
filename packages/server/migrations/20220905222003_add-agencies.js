@@ -4,6 +4,7 @@ exports.up = async function (knex) {
   await knex.schema.createTable('agencies', (table) => {
     table.increments();
     table.string('agency_name');
+    table.binary('encrypted_email');
     table.integer('notification_day').defaultTo(0);
     table.timestamps(false, true);
   })
