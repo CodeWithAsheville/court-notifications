@@ -85,20 +85,26 @@ async function addCases(defendantId, casesIn) {
   return nextDate;
 }
 
-async function addSubscriber(nextDate, phone, language) {
+async function addSubscriber(nextDate, phone, language, agency = null) {
   const nextNotify = `${nextDate.getMonth() + 1}/${nextDate.getDate()}/${nextDate.getFullYear()}`;
   let subscriberId = null;
   let subscribers = null;
   try {
-    subscribers = await knex('subscribers').select()
-      .where(
-        // eslint-disable-next-line comma-dangle
-        knex.raw('PGP_SYM_DECRYPT(encrypted_phone::bytea, ?) = ?', [process.env.DB_CRYPTO_SECRET, phone])
-      );
+    if (agency) {
+      subscribers = await knex('subscribers').select()
+        .where('agency', agency);
+    } else {
+      subscribers = await knex('subscribers').select()
+        .where(
+          // eslint-disable-next-line comma-dangle
+          knex.raw('PGP_SYM_DECRYPT(encrypted_phone::bytea, ?) = ?', [process.env.DB_CRYPTO_SECRET, phone])
+        );
+    }
   } catch (e) {
     logger.error(`util/subscribe.addSubscriber lookup: ${e}`);
     throw Error('Error in subscriber lookup');
   }
+
   if (subscribers.length > 0) { // We already have this subscriber, update the date if needed
     subscriberId = subscribers[0].id;
     const currentNext = new Date(subscribers[0].next_notify);
@@ -113,12 +119,15 @@ async function addSubscriber(nextDate, phone, language) {
     }
   } else { // New subscriber
     try {
-      const retVal = await knex('subscribers').insert({
-        encrypted_phone: knex.raw('PGP_SYM_ENCRYPT(?::text, ?)', [phone, process.env.DB_CRYPTO_SECRET]),
+      const encryptedPhone = agency ? null : knex.raw('PGP_SYM_ENCRYPT(?::text, ?)', [phone, process.env.DB_CRYPTO_SECRET]);
+      const subscriber = {
+        encrypted_phone: encryptedPhone,
         language,
         next_notify: nextNotify,
         status: 'pending',
-      })
+        agency,
+      };
+      const retVal = await knex('subscribers').insert(subscriber)
         .returning('id');
       [subscriberId] = retVal;
     } catch (e) {
@@ -146,13 +155,13 @@ async function addSubscription(subscriberId, defendantId) {
   }
 }
 
-async function subscribe(phone, defendantLongId, details, t, language) {
+async function subscribe(phone, defendantLongId, details, t, language, agency = null) {
   const { cases } = details;
   if (cases == null || cases.length === 0) throw t('no-cases');
   const defendant = initializeDefendant(defendantLongId, details);
   const defendantId = await addDefendant(defendant);
   const nextDate = await addCases(defendantId, cases);
-  const subscriberId = await addSubscriber(nextDate, phone, language);
+  const subscriberId = await addSubscriber(nextDate, phone, language, agency);
   await addSubscription(subscriberId, defendantId);
   return { defendant, subscriberId, cases };
 }

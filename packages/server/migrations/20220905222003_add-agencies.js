@@ -8,14 +8,12 @@ exports.up = async function (knex) {
     table.timestamps(false, true);
   })
     .alterTable('subscribers', (table) => {
-      table.binary('encrypted_email');
-      table.integer('agency');
+      table.string('agency');
     });
 };
 
 exports.down = async function (knex) {
   await knex.schema.table('subscribers', (table) => {
-    table.dropColumn('encrypted_email');
     table.dropColumn('agency');
   })
     .dropTable('agencies');
