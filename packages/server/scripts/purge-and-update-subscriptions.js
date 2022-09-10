@@ -1,10 +1,11 @@
 /* eslint-disable no-await-in-loop */
+require('dotenv').config({ path: '../.env' });
+
 const i18next = require('i18next');
 const FsBackend = require('i18next-fs-backend');
 const path = require('path');
 const client = require('twilio')(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 
-require('dotenv').config({ path: '../../.env' });
 const { logger } = require('../util/logger');
 const { twilioSendMessage } = require('../util/twilio-send-message');
 

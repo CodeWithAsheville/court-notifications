@@ -1,4 +1,4 @@
-require('dotenv').config({ path: '../../.env' });
+require('dotenv').config({ path: '../.env' });
 const i18next = require('i18next');
 const FsBackend = require('i18next-fs-backend');
 const Mustache = require('mustache');

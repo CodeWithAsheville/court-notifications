@@ -1,4 +1,4 @@
-require('dotenv').config({ path: '../../.env' });
+require('dotenv').config({ path: '../.env' });
 const { knex } = require('../util/db');
 const { searchCourtRecords } = require('../search-court-records');
 const { addCases } = require('../util/subscribe');
