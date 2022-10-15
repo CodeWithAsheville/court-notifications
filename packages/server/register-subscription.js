@@ -80,7 +80,7 @@ async function registerSubscription(req, callback) {
   let cases = [];
   logger.debug('Adding a new subscription');
   try {
-    const phone = body.phone_number.replace(/\D/g, '');
+    const phone = body.phone_number ? body.phone_number.replace(/\D/g, '') : null;
     // Do we want to have some validation here?
     ({ defendant, subscriberId, cases } = await subscribe(
       phone,

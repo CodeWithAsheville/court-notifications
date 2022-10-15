@@ -49,10 +49,22 @@ async function getAgencies() {
     )
     .leftOuterJoin('subscribers', 'agencies.agency_name', 'subscribers.agency');
   return agencies;
-  // return agencies.map((agency) => ({
-  //   ...agency,
-  //   tr: null,
-  // }));
+}
+
+async function getUpcomingCourtDates(agency) {
+  console.log('Begin');
+  console.log(agency);
+  const cases = await knex('subscriptions')
+    .select(
+      'subscriptions.subscriber_id',
+    );
+  console.log('did it');
+  console.log(cases);
+  // .leftOuterJoin('defendants', 'subscriptions.defendant_id', 'defendants.id')
+  // .leftOuterJoin('cases', 'cases.defendant_id', 'defendants.id')
+  // .where('subscriptions.subscriber_id', '=', agency.subscriber_id)
+  // .where('cases.court_date', '<', '2023-09-01');
+  console.log('End');
 }
 
 (async () => {
@@ -67,12 +79,21 @@ async function getAgencies() {
   await initTranslations();
   const agencies = await getAgencies();
   const today = new Date().getDay();
-  agencies.forEach(async (agency) => {
-    if (agency.notification_day === today) {
-      logger.debug(`Generating notification for ${agency.agency_name}`);
-      await sendMessage(msg);
-    }
-  });
+  console.log('Today is ', today);
+  console.log(agencies);
+  try {
+    agencies.forEach(async (agency) => {
+      console.log(agency.agency_name, ' notification day is ', agency.notification_day);
+      if (agency.notification_day === today) {
+        logger.debug(`Generating notification for ${agency.agency_name}`);
+        const defendants = await getUpcomingCourtDates(agency);
+        await sendMessage(msg);
+        console.log(defendants);
+      }
+    });
+  } catch (e) {
+    console.log ('Loop failed ', e);
+  }
 
   logger.debug('Done with agency notifications');
   process.exit();

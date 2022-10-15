@@ -7,7 +7,7 @@ const { knex } = require('../util/db');
 
 const query = {
   selectedDefendant: 'JACKSON,BRIAN,KEITH.11/04',
-  phone_number: process.env.TEST_PHONE_NUMBER,
+  agency: 'AHOPE',
   details: {
     defendant: 'JACKSON,BRIAN,KEITH',
     dob: '11/04',

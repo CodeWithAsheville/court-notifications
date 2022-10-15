@@ -120,11 +120,12 @@ async function addSubscriber(nextDate, phone, language, agency = null) {
   } else { // New subscriber
     try {
       const encryptedPhone = agency ? null : knex.raw('PGP_SYM_ENCRYPT(?::text, ?)', [phone, process.env.DB_CRYPTO_SECRET]);
+      const status = agency ? 'confirmed' : 'pending';
       const subscriber = {
         encrypted_phone: encryptedPhone,
         language,
         next_notify: nextNotify,
-        status: 'pending',
+        status,
         agency,
       };
       const retVal = await knex('subscribers').insert(subscriber)
