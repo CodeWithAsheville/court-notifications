@@ -1,3 +1,4 @@
+console.log('a0');
 require('dotenv').config();
 
 const express = require('express');
@@ -5,12 +6,13 @@ const path = require('path');
 const i18next = require('i18next');
 const FsBackend = require('i18next-fs-backend');
 const middleware = require('i18next-http-middleware');
-
+console.log('a1');
 const { searchCourtRecords } = require('./search-court-records');
 const { registerSubscription } = require('./register-subscription');
 const { checkSubscription } = require('./check-subscription');
 const { twilioIncomingWebhook } = require('./twilio-incoming-webhook');
 const { twilioSendStatusWebhook } = require('./twilio-send-status-webhook');
+console.log('a2');
 
 i18next
   .use(middleware.LanguageDetector)
@@ -54,6 +56,16 @@ if (process.env.NODE_ENV === 'production') {
     return next();
   });
 }
+
+app.get('/api/version', async (req, res) => {
+  let version = 'default';
+  if (req.hostname.includes('jail')) {
+    version = 'jail';
+  } else if (req.hostname.includes('agency')) {
+    version = 'agency';
+  }
+  res.json({ version });
+});
 
 app.post('/api/court-search', async (req, res) => {
   await searchCourtRecords(req.body, (cases) => res.json(cases));
