@@ -64,7 +64,11 @@ app.get('/api/version', async (req, res) => {
   } else if (req.hostname.includes('agency')) {
     version = 'agency';
   }
-  res.json({ version });
+  const returnValue = {
+    version,
+    privacy_url: 'https://docs.google.com/document/d/19M2zCxx4gICCmjgVx1bKSHlC92Gnb2SCmkmrclLIq3Y/edit',
+  };
+  res.json(returnValue);
 });
 
 app.post('/api/court-search', async (req, res) => {
