@@ -53,9 +53,9 @@ export default function ResultsTable({ state, dispatch }) {
     return (
       <div>
         <p>
-          <b>{t('casesTable.description')} {df} </b>
           {!isJailVersion && (
             <>
+              <b>{t('casesTable.description')} {df} </b>
               <br/>
               {t('casesTable.help')} <a href={computeFullSearchUrl(df)} target="_blank" rel="noreferrer">NC Courts</a>.
             </>

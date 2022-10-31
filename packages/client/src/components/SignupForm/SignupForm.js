@@ -57,7 +57,7 @@ export default function SignupForm({ state, dispatch }) {
     phoneMessageText = <div>&nbsp;&nbsp;&nbsp;{state.phone_message}</div>;
   }
 
-  const explanationText = (
+  const explanationText = isJailVersion ? '' : (
     <p>{t('signup.description')}</p>
   );
 
