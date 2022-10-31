@@ -12,6 +12,11 @@ export default function SignupForm({ state, dispatch }) {
   const updatePhone = createPhoneUpdater(dispatch);
   const { t } = useTranslation();
 
+  let isJailVersion = false;
+  if (window.location.hostname.includes('jail') || (typeof process.env.REACT_APP_CONTEXT !== "undefined" && process.env.REACT_APP_CONTEXT === 'jail')) {
+    isJailVersion = true;
+  }
+
   async function doSubscription() {
     let doit = false;
     let tphone = state.phone_number;
@@ -109,11 +114,12 @@ export default function SignupForm({ state, dispatch }) {
         {t('signup.previousList')}
       </button>
       {explanationText}
-
-      <form className="usa-form lookup-form signup-form">
-        {inputBox}
-        {signupButton}
-      </form>
+      {!isJailVersion && (
+        <form className="usa-form lookup-form signup-form">
+          {inputBox}
+          {signupButton}
+        </form>
+      )}
     </div>
   );
 }
