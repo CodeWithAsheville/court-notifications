@@ -61,8 +61,6 @@ app.get('/api/version', async (req, res) => {
   if (req.hostname.includes('jail')) {
     version = 'jail';
     privacyUrl = 'https://docs.google.com/document/d/1YitpkjO2aJH2zwQ_m_Hx6NbhJHqK1q6g0OTKJkxeXAY/';
-  } else if (req.hostname.includes('agency')) {
-    version = 'agency';
   }
   const returnValue = {
     version,
