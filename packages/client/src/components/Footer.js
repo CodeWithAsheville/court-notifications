@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 export default function Footer() {
   const { t } = useTranslation();
   let privacyStatementWithLinks = 'https://docs.google.com/document/d/19M2zCxx4gICCmjgVx1bKSHlC92Gnb2SCmkmrclLIq3Y/';
-  let privacyStatementWithoutLinks = 'https://docs.google.com/document/d/1YitpkjO2aJH2zwQ_m_Hx6NbhJHqK1q6g0OTKJkxeXAY/';
 
   let isJailVersion = false;
   if (window.location.hostname.includes('jail') || (typeof process.env.REACT_APP_CONTEXT !== "undefined" && process.env.REACT_APP_CONTEXT === 'jail')) {
@@ -28,10 +27,12 @@ export default function Footer() {
                   <span style={{paddingRight: "2em"}}>
                     <a href="https://docs.google.com/forms/d/e/1FAIpQLSfraeD1Uwlz10Mr_t4mbV96Hdwb0njm-kTQofQbNjucMw8KAQ/viewform?usp=sf_link" target="_blank" rel="noreferrer">{t('footer.contact')}</a>
                   </span>
-                )}                
-                <span style={{paddingRight: "2em"}}>
-                  <a href={isJailVersion ? privacyStatementWithoutLinks : privacyStatementWithLinks} rel="noreferrer" target="_blank">{t('footer.privacy-policy')}</a>
-                </span>
+                )}
+                {!isJailVersion && (
+                  <span style={{paddingRight: "2em"}}>
+                    <a href={privacyStatementWithLinks} rel="noreferrer" target="_blank">{t('footer.privacy-policy')}</a>
+                  </span>
+                )}
                 {!isJailVersion && (
                 <span>
                   <a href="https://github.com/CodeForAsheville/court-notifications" target="_blank" rel="noreferrer">Github</a>
