@@ -5159,7 +5159,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "court-notifications@workspace:."
   dependencies:
-    "@sendgrid/mail": ^7.7.0
     concurrently: ^7.0.0
     knex: ^1.0.1
     nodemon: ^2.0.15
@@ -13756,6 +13755,7 @@ __metadata:
   resolution: "server@workspace:packages/server"
   dependencies:
     "@fortawesome/fontawesome-free": ^5.15.4
+    "@sendgrid/mail": ^7.7.0
     axios: ^0.21.1
     axios-cookiejar-support: ^1.0.1
     body-parser: ^1.18.3

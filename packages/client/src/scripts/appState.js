@@ -146,6 +146,7 @@ export async function subscribeToDefendant(state) {
     body: JSON.stringify({
       selectedDefendant: state.selectedDefendant,
       phone_number: state.phone_number,
+      agency_code: state.agency_code,
       details: filteredCases[0],
     })
   });

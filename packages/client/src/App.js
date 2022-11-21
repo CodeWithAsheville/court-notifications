@@ -14,7 +14,7 @@ import stepper from "./scripts/stepper";
 import {
   BrowserRouter as Router,
   Switch,
-  Route
+  Route,
 } from "react-router-dom";
 
 const initialState = {
@@ -26,6 +26,7 @@ const initialState = {
   selectedDefendant: null,
   selectedCase: null,
   phone_number: "",
+  agency_code: "",
   phone_message: "",
   signupSuccess: false,
   searchError: false,
@@ -49,6 +50,11 @@ function reducer(state, action) {
         },
       };
     case "update-phone":
+      return {
+        ...state,
+        ...action.value,
+      };
+    case "update-agency":
       return {
         ...state,
         ...action.value,
@@ -109,13 +115,16 @@ function App() {
           <Route exact={true} path="/">
             <Home state={state} dispatch={dispatch} />
           </Route>
+          <Route path="/agency" >
+            <Home state={state} dispatch={dispatch} />
+          </Route>
         </Switch>
       </div>
     </Router>
   );
 }
 
-function Home({ state, dispatch }) {
+function Home({ state, dispatch, props }) {
   const { t } = useTranslation();
   const step1 = useRef(null);
   const step2 = useRef(null);
@@ -127,6 +136,7 @@ function Home({ state, dispatch }) {
 
   if (state.selectedDefendant) {
     let defendantName = state.cases.filter(item => item.defendant+'.'+item.dob === state.selectedDefendant)[0].defendant;
+    // Need language update here (agency code or phone number)
     headerText =
       `${t('signup.title')} ${defendantName}`;
     signupForm = <SignupForm state={state} dispatch={dispatch} />;
