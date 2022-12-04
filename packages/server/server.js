@@ -55,6 +55,20 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
+app.get('/api/version', async (req, res) => {
+  let version = 'default';
+  let privacyUrl = 'https://docs.google.com/document/d/19M2zCxx4gICCmjgVx1bKSHlC92Gnb2SCmkmrclLIq3Y/';
+  if (req.hostname.includes('jail')) {
+    version = 'jail';
+    privacyUrl = 'https://docs.google.com/document/d/1YitpkjO2aJH2zwQ_m_Hx6NbhJHqK1q6g0OTKJkxeXAY/';
+  }
+  const returnValue = {
+    version,
+    privacyUrl,
+  };
+  res.json(returnValue);
+});
+
 app.post('/api/court-search', async (req, res) => {
   await searchCourtRecords(req.body, (cases) => res.json(cases));
 });

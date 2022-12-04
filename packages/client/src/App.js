@@ -134,10 +134,18 @@ function Home({ state, dispatch, props }) {
   let headerText = `${t('select.title')}`
   let resultsItem = "";
 
+  let isJailVersion = false;
+  if (window.location.hostname.includes('jail') || (typeof process.env.REACT_APP_CONTEXT !== "undefined" && process.env.REACT_APP_CONTEXT === 'jail')) {
+    isJailVersion = true;
+  }
+
   if (state.selectedDefendant) {
     let defendantName = state.cases.filter(item => item.defendant+'.'+item.dob === state.selectedDefendant)[0].defendant;
     // Need language update here (agency code or phone number)
-    headerText =
+//    <b>{t('casesTable.description')} {defendantName} </b>
+
+    headerText = isJailVersion ? 
+      `${t('casesTable.description')} ${defendantName}` :
       `${t('signup.title')} ${defendantName}`;
     signupForm = <SignupForm state={state} dispatch={dispatch} />;
   }

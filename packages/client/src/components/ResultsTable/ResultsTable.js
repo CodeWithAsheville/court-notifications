@@ -9,6 +9,11 @@ export default function ResultsTable({ state, dispatch }) {
   let caseRows = null;
   let caseTable = null;
 
+  let isJailVersion = false;
+  if (window.location.hostname.includes('jail') || (typeof process.env.REACT_APP_CONTEXT !== "undefined" && process.env.REACT_APP_CONTEXT === 'jail')) {
+    isJailVersion = true;
+  }
+
   const { t } = useTranslation();
 
 
@@ -48,24 +53,30 @@ export default function ResultsTable({ state, dispatch }) {
     return (
       <div>
         <p>
-          <b>{t('casesTable.description')} {df} </b>&nbsp;&nbsp;&nbsp;
-          <br/>
-           {t('casesTable.help')} <a href={computeFullSearchUrl(df)} target="_blank" rel="noreferrer">NC Courts</a>.
+          {!isJailVersion && (
+            <>
+              <b>{t('casesTable.description')} {df} </b>
+              <br/>
+              {t('casesTable.help')} <a href={computeFullSearchUrl(df)} target="_blank" rel="noreferrer">NC Courts</a>.
+            </>
+          )}
         </p>
         {populatedTable}
       </div>
     );
 
   } else {
-    const defendantRows = state.cases.map((courtCase, index) => (
-      <DefendantTableRow
-        key={courtCase.caseNumber}
-        index={index}
-        state={state}
-        courtCase={courtCase}
-        dispatch={dispatch}
-      />
-    ));
+    const defendantRows = state.cases.map((courtCase, index) => { 
+      return (
+        <DefendantTableRow
+          key={courtCase.cases[0].caseNumber}
+          index={index}
+          state={state}
+          courtCase={courtCase}
+          dispatch={dispatch}
+        />
+      );
+    });
     const populatedTable = (
       <table className="usa-table usa-table--stacked">
         <thead>

@@ -18,7 +18,8 @@ export default function SearchForm({ state, dispatch }) {
   let showError = state.searchError && state.searchSubmitted;
 
   // Reset things
-  async function reloadCaseLookUp() {
+  async function reloadCaseLookUp(e) {
+    e.preventDefault();
     dispatch({ type: "submit-search", value: true });
     if (state.lastName) {
       dispatch({
@@ -48,14 +49,14 @@ export default function SearchForm({ state, dispatch }) {
   }
   let searchButton = (
     <div>
-      <button disabled = {state.searchInProgress} type="button" className="usa-button" onClick={reloadCaseLookUp}>
+      <button disabled = {state.searchInProgress} type="submit" className="usa-button">
         {t('search.submitButton')}
       </button>
       {searchInProgressText}
     </div>
   );
   return (
-    <form className="usa-form lookup-form">
+    <form className="usa-form lookup-form" onSubmit={reloadCaseLookUp}>
       <div className="usa-form-group">
         <label className="usa-label" htmlFor="input-type-text">
         {t('search.inputfields.firstName')}
