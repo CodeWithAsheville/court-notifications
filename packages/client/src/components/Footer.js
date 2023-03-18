@@ -15,12 +15,20 @@ export default function Footer() {
         <div className="grid-container">
           <div className="usa-footer__logo grid-row grid-gap-2">
             <div className="grid-col-auto">
-              <a href="https://www.codeforasheville.org">
+              {!isJailVersion && (
+                <a href="https://www.codeforasheville.org">
+                  <img
+                    src="code-for-asheville-logo.png"
+                    alt="Code for Asheville logo"
+                  />
+                </a>
+              )}
+              {isJailVersion && (
                 <img
                   src="code-for-asheville-logo.png"
                   alt="Code for Asheville logo"
                 />
-              </a>
+              )}
             </div>
               <div style={{textAlign: "center", width: "100%"}}>
                 {!isJailVersion && (
