@@ -29,11 +29,10 @@ async function purgeSubscriptions() {
   const daysBeforePurge = await getConfigurationIntValue('days_before_purge', 30);
   const purgeDate = getPreviousDate(daysBeforePurge);
 
-  // .where('done', '=', 0).limit(updatesPerCall);
   let count = await knex('defendants').delete().where('last_valid_cases_date', '<', purgeDate);
 
   if (count > 0) {
-    logger.debug(`${count} defendants purged`);
+    logger.debug(`Purging ${count} defendants`);
     // eslint-disable-next-line func-names
     count = await knex('subscriptions').delete().whereNotExists(function () {
       this.select('*').from('defendants').whereRaw('defendants.id = subscriptions.defendant_id');
@@ -131,10 +130,9 @@ async function initTranslations() {
 // script
 (async () => {
   await initTranslations();
-  // Uncomment when ready to use the new purge code.
-  // logger.debug('Call purgeSubscriptions');
-  // await purgeSubscriptions();
-  // logger.debug('Done with purge');
+  logger.debug('Call purgeSubscriptions');
+  await purgeSubscriptions();
+  logger.debug('Done with purge');
   logger.debug('Call updateSubscriptions');
   await updateSubscriptions();
   logger.debug('Done with update setup');
