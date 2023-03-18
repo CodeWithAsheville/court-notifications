@@ -14,6 +14,12 @@ We maintain three active branches:
 
 Standard development approach is to fork this repository and work in a branch off the latest version of development. When ready, submit a pull request into development for review.
 
+## In-Custody Version
+The primary purpose of the application is to allow people to sign up for text-message notifications about their court dates. However, there is an in-custody mode that suppresses all external links so that people can look up their court dates while in jail. The in-custody mode is triggered in two ways:
+
+- Set the environment variable ```REACT_APP_CONTEXT=jail``` in the browser environment (for development and testing)
+- Host with a domain name that includes the word 'jail'.
+
 ## Getting Started with Development
 ### Important Note
 This project uses the ```yarn``` package manager. Please ensure that pull requests correctly build with yarn and do not include a ```package-lock.json``` file
