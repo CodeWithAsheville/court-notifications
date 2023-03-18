@@ -1,6 +1,13 @@
 # Court Reminders Change Log
 
-## 1.1.0 - TBD
+## 1.1.? - TBD
+
+## 1.1.1 - October 28, 2022
+### New features
+- Add new /api/version endpoint to determine, based on hostname, whether to provide the in-custody (jail) version or the regular version
+- Front-end jail version changes - suppress all external links and signup functionality, leaving just ability to look up cases.
+
+## 1.1.0 - September 5, 2022
 ### New features
 - Only delete subscriptions 30 days after ```last_valid_cases_date```
 
