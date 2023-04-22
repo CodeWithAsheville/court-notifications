@@ -1,6 +1,7 @@
 # Court Reminders Change Log
 
-## 1.1.? - TBD
+## 1.1.2 - March 19, 2023
+- Snapshot defendant cases data on first signup for later analysis together with jail data.
 
 ## 1.1.1 - October 28, 2022
 ### New features
