@@ -107,8 +107,16 @@ In the _Resources_ tab of the application, search for and add the _Heroku Schedu
   - Command ```node packages/server/scripts/notify.js```
   - Schedule: Once per day _after_ purge
 
+### Postgres Maintenance
+Heroku will periodically notify that maintenance is needed on the PostgreSQL database. Letting Heroku do it automatically may work fine, but better to do in a more controlled way:
 
-
+1. In the console or from the command line, put the application in maintenance mode.
+2. In the Postgres add-on console, under _Durability_, manually create a backup.
+3. Change the every-10-minute ```update_defendants.js``` scheduled job to once-a-day. Make sure that none of the jobs will run in the next few minutes.
+4. Log into Heroku from the command line and run: ```heroku pg:maintenance:run -a <application name>```
+5. You can track progress by running ```heroku logs -t -a <application name>```
+6. When the maintenance is complete (just a couple minutes), change the ```update_defendants.js``` job back to every 10 minutes.
+7. Take the application out of maintenance mode and test that it is functioning properly.
 
 ### Setting up Twilio in Production
 Once you have created a Twilio account, you will need to add the Twilio environment variables (see .env file) as environment variables in your hosting provider.
