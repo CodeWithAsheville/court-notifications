@@ -1,6 +1,8 @@
 # Court Reminders Change Log
 
-## 1.1.? - TBD
+## 1.1.2 - December 30, 2023
+- Changed sample.env in ./packages/server to set Twilio credentials to null, then added test for non-null before initializing. It was crashing the server to run directly off the sample env file.
+- Upgraded axios, axios-cookiejar-support, and tough-cookie to latest versions.
 
 ## 1.1.1 - October 28, 2022
 ### New features

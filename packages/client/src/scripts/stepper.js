@@ -13,5 +13,5 @@ function Stepper() {
     scrollToStep,
   };
 }
-
-export default new Stepper();
+const stepper = new Stepper();
+export default stepper;
