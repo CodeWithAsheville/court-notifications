@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.4",
-    "axios": "^1.6.2",
+    "axios": "^1.6.3",
     "axios-cookiejar-support": "^4.0.7",
     "body-parser": "^1.18.3",
     "copy-to-clipboard": "^3.3.1",

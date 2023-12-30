@@ -4256,7 +4256,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^1.6.2":
+"axios@npm:^1.6.3":
   version: 1.6.3
   resolution: "axios@npm:1.6.3"
   dependencies:
@@ -14467,7 +14467,7 @@ eslint-config-airbnb@latest:
   resolution: "server@workspace:packages/server"
   dependencies:
     "@fortawesome/fontawesome-free": ^5.15.4
-    axios: ^1.6.2
+    axios: ^1.6.3
     axios-cookiejar-support: ^4.0.7
     body-parser: ^1.18.3
     concurrently: ^6.4.0
