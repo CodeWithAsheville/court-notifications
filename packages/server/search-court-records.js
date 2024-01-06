@@ -1,7 +1,7 @@
 const { JSDOM } = require('jsdom');
 const axios = require('axios');
-const axiosCookieJarSupport = require('axios-cookiejar-support').default;
-const tough = require('tough-cookie');
+const { wrapper } = require('axios-cookiejar-support');
+const { CookieJar } = require('tough-cookie');
 const { CourtCase } = require('./court-case');
 
 const maxPages = 50;
@@ -91,17 +91,15 @@ function sortByDefendant(a, b) {
 }
 
 async function searchCourtRecords(body, callback) {
-  const axiosInstance = axios.create();
-  axiosCookieJarSupport(axiosInstance);
-  axiosInstance.defaults.jar = new tough.CookieJar(); // Make sure we're using cookies
+  const jar = new CookieJar();
+  const axiosInstance = wrapper(axios.create({ jar }));
 
   let url = computeSearchUrl(body, 0, 0, 'Search');
   let cases = [];
-
   let nextPage = await getCasesPage(axiosInstance, url, cases, false);
-
   let { keepOn } = nextPage;
   let count = 0;
+
   while (keepOn) {
     url = computeSearchUrl(body, nextPage.start, nextPage.navindex, nextPage.submit);
     // eslint-disable-next-line no-await-in-loop
