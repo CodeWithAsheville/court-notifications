@@ -2,6 +2,7 @@
 ## 2.0.0 - In Progress
 - Upgraded Node to 18.19.x
 - Added a note about installing Node and Yarn to the section on getting started with development
+- Upgraded all server modules
 
 
 
