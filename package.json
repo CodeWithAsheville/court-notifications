@@ -22,8 +22,8 @@
   },
   "packageManager": "yarn@3.2.3",
   "devDependencies": {
-    "concurrently": "^7.0.0",
-    "knex": "^1.0.1",
-    "nodemon": "^2.0.15"
+    "concurrently": "^8.2.2",
+    "knex": "^2.5.1",
+    "nodemon": "^3.0.2"
   }
 }
