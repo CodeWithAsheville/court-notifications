@@ -9,7 +9,7 @@
     "packages/*"
   ],
   "engines": {
-    "node": "16.17.x"
+    "node": "18.19.x"
   },
   "scripts": {
     "client": "cd packages/client && yarn start",
