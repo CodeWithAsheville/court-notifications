@@ -1608,12 +1608,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.1.2, @babel/runtime@npm:^7.10.2, @babel/runtime@npm:^7.11.2, @babel/runtime@npm:^7.12.13, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.14.5, @babel/runtime@npm:^7.16.3, @babel/runtime@npm:^7.17.2, @babel/runtime@npm:^7.19.0, @babel/runtime@npm:^7.21.0, @babel/runtime@npm:^7.23.2, @babel/runtime@npm:^7.8.4, @babel/runtime@npm:^7.9.2":
+"@babel/runtime@npm:^7.1.2, @babel/runtime@npm:^7.10.2, @babel/runtime@npm:^7.11.2, @babel/runtime@npm:^7.12.13, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.16.3, @babel/runtime@npm:^7.19.0, @babel/runtime@npm:^7.21.0, @babel/runtime@npm:^7.23.2, @babel/runtime@npm:^7.8.4, @babel/runtime@npm:^7.9.2":
   version: 7.23.6
   resolution: "@babel/runtime@npm:7.23.6"
   dependencies:
     regenerator-runtime: ^0.14.0
   checksum: 1a8eaf3d3a103ef5227b60ca7ab5c589118c36ca65ef2d64e65380b32a98a3f3b5b3ef96660fa0471b079a18b619a8317f3e7f03ab2b930c45282a8b69ed9a16
+  languageName: node
+  linkType: hard
+
+"@babel/runtime@npm:^7.22.5":
+  version: 7.23.7
+  resolution: "@babel/runtime@npm:7.23.7"
+  dependencies:
+    regenerator-runtime: ^0.14.0
+  checksum: eba85bd24d250abb5ae19b16cffc15a54d3894d8228ace40fa4c0e2f1938f28b38ad3e3430ebff9a1ef511eeb8c527e36044ac19076d6deafa52cef35d8624b9
   languageName: node
   linkType: hard
 
@@ -5396,7 +5405,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"copy-to-clipboard@npm:^3.3.1":
+"copy-to-clipboard@npm:^3.3.3":
   version: 3.3.3
   resolution: "copy-to-clipboard@npm:3.3.3"
   dependencies:
@@ -5477,6 +5486,15 @@ __metadata:
   dependencies:
     node-fetch: 2.6.7
   checksum: f6b8c6ee3ef993ace6277fd789c71b6acf1b504fd5f5c7128df4ef2f125a429e29cd62dc8c127523f04a5f2fa4771ed80e3f3d9695617f441425045f505cf3bb
+  languageName: node
+  linkType: hard
+
+"cross-fetch@npm:4.0.0":
+  version: 4.0.0
+  resolution: "cross-fetch@npm:4.0.0"
+  dependencies:
+    node-fetch: ^2.6.12
+  checksum: ecca4f37ffa0e8283e7a8a590926b66713a7ef7892757aa36c2d20ffa27b0ac5c60dcf453119c809abe5923fc0bae3702a4d896bfb406ef1077b0d0018213e24
   languageName: node
   linkType: hard
 
@@ -6763,6 +6781,33 @@ eslint-config-airbnb@latest:
   languageName: node
   linkType: hard
 
+"eslint-plugin-import@npm:^2.29.1":
+  version: 2.29.1
+  resolution: "eslint-plugin-import@npm:2.29.1"
+  dependencies:
+    array-includes: ^3.1.7
+    array.prototype.findlastindex: ^1.2.3
+    array.prototype.flat: ^1.3.2
+    array.prototype.flatmap: ^1.3.2
+    debug: ^3.2.7
+    doctrine: ^2.1.0
+    eslint-import-resolver-node: ^0.3.9
+    eslint-module-utils: ^2.8.0
+    hasown: ^2.0.0
+    is-core-module: ^2.13.1
+    is-glob: ^4.0.3
+    minimatch: ^3.1.2
+    object.fromentries: ^2.0.7
+    object.groupby: ^1.0.1
+    object.values: ^1.1.7
+    semver: ^6.3.1
+    tsconfig-paths: ^3.15.0
+  peerDependencies:
+    eslint: ^2 || ^3 || ^4 || ^5 || ^6 || ^7.2.0 || ^8
+  checksum: e65159aef808136d26d029b71c8c6e4cb5c628e65e5de77f1eb4c13a379315ae55c9c3afa847f43f4ff9df7e54515c77ffc6489c6a6f81f7dd7359267577468c
+  languageName: node
+  linkType: hard
+
 "eslint-plugin-jest@npm:^25.3.0":
   version: 25.7.0
   resolution: "eslint-plugin-jest@npm:25.7.0"
@@ -6780,7 +6825,7 @@ eslint-config-airbnb@latest:
   languageName: node
   linkType: hard
 
-"eslint-plugin-jsx-a11y@npm:^6.5.1":
+"eslint-plugin-jsx-a11y@npm:^6.5.1, eslint-plugin-jsx-a11y@npm:^6.8.0":
   version: 6.8.0
   resolution: "eslint-plugin-jsx-a11y@npm:6.8.0"
   dependencies:
@@ -7179,7 +7224,7 @@ eslint-config-airbnb@latest:
   languageName: node
   linkType: hard
 
-"express@npm:^4.16.4, express@npm:^4.17.3":
+"express@npm:^4.17.3, express@npm:^4.18.2":
   version: 4.18.2
   resolution: "express@npm:4.18.2"
   dependencies:
@@ -8400,10 +8445,19 @@ eslint-config-airbnb@latest:
   languageName: node
   linkType: hard
 
-"i18next-fs-backend@npm:^1.1.1":
-  version: 1.2.0
-  resolution: "i18next-fs-backend@npm:1.2.0"
-  checksum: da74d20f2b007f8e34eaf442fa91ad12aaff3b9891e066c6addd6d111b37e370c62370dfbc656730ab2f8afd988f2e7ea1c48301ebb19ccb716fb5965600eddf
+"i18next-browser-languagedetector@npm:^7.2.0":
+  version: 7.2.0
+  resolution: "i18next-browser-languagedetector@npm:7.2.0"
+  dependencies:
+    "@babel/runtime": ^7.23.2
+  checksum: 757845c7ae7dfc541f5150855c3a3e4f6d29bcee113796d44dc781594abc7f16f2750a2a70d786904c16d23ba952eba2741c0bcfeaa381016669522a6236998f
+  languageName: node
+  linkType: hard
+
+"i18next-fs-backend@npm:^2.3.1":
+  version: 2.3.1
+  resolution: "i18next-fs-backend@npm:2.3.1"
+  checksum: 86273eecdebfb055c171d466e41e4e3d50b9d8184eed3a88dde4fca2cd30cc7bd92e3ae3d69a6aa51f74bad2f429384388b61b121c3a09596870670bbb833bdb
   languageName: node
   linkType: hard
 
@@ -8416,19 +8470,28 @@ eslint-config-airbnb@latest:
   languageName: node
   linkType: hard
 
-"i18next-http-middleware@npm:^3.1.4":
+"i18next-http-backend@npm:^2.4.2":
+  version: 2.4.2
+  resolution: "i18next-http-backend@npm:2.4.2"
+  dependencies:
+    cross-fetch: 4.0.0
+  checksum: 90b71a024691988ae98781cfa9a6e1c25ee63b0206027939df85c55f46b91c41faaacea6f8a9f868a484bea9ee85377e1aae21a889b2dd970af9ac825120579c
+  languageName: node
+  linkType: hard
+
+"i18next-http-middleware@npm:^3.5.0":
   version: 3.5.0
   resolution: "i18next-http-middleware@npm:3.5.0"
   checksum: c3669f04efd8967729a50fa06be1c7449612e3f2555815a3399d35dcf9404e35182a12cc68c1ed3bbe5da73d868dbd2ac62553be8c1a7ce0d551018dc1e223fa
   languageName: node
   linkType: hard
 
-"i18next@npm:^21.1.0":
-  version: 21.10.0
-  resolution: "i18next@npm:21.10.0"
+"i18next@npm:^23.7.16":
+  version: 23.7.16
+  resolution: "i18next@npm:23.7.16"
   dependencies:
-    "@babel/runtime": ^7.17.2
-  checksum: f997985e2d4d15a62a0936a82ff6420b97f3f971e776fe685bdd50b4de0cb4dc2198bc75efe6b152844794ebd5040d8060d6d152506a687affad534834836d81
+    "@babel/runtime": ^7.23.2
+  checksum: 907eb4429598a53780152a54e8f8edadb224b506dc419b8cc3130e74ace7445dfbaa03af8a173d5145834fa8b45c39310673420f825ace2002dc56bb5879add0
   languageName: node
   linkType: hard
 
@@ -11501,6 +11564,20 @@ eslint-config-airbnb@latest:
   languageName: node
   linkType: hard
 
+"node-fetch@npm:^2.6.12":
+  version: 2.7.0
+  resolution: "node-fetch@npm:2.7.0"
+  dependencies:
+    whatwg-url: ^5.0.0
+  peerDependencies:
+    encoding: ^0.1.0
+  peerDependenciesMeta:
+    encoding:
+      optional: true
+  checksum: d76d2f5edb451a3f05b15115ec89fc6be39de37c6089f1b6368df03b91e1633fd379a7e01b7ab05089a25034b2023d959b47e59759cb38d88341b2459e89d6e5
+  languageName: node
+  linkType: hard
+
 "node-forge@npm:^1":
   version: 1.3.1
   resolution: "node-forge@npm:1.3.1"
@@ -12211,7 +12288,7 @@ eslint-config-airbnb@latest:
   languageName: node
   linkType: hard
 
-"pg@npm:^8.7.1":
+"pg@npm:^8.11.3":
   version: 8.11.3
   resolution: "pg@npm:8.11.3"
   dependencies:
@@ -13526,21 +13603,21 @@ eslint-config-airbnb@latest:
   languageName: node
   linkType: hard
 
-"react-i18next@npm:^11.12.0":
-  version: 11.18.6
-  resolution: "react-i18next@npm:11.18.6"
+"react-i18next@npm:^14.0.0":
+  version: 14.0.0
+  resolution: "react-i18next@npm:14.0.0"
   dependencies:
-    "@babel/runtime": ^7.14.5
+    "@babel/runtime": ^7.22.5
     html-parse-stringify: ^3.0.1
   peerDependencies:
-    i18next: ">= 19.0.0"
+    i18next: ">= 23.2.3"
     react: ">= 16.8.0"
   peerDependenciesMeta:
     react-dom:
       optional: true
     react-native:
       optional: true
-  checksum: 624c0a0313fac4e0d18560b83c99a8bd0a83abc02e5db8d01984e0643ac409d178668aa3a4720d01f7a0d9520d38598dcbff801d6f69a970bae67461de6cd852
+  checksum: ab41bc1db8f0d127d608087444906c0b5ae8decbd442f8d64dffdb05cc8112f024f705818d347cbc5f9cb9cbb9bca137a171ee810494130da917f7befb5669b2
   languageName: node
   linkType: hard
 
@@ -14146,7 +14223,7 @@ eslint-config-airbnb@latest:
   languageName: node
   linkType: hard
 
-"rollbar@npm:^2.24.0":
+"rollbar@npm:^2.26.2":
   version: 2.26.2
   resolution: "rollbar@npm:2.26.2"
   dependencies:
@@ -14582,32 +14659,32 @@ eslint-config-airbnb@latest:
     axios-cookiejar-support: ^4.0.7
     body-parser: ^1.20.2
     concurrently: ^6.4.0
-    copy-to-clipboard: ^3.3.1
+    copy-to-clipboard: ^3.3.3
     dotenv: ^16.3.1
     eslint: ^7.32.0 || ^8.2.0
     eslint-config-airbnb: latest
-    eslint-plugin-import: ^2.25.3
-    eslint-plugin-jsx-a11y: ^6.5.1
+    eslint-plugin-import: ^2.29.1
+    eslint-plugin-jsx-a11y: ^6.8.0
     eslint-plugin-react: ^7.28.0
     eslint-plugin-react-hooks: ^4.3.0
-    express: ^4.16.4
-    i18next: ^21.1.0
-    i18next-browser-languagedetector: ^6.1.2
-    i18next-fs-backend: ^1.1.1
-    i18next-http-backend: ^1.3.1
-    i18next-http-middleware: ^3.1.4
+    express: ^4.18.2
+    i18next: ^23.7.16
+    i18next-browser-languagedetector: ^7.2.0
+    i18next-fs-backend: ^2.3.1
+    i18next-http-backend: ^2.4.2
+    i18next-http-middleware: ^3.5.0
     jest: 26.6.0
     jsdom: ^23.1.0
     knex: ^0.95.8
     mustache: ^4.2.0
-    pg: ^8.7.1
-    react-i18next: ^11.12.0
-    rollbar: ^2.24.0
-    supertest: ^6.2.2
+    pg: ^8.11.3
+    react-i18next: ^14.0.0
+    rollbar: ^2.26.2
+    supertest: ^6.3.3
     tough-cookie: ^4.1.3
     twilio: ^3.67.1
-    winston: ^3.3.3
-    winston-transport: ^4.4.0
+    winston: ^3.11.0
+    winston-transport: ^4.6.0
   languageName: unknown
   linkType: soft
 
@@ -15363,7 +15440,7 @@ eslint-config-airbnb@latest:
   languageName: node
   linkType: hard
 
-"supertest@npm:^6.2.2":
+"supertest@npm:^6.3.3":
   version: 6.3.3
   resolution: "supertest@npm:6.3.3"
   dependencies:
@@ -15860,6 +15937,18 @@ eslint-config-airbnb@latest:
     minimist: ^1.2.6
     strip-bom: ^3.0.0
   checksum: a6162eaa1aed680537f93621b82399c7856afd10ec299867b13a0675e981acac4e0ec00896860480efc59fc10fd0b16fdc928c0b885865b52be62cadac692447
+  languageName: node
+  linkType: hard
+
+"tsconfig-paths@npm:^3.15.0":
+  version: 3.15.0
+  resolution: "tsconfig-paths@npm:3.15.0"
+  dependencies:
+    "@types/json5": ^0.0.29
+    json5: ^1.0.2
+    minimist: ^1.2.6
+    strip-bom: ^3.0.0
+  checksum: 59f35407a390d9482b320451f52a411a256a130ff0e7543d18c6f20afab29ac19fbe55c360a93d6476213cc335a4d76ce90f67df54c4e9037f7d240920832201
   languageName: node
   linkType: hard
 
@@ -16775,7 +16864,7 @@ eslint-config-airbnb@latest:
   languageName: node
   linkType: hard
 
-"winston-transport@npm:^4.4.0, winston-transport@npm:^4.5.0":
+"winston-transport@npm:^4.5.0, winston-transport@npm:^4.6.0":
   version: 4.6.0
   resolution: "winston-transport@npm:4.6.0"
   dependencies:
@@ -16786,7 +16875,7 @@ eslint-config-airbnb@latest:
   languageName: node
   linkType: hard
 
-"winston@npm:^3.3.3":
+"winston@npm:^3.11.0":
   version: 3.11.0
   resolution: "winston@npm:3.11.0"
   dependencies:
