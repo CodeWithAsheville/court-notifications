@@ -1,4 +1,9 @@
 # Court Reminders Change Log
+## 2.0.0 - In Progress
+- Upgraded Node to 18.19.x
+- Added a note about installing Node and Yarn to the section on getting started with development
+
+
 
 ## 1.1.2 - December 30, 2023
 - Changed sample.env in ./packages/server to set Twilio credentials to null, then added test for non-null before initializing. It was crashing the server to run directly off the sample env file.
