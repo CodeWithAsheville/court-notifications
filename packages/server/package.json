@@ -14,7 +14,7 @@
     "test": "jest --env=node"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.15.4",
+    "@fortawesome/fontawesome-free": "^6.5.1",
     "axios": "^1.6.5",
     "axios-cookiejar-support": "^4.0.7",
     "body-parser": "^1.20.2",
@@ -39,12 +39,12 @@
   },
   "devDependencies": {
     "concurrently": "^8.2.2",
-    "eslint": "^7.32.0 || ^8.2.0",
+    "eslint": "^7.32.0 || ^8.56.0",
     "eslint-config-airbnb": "latest",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-jsx-a11y": "^6.8.0",
-    "eslint-plugin-react": "^7.28.0",
-    "eslint-plugin-react-hooks": "^4.3.0",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
     "jest": "29.7.0",
     "supertest": "^6.3.3"
   },
