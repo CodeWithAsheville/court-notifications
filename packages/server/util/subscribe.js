@@ -41,7 +41,7 @@ async function addDefendant(defendant) {
           .insert(defendant)
           .returning('id');
         if (retVal && retVal.length > 0) {
-          return retVal[0];
+          return retVal[0].id;
         }
         throw new Error(`Error inserting defendant ${JSON.stringify(retVal)}`);
       } else {
@@ -120,7 +120,7 @@ async function addSubscriber(nextDate, phone, language) {
         status: 'pending',
       })
         .returning('id');
-      [subscriberId] = retVal;
+      subscriberId = retVal[0].id;
     } catch (e) {
       logger.error(`util/subscribe.addSubscriber add: ${e}`);
       throw Error('Error adding subscriber');
