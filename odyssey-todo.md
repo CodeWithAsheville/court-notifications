@@ -3,10 +3,10 @@
 - Create a new database in AWS to store daily data from AOC
     - Is there any reason not to go with just a single DB instance of minimum size? We might expand later if we support multiple counties, but I doubt it's worth it now, and information is updated daily.
 - Create table(s).
-    - Suggest having columns that correspond 1:1 to AOC file records PLUS
+    - Suggest having columns that correspond 1:1 to AOC file records PLUS a constructed docket number (case number) for direct use in the reminders
+        - This may change depending on how they refer to cases after the switchover. For now just have the routine there to convert to something like what is used now.
         - Do we want to have 2 tables to save space (defendants + cases), or just duplicate defendant info?
-    - Construct the docket number (case number) for direct use in the reminders.
-        -This may change depending on how they refer to cases after the switchover. For now just have the routine there to convert to something like what is used now.
+
 - Create a job to move the AOC file from Buncombe server to S3
     - This should wait until we get actual credentials and test file from Buncombe County
 - Create a job to convert file into new DB tables
