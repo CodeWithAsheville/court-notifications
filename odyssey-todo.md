@@ -12,6 +12,7 @@
     - Probably just use [Bedrock](https://github.com/DeepWeave/bedrock2) for this.
 - Create a job to convert file into new DB tables (Python or Node Lambda)
     - This should read from a file on S3 and process into DB. The file on S3 is fixed-width, so something like [this](https://observablehq.com/@mbostock/parsing-fixed-width-data).
+    - Doc on making a copy of a table [here](https://www.postgresqltutorial.com/postgresql-tutorial/postgresql-copy-table/)
     - Important: get the full file converted and verify that it's ok before replacing records. Also, I would like to have a day-to-day diff of some sort since there are some interesting other applications for that information.
 - Update server code
     - Pull case list from DB rather than website in search-court-records.js
