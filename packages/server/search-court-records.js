@@ -26,7 +26,9 @@ async function doSearch(body) {
 
   const defendants = {};
   courtDateList.forEach((item) => {
-    const defendantID = `${item.defendant_name}`;
+    const race = (item.defendant_race && item.defendant_race.length > 0) ? item.defendant_race : '-';
+    const sex = (item.defendant_sex && item.defendant_sex.length > 0) ? item.defendant_sex : '-';
+    const defendantID = `${item.defendant_name}.${sex}.${race}`;
     if (!(defendantID in defendants)) {
       defendants[defendantID] = [];
     }
@@ -38,9 +40,13 @@ async function doSearch(body) {
   keys.forEach((item) => {
     const caselist = defendants[item];
     const first = caselist[0];
+    const race = (first.defendant_race && first.defendant_race.length > 0) ? first.defendant_race : '-';
+    const sex = (first.defendant_sex && first.defendant_sex.length > 0) ? first.defendant_sex : '-';
     const d = {
       defendant: first.defendant_name,
       dob: '',
+      race,
+      sex,
       cases: caselist.map((c) => {
         const dt = c.calendar_date;
         const x = {
@@ -66,6 +72,7 @@ async function searchCourtRecords(body, callback) {
   if (callback !== null) {
     callback(cases);
   }
+  console.log(cases);
   return cases;
 }
 

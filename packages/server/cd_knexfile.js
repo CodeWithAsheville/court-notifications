@@ -1,3 +1,4 @@
+// This is the knex configuration for the new court dates DB in AWS
 // Update with your config settings.
 require('dotenv').config();
 
