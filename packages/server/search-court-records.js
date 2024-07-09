@@ -72,7 +72,6 @@ async function searchCourtRecords(body, callback) {
   if (callback !== null) {
     callback(cases);
   }
-  console.log(cases);
   return cases;
 }
 
