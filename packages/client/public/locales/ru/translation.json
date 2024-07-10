@@ -49,7 +49,7 @@
         "columns": {
           "select": "Выбрать",
           "defendant": "Обвиняемый",
-          "birthDate": "Дата рождения",
+          "birthDate": "Пол/раса",
           "numberOfCases": "Количество дел"
         }
     },

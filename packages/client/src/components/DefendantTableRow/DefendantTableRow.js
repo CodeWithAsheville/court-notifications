@@ -14,12 +14,12 @@ export default function DefendantTableRow({ state, courtCase, dispatch }) {
       value: courtCase.defendant + '.' + courtCase.dob,
     });
   }
-
+  console.log(courtCase);
   return (
     <tr className="case-row">
       <td data-label="Select"><button onClick={() => selectDefendant(courtCase)}>{t('defendantsTable.columns.select')}</button></td>
       <td data-label="Defendant">{courtCase.defendant}</td>
-      <td data-label="Date of Birth">{courtCase.dob}</td>
+      <td data-label="Sex/Race">{courtCase.sex + '/' + courtCase.race}</td>
       <td data-label="Number of Cases">{courtCase.cases.length}</td>
     </tr>
   );
