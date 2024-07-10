@@ -11,6 +11,7 @@ const { registerSubscription } = require('./register-subscription');
 const { checkSubscription } = require('./check-subscription');
 const { twilioIncomingWebhook } = require('./twilio-incoming-webhook');
 const { twilioSendStatusWebhook } = require('./twilio-send-status-webhook');
+const { getConfiguration } = require('./get-configuration');
 
 i18next
   .use(middleware.LanguageDetector)
@@ -67,6 +68,10 @@ app.get('/api/version', async (req, res) => {
     privacyUrl,
   };
   res.json(returnValue);
+});
+
+app.get('/api/configuration', async (req, res) => {
+  await getConfiguration(req.query, (result) => res.json(result));
 });
 
 app.post('/api/court-search', async (req, res) => {
