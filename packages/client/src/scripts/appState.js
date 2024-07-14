@@ -134,7 +134,7 @@ function sleep(ms) {
 
 export async function subscribeToDefendant(state) {
   const filteredCases = state.cases.filter(item => {
-    return (item.defendant+'.'+item.dob === state.selectedDefendant);
+    return (item.defendant+'.'+item.sex+'.'+item.race === state.selectedDefendant);
   });
   const url = "/api/subscribe-to-defendant?lng="+i18next.language;
   console.log('URL to subscribe ' + url);
