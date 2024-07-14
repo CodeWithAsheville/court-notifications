@@ -131,7 +131,7 @@ function Home({ state, dispatch }) {
   }
 
   if (state.selectedDefendant) {
-    let defendantName = state.cases.filter(item => item.defendant+'.'+item.dob === state.selectedDefendant)[0].defendant;
+    let defendantName = state.cases.filter(item => item.defendant+'.'+item.sex+'.'+item.race === state.selectedDefendant)[0].defendant;
 //    <b>{t('casesTable.description')} {defendantName} </b>
 
     headerText = isJailVersion ? 

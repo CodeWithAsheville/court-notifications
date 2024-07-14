@@ -11,7 +11,7 @@ export default function DefendantTableRow({ state, courtCase, dispatch }) {
   function selectDefendant(courtCase) {
     dispatch({
       type: "select-defendant",
-      value: courtCase.defendant + '.' + courtCase.dob,
+      value: courtCase.defendant + '.' + courtCase.sex + '.' + courtCase.race,
     });
   }
   console.log(courtCase);

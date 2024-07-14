@@ -20,7 +20,7 @@ export default function ResultsTable({ state, dispatch }) {
   if (state.selectedDefendant !== null) {
 
     let cases = state.cases.filter(item => {
-      return (item.defendant+'.'+item.dob === state.selectedDefendant);
+      return (item.defendant+'.'+item.sex + '.' + item.race === state.selectedDefendant);
     });
 
     caseRows = cases[0].cases.map((courtCase, index) => (
