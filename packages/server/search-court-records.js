@@ -21,8 +21,13 @@ async function doSearch(body) {
     queryWhere += '%';
   }
 
-  const courtDateList = await knex('criminal_dates').select('*')
-    .whereRaw('LOWER(defendant_name) LIKE ?', queryWhere.toLowerCase());
+  let courtDateList = [];
+  try {
+    courtDateList = await knex('criminal_dates').select('*')
+      .whereRaw('LOWER(defendant_name) LIKE ?', queryWhere.toLowerCase());
+  } catch (e) {
+    console.log('Got an error trying to read court dates ', e);
+  }
 
   const defendants = {};
   courtDateList.forEach((item) => {
