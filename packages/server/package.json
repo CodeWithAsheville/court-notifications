@@ -3,7 +3,7 @@
   "version": "1.1.0",
   "license": "GPL-3.0-only",
   "engines": {
-    "node": "18.19.x"
+    "node": "20.9.x"
   },
   "scripts": {
     "client": "cd client && yarn start",
