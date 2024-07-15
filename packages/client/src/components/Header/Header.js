@@ -19,7 +19,8 @@ function StatusHeader() {
       <div className="usa-alert usa-alert--warning margin-0">
       <div className="usa-alert__body padding-205 cn-maintenance-alert">
         <h4 className="usa-alert__heading">Alert</h4>
-        <p className="usa-alert__text">{configuration.detail}</p>
+        <div className="usa-alert__text" dangerouslySetInnerHTML={{__html: configuration.detail}}></div>
+
       </div>
     </div>
     )
