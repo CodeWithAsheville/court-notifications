@@ -1,5 +1,10 @@
 import i18next from 'i18next';
 
+export async function checkMaintenanceMode() {
+  return fetch("/api/configuration?name=maintenance_mode")
+    .then(response => response.json());
+}
+
 // Grab a reference to localStorage when the app boots
 const localStorage = window.localStorage;
 
