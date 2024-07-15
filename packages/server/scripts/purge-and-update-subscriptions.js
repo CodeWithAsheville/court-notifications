@@ -78,6 +78,8 @@ async function purgeSubscriptions() {
 async function updateSubscriptions() {
   const daysBeforeUpdate = await getConfigurationIntValue('days_before_update', 7);
 
+  if (daysBeforeUpdate < 0) return;
+
   // Delete all the subscribers with status failed
   const failedSubscribers = await knex('subscribers')
     .select(
