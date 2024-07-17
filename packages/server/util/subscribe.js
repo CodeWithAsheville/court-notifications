@@ -10,6 +10,8 @@ function initializeDefendant(longDefendantId, details) {
     middle_name: null,
     suffix: null,
     birth_date: '',
+    sex: details.sex,
+    race: details.race,
     last_valid_cases_date: `${dt.getFullYear()}-${(dt.getMonth() + 1)}-${dt.getDate()}`,
   };
   defendant.birth_date = details.dob;

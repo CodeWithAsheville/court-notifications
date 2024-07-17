@@ -1,8 +1,9 @@
 import "./SearchForm.scss";
-
+import { useState, useEffect } from "react";
 import stepper from "../../scripts/stepper";
 import { getCaseData } from "../../scripts/appState";
 import { useTranslation } from 'react-i18next';
+import { checkMaintenanceMode } from "../../scripts/appState";
 
 function createNameUpdater(dispatch) {
   return function updateName($event, param) {
@@ -13,6 +14,13 @@ function createNameUpdater(dispatch) {
 export default function SearchForm({ state, dispatch }) {
 
   const { t } = useTranslation();
+  const [configuration, setConfiguration] = useState();
+  useEffect(() => {
+    checkMaintenanceMode().then(config => {
+      console.log(config)
+      setConfiguration(config)
+    });
+  }, [])
 
   const updateName = createNameUpdater(dispatch);
   let showError = state.searchError && state.searchSubmitted;
@@ -49,7 +57,7 @@ export default function SearchForm({ state, dispatch }) {
   }
   let searchButton = (
     <div>
-      <button disabled = {state.searchInProgress} type="submit" className="usa-button">
+      <button disabled = {state.searchInProgress || configuration?.value === "1"} type="submit" className="usa-button">
         {t('search.submitButton')}
       </button>
       {searchInProgressText}

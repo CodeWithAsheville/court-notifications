@@ -1,5 +1,10 @@
 import i18next from 'i18next';
 
+export async function checkMaintenanceMode() {
+  return fetch("/api/configuration?name=maintenance_mode")
+    .then(response => response.json());
+}
+
 // Grab a reference to localStorage when the app boots
 const localStorage = window.localStorage;
 
@@ -134,7 +139,7 @@ function sleep(ms) {
 
 export async function subscribeToDefendant(state) {
   const filteredCases = state.cases.filter(item => {
-    return (item.defendant+'.'+item.dob === state.selectedDefendant);
+    return (item.defendant+'.'+item.sex+'.'+item.race === state.selectedDefendant);
   });
   const url = "/api/subscribe-to-defendant?lng="+i18next.language;
   console.log('URL to subscribe ' + url);

@@ -49,7 +49,7 @@
         "columns": {
           "select": "Select",
           "defendant": "Defendant",
-          "birthDate": "Date of Birth",
+          "birthDate": "Sex/Race",
           "numberOfCases": "Number of Cases"
         }
     },

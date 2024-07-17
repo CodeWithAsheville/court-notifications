@@ -49,7 +49,7 @@
       "columns": {
         "select": "Selecione",
         "defendant": "El acusado",
-        "birthDate": "La fecha de nacimiento",
+        "birthDate": "Sexo/raza",
         "numberOfCases": "Número de los casos judiciales"
       }
   },
