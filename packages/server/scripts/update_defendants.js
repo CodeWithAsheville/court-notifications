@@ -15,7 +15,7 @@ async function updateDefendants() {
   const defendantsToUpdate = await knex('records_to_update').select('defendant_id')
     .where('done', '=', 0).limit(updatesPerCall);
   const defendantIds = defendantsToUpdate.map((itm) => itm.defendant_id);
-  logger.debug('Defendants to update: ', JSON.stringify(defendantIds));
+  logger.debug(`Defendants to update: ${JSON.stringify(defendantIds)}`);
   // Let's be optimistic and assume we'll succeed in updating, so just delete now
   await knex('records_to_update').delete().where('defendant_id', 'in', defendantIds);
   const defendants = await knex('defendants').select('*').where('id', 'in', defendantIds);
@@ -24,14 +24,16 @@ async function updateDefendants() {
 
   for (let i = 0; i < defendants.length; i += 1) {
     const d = defendants[i];
-    logger.debug('Update defendant ', JSON.stringify(d));
+    logger.debug(`Update defendant ${JSON.stringify(d)}`);
     // eslint-disable-next-line no-await-in-loop
     const matches = await searchCourtRecords({
       lastName: d.last_name,
       firstName: d.first_name,
       middleName: d.middle_name,
+      exact: true,
     }, null);
-    const match = matches.filter((itm) => (`${itm.defendant}.${itm.dob}`) === d.long_id);
+
+    const match = matches.filter((itm) => (`${itm.defendant}.${itm.sex}.${itm.race}`) === d.long_id);
     let updateObject;
     if (match.length > 0) {
       const { cases } = match[0];
