@@ -14,11 +14,15 @@ function sortByDefendant(a, b) {
 
 async function doSearch(body) {
   let queryWhere = `${body.lastName}`;
-  if (body.firstName) {
-    if (body.firstName) queryWhere += `%2C${body.firstName}`;
-    if (body.middleName) queryWhere += `%2C${body.middleName}`;
+  if (body.exact) {
+    if (body.firstName) queryWhere += `,${body.firstName}`;
+    if (body.middleName) queryWhere += `,${body.middleName}`;
   } else {
     queryWhere += '%';
+    if (body.firstName) {
+      if (body.firstName) queryWhere += `,${body.firstName}%`;
+      if (body.middleName) queryWhere += `,${body.middleName}%`;
+    }
   }
 
   let courtDateList = [];
