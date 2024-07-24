@@ -1,7 +1,7 @@
 {
   "signup-success": "Se ha suscrito en forma exitosa.",
   "no-cases": "No se encontraron casos judiciales",
-  "name-template": "Te has suscrito a las notificaciones de {{fname}} {{mname}} {{lname}} {{suffix}}. Puede ver detalles sobre los cargos en el sitio web del NC Judicial Branch: https://www1.aoc.state.nc.us/www/calendars.Criminal.do?county={{county}}&court=BTH+&defendant={{urlname}}&start=0&navindex=0&fromcrimquery=yes&submit=Search",
+  "name-template": "Te has suscrito a las notificaciones de {{fname}} {{mname}} {{lname}} {{suffix}}. Puede ver detalles sobre los cargos en el sitio web del NC Judicial Branch eCourts Portal: https://portal-nc.tylertech.cloud/Portal/",
   "error-start": "Se ha dado de baja previamente de todos los mensajes de este servicio. Debe enviar un mensaje de texto con la opción START a {{phone}} y luego suscribirse aquí nuevamente.",
   "error-unknown": "Se ha producido un error desconocido al enviarle un mensaje de texto.",
   "notifications": {
@@ -10,7 +10,7 @@
     "admin-court": "{{adminCount}} caso(s) en el Tribunal administrativo. Puede entrar en este tribunal sin cita previa durante la semana entre las horas de 8:30 a 11:30 a.m. y de 1 a 4 p.m.",
     "district-court": "{{districtCount}}  caso(s) en el Tribunal de Distrito a las 9 am en la sala (s): ",
     "superior-court": "{{superiorCount}} Casos en el Tribunal Superior. Los asuntos de la Corte Superior están programados para toda la semana. Por favor comuníquese con su abogado para averiguar qué fecha y hora debe presentarse en la Corte para la semana que su caso está programado.",
-    "reminder-final": "Puede encontrar más información sobre cómo presentarse a la corte en https://buncombenc.courtdates.org/tips/. Puede ver detalles sobre los cargos en el sitio web del NC Judicial Branch: https://www1.aoc.state.nc.us/www/calendars.Criminal.do?county={{county}}&court=BTH+&defendant={{urlname}}&start=0&navindex=0&fromcrimquery=yes&submit=Search"
+    "reminder-final": "Puede encontrar más información sobre cómo presentarse a la corte en https://buncombenc.courtdates.org/tips/. Puede ver detalles sobre los cargos en el sitio web del NC Judicial Branch eCourts Portal: https://portal-nc.tylertech.cloud/Portal/"
   },
   "unsubscribe": {
     "signup": "Responda a este mensaje con 'STOP' si desea dejar de recibir notificaciones del sistema Buncombe County Court Reminders (https://buncombenc.courtdates.org).",
