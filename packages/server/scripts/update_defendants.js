@@ -35,6 +35,18 @@ async function updateDefendants() {
 
     const match = matches.filter((itm) => (`${itm.defendant}.${itm.sex}.${itm.race}`) === d.long_id);
     let updateObject;
+    let updateLog = {
+      id: d.id,
+      long_id: d.long_id,
+      last_valid_cases_date: d.last_valid_cases_date,
+      updates: d.updates,
+      original_create_date: d.created_at,
+      new_case_count: match.length,
+    };
+    // Need to be transactionalizing all this, but for now we'll log the action before we do it.
+    // eslint-disable-next-line no-await-in-loop
+    await knex('log_updates').insert(updateLog);
+
     if (match.length > 0) {
       const { cases } = match[0];
       // eslint-disable-next-line no-await-in-loop
