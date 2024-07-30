@@ -35,7 +35,7 @@ async function updateDefendants() {
 
     const match = matches.filter((itm) => (`${itm.defendant}.${itm.sex}.${itm.race}`) === d.long_id);
     let updateObject;
-    let updateLog = {
+    const updateLog = {
       id: d.id,
       long_id: d.long_id,
       last_valid_cases_date: d.last_valid_cases_date,
