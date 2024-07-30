@@ -17,6 +17,7 @@ async function doSearch(body) {
   if (body.exact) {
     if (body.firstName) queryWhere += `,${body.firstName}`;
     if (body.middleName) queryWhere += `,${body.middleName}`;
+    if (body.suffix) queryWhere += `,${body.suffix}`;
   } else {
     queryWhere += '%';
     if (body.firstName) {

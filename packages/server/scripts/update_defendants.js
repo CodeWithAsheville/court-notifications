@@ -30,18 +30,20 @@ async function updateDefendants() {
       lastName: d.last_name,
       firstName: d.first_name,
       middleName: d.middle_name,
+      suffix: d.suffix,
       exact: true,
     }, null);
-
-    const match = matches.filter((itm) => (`${itm.defendant}.${itm.sex}.${itm.race}`) === d.long_id);
+    const match = matches.filter((itm) => (`${itm.defendant}.${itm.sex}.${itm.race}`.toLocaleLowerCase()) === d.long_id.toLocaleLowerCase());
     let updateObject;
+    let nCases = 0;
+    if (match.length > 0) nCases = match[0].cases.length;
     const updateLog = {
       id: d.id,
       long_id: d.long_id,
       last_valid_cases_date: d.last_valid_cases_date,
       updates: d.updates,
       original_create_date: d.created_at,
-      new_case_count: match.length,
+      new_case_count: nCases,
     };
     // Need to be transactionalizing all this, but for now we'll log the action before we do it.
     // eslint-disable-next-line no-await-in-loop

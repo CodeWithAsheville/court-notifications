@@ -1,6 +1,6 @@
 /* eslint-disable func-names */
 exports.up = async function (knex) {
-  await knex.schema.createTable('log_updates', (table) => {
+  await knex.schema.withSchema('public').createTable('log_updates', (table) => {
     table.integer('id');
     table.string('long_id');
     table.date('last_valid_cases_date');
