@@ -29,7 +29,8 @@ async function purgeSubscriptions() {
   const daysBeforePurge = await getConfigurationIntValue('days_before_purge', 30);
   const purgeDate = getPreviousDate(daysBeforePurge);
 
-  let count = await knex('defendants').delete().where('last_valid_cases_date', '<', purgeDate);
+  let count = await knex('defendants').delete()
+    .where('last_valid_cases_date', '<', purgeDate);
 
   if (count > 0) {
     logger.debug(`Purging ${count} defendants`);
@@ -104,7 +105,9 @@ async function updateSubscriptions() {
   // Now we need to prepare to update information on remaining subscribers
   const updateDate = getPreviousDate(daysBeforeUpdate);
   const defendantsToUpdate = await knex('defendants').select('id as defendant_id')
-    .where('updated_at', '<', updateDate);
+    .where('updated_at', '<', updateDate)
+    .andWhere('flag', '<>', 1);
+
   await knex('records_to_update').delete(); // Delete all
   if (defendantsToUpdate && defendantsToUpdate.length > 0) {
     await knex('records_to_update').insert(defendantsToUpdate);
