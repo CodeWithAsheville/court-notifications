@@ -1,7 +1,7 @@
 # Requirements for the New Version
 
 ## Multitenant
-The one Trevor Lohrbeer used for GPT Builder Toolkit is Supastarter. If that doesn't look like it'll work for you, you may want to look at Shipixen or one of the starter kits listed here or here. Or just search for "saas starter kit" to find others that have been released since he bookmarked those.
+The one Trevor Lohrbeer used for GPT Builder Toolkit is [Supastarter](https://supastarter.dev/). If that doesn't look like it'll work for you, you may want to look at [Shipixen](https://shipixen.com/) or one of the starter kits listed [here](https://saasstarters.com/tags/nodejs/) or [here](https://phlaunchchecklist.com/saas-starter-kits/). Or just search for "saas starter kit" to find others that have been released since he bookmarked those.
 
 ## Reminder Content and Channels
 - Standard generic reminder messages that can be used in any county without change.
