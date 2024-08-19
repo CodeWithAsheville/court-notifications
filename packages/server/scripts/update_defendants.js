@@ -33,7 +33,8 @@ async function updateDefendants() {
       suffix: d.suffix,
       exact: true,
     }, null);
-    const match = matches.filter((itm) => (`${itm.defendant}.${itm.sex}.${itm.race}`.toLocaleLowerCase()) === d.long_id.toLocaleLowerCase());
+    const match = matches.filter((itm) => (`${itm.defendant}.${itm.sex}.${itm.race}`.toLowerCase()) === d.long_id.toLowerCase());
+
     let updateObject;
     let nCases = 0;
     if (match.length > 0) nCases = match[0].cases.length;
