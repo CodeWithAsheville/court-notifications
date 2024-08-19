@@ -7,6 +7,7 @@ The one Trevor Lohrbeer used for GPT Builder Toolkit is [Supastarter](https://su
 - Standard generic reminder messages that can be used in any county without change.
 - Ability to change reminder messages without a rebuild.
 - Include site name and unsubscribe information in every message
+- When unsubscribing, ask if they want us to keep phone for another 6 months to ensure future court dates
 
 ## Site Content
 - Add language re: data privacy/use directly on the signup page, e.g., "This service is not maintained by the courts or law enforcement, and phone numbers are used only to send text reminders and deleted once there are no more court dates"
@@ -18,3 +19,6 @@ The one Trevor Lohrbeer used for GPT Builder Toolkit is [Supastarter](https://su
 - Better logging generally
 - Ability to review everything that has happened with a subscriber/defendant (including when court dates changed?).
 
+
+## Notes
+- 
