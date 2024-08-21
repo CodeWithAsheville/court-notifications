@@ -1,6 +1,8 @@
 /* eslint-disable func-names */
+const schema = process.env.DB_SCHEMA;
+
 exports.up = async function (knex) {
-  await knex.schema.withSchema('public').createTable('log_updates', (table) => {
+  await knex.schema.createTable(`${schema}.log_updates`, (table) => {
     table.integer('id');
     table.string('long_id');
     table.date('last_valid_cases_date');
@@ -13,5 +15,5 @@ exports.up = async function (knex) {
 };
 
 exports.down = function (knex) {
-  return knex.schema.dropTable('log_updates');
+  return knex.schema.dropTable(`${schema}.log_updates`);
 };

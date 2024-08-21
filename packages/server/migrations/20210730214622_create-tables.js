@@ -1,13 +1,15 @@
 /* eslint-disable func-names */
+const schema = process.env.DB_SCHEMA;
+
 exports.up = async function (knex) {
-  await knex.schema.createTable('subscribers', (table) => {
+  await knex.schema.createTable(`${schema}.subscribers`, (table) => {
     table.increments();
     table.binary('encrypted_phone');
     table.string('language');
     table.date('next_notify');
     table.timestamps(false, true);
   })
-    .createTable('defendants', (table) => {
+    .createTable(`${schema}.defendants`, (table) => {
       table.increments();
       table.string('long_id').unique().notNullable();
       table.string('first_name');
@@ -18,12 +20,12 @@ exports.up = async function (knex) {
       table.integer('updates').defaultTo(0);
       table.timestamps(false, true);
     })
-    .createTable('subscriptions', (table) => {
+    .createTable(`${schema}.subscriptions`, (table) => {
       table.integer('subscriber_id');
       table.integer('defendant_id');
       table.timestamps(false, true);
     })
-    .createTable('cases', (table) => {
+    .createTable(`${schema}.cases`, (table) => {
       table.increments();
       table.integer('defendant_id');
       table.string('case_number');
@@ -40,18 +42,18 @@ exports.up = async function (knex) {
     const cmd = `
       CREATE TRIGGER update_timestamp
       BEFORE UPDATE
-      ON ${tables[i]}
+      ON ${schema}.${tables[i]}
       FOR EACH ROW
-      EXECUTE PROCEDURE update_timestamp();
+      EXECUTE PROCEDURE ${schema}.update_timestamp();
     `;
     // eslint-disable-next-line no-await-in-loop
-    await knex.raw(cmd);
+    await knex.schema.raw(cmd);
   }
 };
 
-exports.down = function (knex) {
-  return knex.schema.dropTable('subscribers')
-    .dropTable('defendants')
-    .dropTable('subscriptions')
-    .dropTable('cases');
+exports.down = async function (knex) {
+  return knex.schema.dropTable(`${schema}.subscribers`)
+    .dropTable(`${schema}.defendants`)
+    .dropTable(`${schema}.subscriptions`)
+    .dropTable(`${schema}.cases`);
 };

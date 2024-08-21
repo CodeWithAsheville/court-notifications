@@ -1,12 +1,14 @@
 /* eslint-disable func-names */
+const schema = process.env.DB_SCHEMA;
+
 exports.up = async function (knex) {
   await knex.schema
-    .createTable('cn_configuration', (table) => {
+    .createTable(`${schema}.cn_configuration`, (table) => {
       table.string('name');
       table.string('type');
       table.string('value');
     });
-  await knex('cn_configuration').insert([
+  await knex(`${schema}.cn_configuration`).insert([
     { name: 'updates_per_call', value: '2' },
     { name: 'days_before_update', value: '-1' },
     { name: 'days_before_purge', value: '2' },
@@ -14,5 +16,5 @@ exports.up = async function (knex) {
 };
 
 exports.down = async function (knex) {
-  return knex.schema.dropTable('cn_configuration');
+  return knex.schema.dropTable(`${schema}.cn_configuration`);
 };

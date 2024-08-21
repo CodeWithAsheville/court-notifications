@@ -1,6 +1,8 @@
 /* eslint-disable func-names */
+const schema = process.env.DB_SCHEMA;
+
 exports.up = async function (knex) {
-  await knex.schema.createTable('log_subscriptions', (table) => {
+  await knex.schema.createTable(`${schema}.log_subscriptions`, (table) => {
     table.string('first_name');
     table.string('middle_name');
     table.string('last_name');
@@ -9,7 +11,7 @@ exports.up = async function (knex) {
     table.text('cases');
     table.timestamps(false, true);
   })
-    .createTable('log_notifications', (table) => {
+    .createTable(`${schema}.log_notifications`, (table) => {
       table.string('tag');
       table.integer('days_before');
       table.string('first_name');
@@ -26,6 +28,6 @@ exports.up = async function (knex) {
 };
 
 exports.down = function (knex) {
-  return knex.schema.dropTable('log_subscriptions')
-    .dropTable('log_notifications');
+  return knex.schema.dropTable(`${schema}.log_subscriptions`)
+    .dropTable(`${schema}.log_notifications`);
 };

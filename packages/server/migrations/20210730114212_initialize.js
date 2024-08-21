@@ -1,9 +1,11 @@
 /* eslint-disable func-names */
 // See https://dev.to/morz/knex-psql-updating-timestamps-like-a-pro-2fg6
 
+const schema = process.env.DB_SCHEMA;
+
 exports.up = async function (knex) {
   return knex.raw(`
-    CREATE OR REPLACE FUNCTION update_timestamp() RETURNS TRIGGER
+    CREATE OR REPLACE FUNCTION ${schema}.update_timestamp() RETURNS TRIGGER
     LANGUAGE plpgsql
     AS
     $$
@@ -17,6 +19,6 @@ exports.up = async function (knex) {
 
 exports.down = async function (knex) {
   return knex.raw(`
-    DROP FUNCTION IF EXISTS update_timestamp() CASCADE;
+    DROP FUNCTION IF EXISTS ${schema}.update_timestamp() CASCADE;
   `);
 };
