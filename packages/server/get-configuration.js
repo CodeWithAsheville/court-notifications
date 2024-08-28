@@ -1,6 +1,8 @@
-const { knex } = require('./util/db');
+const db = require('./util/db');
 
-async function getConfiguration (query, callback) {
+const { getDBClient } = db;
+
+async function getConfiguration(query, callback) {
   const returnValue = {
     name: query.name,
     type: null,
@@ -8,19 +10,25 @@ async function getConfiguration (query, callback) {
     detail: null,
     error_message: 'Configuration value not found',
   };
+  let client;
   if (query.name) {
     try {
-      const config = await knex('cn_configuration').select().where({
-        name: query.name,
-      });
-      if (config.length > 0) {
-        returnValue.type = config[0].type;
-        returnValue.value = config[0].value;
-        returnValue.detail = config[0].detail;
+      client = getDBClient();
+      await client.connect();
+      const sql = `SELECT * FROM ${process.env.DB_SCHEMA}.cn_configuration WHERE name = $1`;
+      const config = await client.query(sql, [query.name]);
+      if (config.rows.length > 0) {
+        returnValue.type = config.rows[0].type;
+        returnValue.value = config.rows[0].value;
+        returnValue.detail = config.rows[0].detail;
       }
       returnValue.error_message = '';
     } catch (e) {
+      // eslint-disable-next-line no-console
+      console.error(e);
       returnValue.error_message = (typeof e === 'string') ? e : e.message;
+    } finally {
+      await client.end();
     }
   }
   callback(returnValue);
