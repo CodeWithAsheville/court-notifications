@@ -1,5 +1,5 @@
 const url = require('url');
-const { knex } = require('./util/db');
+const { getDBClient } = require('./util/db');
 const { logger } = require('./util/logger');
 
 const twilioErrorCodes = {
@@ -13,13 +13,22 @@ const twilioErrorCodes = {
 async function checkSubscription(req, callback) {
   let status = 'pending';
   let errormessage = '';
+  let client;
+  try {
+    client = getDBClient();
+    await client.connect();
+  } catch (e) {
+    logger.error(`util/subscribe.addSubscriber db connect: ${e}`);
+    throw Error('Error connecting to database');
+  }
   try {
     const queryObject = url.parse(req.url, true).query;
     logger.debug(`Checking subscription status for index ${JSON.stringify(queryObject)}`);
     const { index } = queryObject;
-    const subscribers = await knex('subscribers').select().where({
-      id: index,
-    });
+    const res = await client.query(`
+      SELECT * FROM ${process.env.DB_SCHEMA}.subscribers WHERE id = $1
+      `, [index]);
+    const subscribers = res.rows;
     if (subscribers.length <= 0) {
       status = 'failed';
       errormessage = 'Unknown error';

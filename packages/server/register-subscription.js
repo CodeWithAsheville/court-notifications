@@ -1,5 +1,9 @@
 const Mustache = require('mustache');
-const { knex } = require('./util/db');
+const db = require('./util/db');
+
+const { getDBClient } = db;
+
+// const { knex } = require('./util/db');
 const { unsubscribe } = require('./util/unsubscribe');
 const { subscribe } = require('./util/subscribe');
 const { computeUrlName } = require('./util/computeUrlName');
@@ -10,20 +14,36 @@ const fromTwilioPhone = process.env.TWILIO_PHONE_NUMBER;
 
 async function logSubscription(defendant, cases, language) {
   const caseInserts = cases.map((c) => {
-    const oneCase = {
-      first_name: defendant.first_name,
-      middle_name: defendant.middle_name ? defendant.middle_name : '',
-      last_name: defendant.last_name,
-      suffix: defendant.suffix ? defendant.suffix : '',
-      birth_date: defendant.birth_date,
-      case_number: c.caseNumber,
+    const oneCase = [
+      defendant.first_name,
+      defendant.middle_name ? defendant.middle_name : '',
+      defendant.last_name,
+      defendant.suffix ? defendant.suffix : '',
+      defendant.birth_date,
+      c.caseNumber,
       language,
-      court: c.court,
-      room: c.courtRoom,
-    };
+      c.court,
+      c.courtRoom,
+    ];
     return oneCase;
   });
-  await knex('log_subscriptions').insert(caseInserts);
+  console.log('Cases: ', caseInserts);
+  let client;
+  try {
+    client = getDBClient();
+    await client.connect();
+    client.query(`
+      INSERT INTO ${process.env.DB_SCHEMA}.log_subscriptions
+        (first_name, middle_name, last_name, suffix, birth_date, case_number, language, court, room)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+    `, caseInserts);
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error(err);
+    throw err;
+  } finally {
+    client.end();
+  }
 }
 
 async function registerSubscription(req, callback) {

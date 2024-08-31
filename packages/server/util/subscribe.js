@@ -1,4 +1,6 @@
-const { knex } = require('./db');
+const db = require('./db');
+
+const { getDBClient } = db;
 const { logger } = require('./logger');
 
 function initializeDefendant(longDefendantId, details) {
@@ -33,72 +35,105 @@ function initializeDefendant(longDefendantId, details) {
 }
 
 async function addDefendant(defendant) {
-  const defendantId = await knex('defendants')
-    .select()
-    .where('long_id', defendant.long_id)
-    .then(async (rows) => {
-      if (rows.length === 0) {
-        // no matching records found
-        const retVal = await knex('defendants')
-          .insert(defendant)
-          .returning('id');
-        if (retVal && retVal.length > 0) {
-          return retVal[0].id;
-        }
-        throw new Error(`Error inserting defendant ${JSON.stringify(retVal)}`);
-      } else {
-        return rows[0].id;
+  let client;
+  let res;
+  let defendantId = -1;
+  try {
+    client = getDBClient();
+    await client.connect();
+    const sql = `SELECT * FROM ${process.env.DB_SCHEMA}.defendants WHERE long_id = $1`;
+    res = await client.query(sql, [defendant.long_id]);
+    if (res.rows.length === 0) {
+      res = await client.query(`
+        INSERT INTO ${process.env.DB_SCHEMA}.defendants (
+          long_id, first_name, middle_name, last_name, suffix, birth_date
+        ) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id
+      `,
+      [
+        defendant.long_id, defendant.last_name, defendant.first_name,
+        defendant.middle_name, defendant.suffix, '',
+      ],
+      );
+      if (res.rows.length > 0) {
+        defendantId = res.rows[0].id;
       }
-    })
-    .catch((ex) => {
-      // you can find errors here.
-      throw Error(`Error adding or updating defendant ${ex}`);
-    });
-
+    } else {
+      defendantId = res.rows[0].id;
+    }
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error(err);
+    throw err;
+  } finally {
+    client.end();
+  }
   return defendantId;
 }
 
 async function addCases(defendantId, casesIn) {
   let nextDate = null;
+  let client;
+
   const cases = casesIn.map((itm) => {
     const cdate = new Date(itm.courtDate);
     if (nextDate === null || cdate < nextDate) nextDate = cdate;
-    return {
-      defendant_id: defendantId,
-      case_number: itm.caseNumber,
-      court_date: itm.courtDate,
-      court: itm.court,
-      room: itm.courtRoom,
-      session: itm.session,
-    };
+    return [
+      defendantId,
+      itm.caseNumber,
+      itm.courtDate,
+      itm.court,
+      itm.courtRoom,
+      itm.session,
+    ];
   });
   try {
     // We could compare existing cases in DB to new ones, but ... why?
-    await knex('cases')
-      .where('defendant_id', cases[0].defendant_id)
-      .del();
-
-    await knex('cases')
-      .insert(cases)
-      .returning('id');
+    client = getDBClient();
+    await client.connect();
+    await client.query(
+      `DELETE FROM ${process.env.DB_SCHEMA}.cases WHERE defendant_id = $1`,
+      [cases[0].defendant_id],
+    );
+    for (let i = 0; i < cases.length; i += 1) {
+      // eslint-disable-next-line no-await-in-loop
+      const res = await client.query(`
+        INSERT INTO ${process.env.DB_SCHEMA}.cases (
+          defendant_id, case_number, court_date, court, room, session
+        ) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id
+      `, cases[i]);
+    }
   } catch (e) {
+    console.log(e);
     throw Error('Error adding or updating cases for subscription');
+  } finally {
+    client.end();
   }
   return nextDate;
 }
 
 async function addSubscriber(nextDate, phone, language) {
   const nextNotify = `${nextDate.getMonth() + 1}/${nextDate.getDate()}/${nextDate.getFullYear()}`;
+  let client = null;
+  let res;
   let subscriberId = null;
   let subscribers = null;
   try {
-    subscribers = await knex('subscribers').select()
-      .where(
-        // eslint-disable-next-line comma-dangle
-        knex.raw('PGP_SYM_DECRYPT(encrypted_phone::bytea, ?) = ?', [process.env.DB_CRYPTO_SECRET, phone])
-      );
+    client = getDBClient();
+    await client.connect();
+  } catch (e) {
+    logger.error(`util/subscribe.addSubscriber db connect: ${e}`);
+    throw Error('Error connecting to database');
+  }
+  try {
+    res = await client.query(
+      `SELECT * FROM ${process.env.DB_SCHEMA}.subscribers WHERE
+       PGP_SYM_DECRYPT(encrypted_phone::bytea, $1) = $2`,
+      [process.env.DB_CRYPTO_SECRET, phone],
+    );
+    subscribers = res.rows;
   } catch (e) {
     logger.error(`util/subscribe.addSubscriber lookup: ${e}`);
+    client.end();
     throw Error('Error in subscriber lookup');
   }
   if (subscribers.length > 0) { // We already have this subscriber, update the date if needed
@@ -106,42 +141,50 @@ async function addSubscriber(nextDate, phone, language) {
     const currentNext = new Date(subscribers[0].next_notify);
     if (nextDate !== currentNext) { // Need to update the date
       try {
-        knex('subscribers').where('id', subscriberId).update({
-          next_notify: nextNotify,
-        });
+        client.query(
+          `UPDATE ${process.env.DB_SCHEMA}.subscribers SET next_notify = $1 WHERE id = $2`,
+          [nextNotify, subscriberId],
+        );
       } catch (e) {
+        client.end();
         throw Error('Error updating next court date');
       }
     }
   } else { // New subscriber
     try {
-      const retVal = await knex('subscribers').insert({
-        encrypted_phone: knex.raw('PGP_SYM_ENCRYPT(?::text, ?)', [phone, process.env.DB_CRYPTO_SECRET]),
-        language,
-        next_notify: nextNotify,
-        status: 'pending',
-      })
-        .returning('id');
+      res = client.query(`
+        INSERT INTO ${process.env.DB_SCHEMA}.subscribers (encrypted_phone, language, next_notify, status)
+        VALUES (PGP_SYM_ENCRYPT($1::text, $2), $3, $4, 'pending') RETURNING id
+        `,
+      [phone, process.env.DB_CRYPTO_SECRET, language, nextNotify],
+      );
+      const retVal = (await res).rows;
       subscriberId = retVal[0].id;
     } catch (e) {
+      client.end();
       logger.error(`util/subscribe.addSubscriber add: ${e}`);
       throw Error('Error adding subscriber');
     }
   }
+  client.end();
   return subscriberId;
 }
 
 async function addSubscription(subscriberId, defendantId) {
+  let client;
   try {
-    const retVal = await knex('subscriptions').select().where({
-      subscriber_id: subscriberId,
-      defendant_id: defendantId,
-    });
+    client = getDBClient();
+    await client.connect();
+    const res = await client.query(`
+      SELECT * FROM ${process.env.DB_SCHEMA}.subscriptions WHERE
+      subscriber_id = $1 AND defendant_id = $2
+      `, [subscriberId, defendantId]);
+    const retVal = res.rows;
     if (retVal.length === 0) {
-      await knex('subscriptions').insert({
-        subscriber_id: subscriberId,
-        defendant_id: defendantId,
-      });
+      await client.query(`
+        INSERT INTO ${process.env.DB_SCHEMA}.subscriptions (subscriber_id, defendant_id)
+        VALUES ($1, $2)
+      `, [subscriberId, defendantId]);
     }
   } catch (e) {
     throw Error('Error adding subscription');
@@ -151,10 +194,15 @@ async function addSubscription(subscriberId, defendantId) {
 async function subscribe(phone, defendantLongId, details, t, language) {
   const { cases } = details;
   if (cases == null || cases.length === 0) throw t('no-cases');
+  console.log('Initialize defendant');
   const defendant = initializeDefendant(defendantLongId, details);
+  console.log('Add defendant');
   const defendantId = await addDefendant(defendant);
+  console.log('Add cases');
   const nextDate = await addCases(defendantId, cases);
+  console.log('Add subscriber');
   const subscriberId = await addSubscriber(nextDate, phone, language);
+  console.log('Add subscription');
   await addSubscription(subscriberId, defendantId);
   return { defendant, subscriberId, cases };
 }
