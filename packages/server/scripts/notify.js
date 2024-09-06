@@ -8,7 +8,9 @@ const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 
 const client = require('twilio')(accountSid, authToken);
-const { knex } = require('../util/db');
+const db = require('../util/db');
+
+const { getDBClient } = db;
 
 const fromTwilioPhone = process.env.TWILIO_PHONE_NUMBER;
 const { logger } = require('../util/logger');
@@ -35,12 +37,17 @@ function getFormattedDate(d) {
 }
 
 // Load all defendants with cases scheduled notificationDays from now
-async function loadDefendants(notificationDays) {
+async function loadDefendants(notificationDays, pgClient) {
   const dateClause = `court_date - CURRENT_DATE = ${notificationDays}`;
-  const results = await knex('cases')
-    .select('cases.defendant_id', 'cases.case_number', 'cases.court_date', 'cases.court', 'cases.room', 'cases.session', 'defendants.first_name', 'defendants.middle_name', 'defendants.last_name', 'defendants.suffix', 'defendants.birth_date')
-    .leftOuterJoin('defendants', 'cases.defendant_id', 'defendants.id')
-    .whereRaw(dateClause);
+  const sql = `
+    SELECT c.defendant_id, c.case_number, c.court_date, c.court, c.room, c.session,
+           d.first_name, d.middle_name, d.last_name, d.suffix, d.birth_date
+      FROM ${process.env.DB_SCHEMA}.cases c LEFT OUTER JOIN ${process.env.DB_SCHEMA}.defendants d
+      WHERE c.defendant_id = d.defendant_id
+      AND ${dateClause}
+  `;
+  const res = await pgClient.query(sql);
+  const results = res.rows;
 
   const defendantHash = {};
   const nameTemplate = '{{fname}} {{mname}} {{lname}} {{suffix}}';
@@ -100,99 +107,115 @@ async function loadDefendants(notificationDays) {
   return defendants;
 }
 
-function loadSubscribers(defendantId) {
-  return knex('subscriptions')
-    .select(
-      'subscriptions.defendant_id',
-      'subscriptions.subscriber_id',
-      'subscribers.language',
-      // eslint-disable-next-line comma-dangle
-      knex.raw('PGP_SYM_DECRYPT("subscribers"."encrypted_phone"::bytea, ?) as phone', [process.env.DB_CRYPTO_SECRET])
-    )
-    .leftOuterJoin('subscribers', 'subscriptions.subscriber_id', 'subscribers.id')
-    .where('subscriptions.defendant_id', '=', defendantId);
+async function loadSubscribers(defendantId, pgClient) {
+  const res = await pgClient.query(
+    `SELECT subscriptions.defendant_id, subscriptions.subscriber_id, subscribers.language,
+            PGP_SYM_DECRYPT("subscribers"."encrypted_phone"::bytea, $1) as phone,
+
+      FROM ${process.env.DB_SCHEMA}.subscriptions
+      LEFT OUTER JOIN ${process.env.DB_SCHEMA}.subscribers
+      ON subscriptions.subscriber_id = subscribers.id
+      WHERE subscriptions.defendant_id = $2`,
+    [process.env.DB_CRYPTO_SECRET, defendantId],
+  );
+  return res.rows;
 }
 
-async function logNotification(defendant, notification, language) {
-  const notifyInserts = defendant.cases.map((c) => ({
-    tag: notification.key,
-    days_before: notification.days_before,
-    first_name: defendant.first_name,
-    middle_name: defendant.middle_name ? defendant.middle_name : '',
-    last_name: defendant.last_name,
-    suffix: defendant.suffix ? defendant.suffix : '',
-    birth_date: defendant.birth_date,
-    district_count: defendant.districtCount,
-    superior_count: defendant.superiorCount,
-    case_number: c.case_number,
-    language,
-    court: c.court,
-    room: c.room,
-  }));
-  await knex('log_notifications').insert(notifyInserts);
+async function logNotification(defendant, notification, language, pgClient) {
+  for (let i = 0; i < defendant.cases.length; i += 1) {
+    const c = defendant.cases[i];
+    await pgClient.query(`
+      INSERT INTO ${process.env.DB_SCHEMA}.log_notifications
+        (tag, days_before, first_name, middle_name, last_name, suffix,
+        birth_date, district_count, superior_count, case_number, language,
+        court, room) 
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+    `,
+    [notification.key, notification.days_before, defendant.first_name,
+     defendant.middle_name ? defendant.middle_name : '', defendant.last_name,
+     defendant.suffix ? defendant.suffix : '', defendant.birth_date,
+     defendant.districtCount, defendant.superiorCount, c.case_number, language,
+     c.court, c.room]
+  );
 }
 
 async function sendNotifications() {
-  const notificationSets = await knex('notify_configuration').select('*');
+  let pgClient;
+  try {
+    pgClient = getDBClient();
+    await pgClient.connect();
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error(err);
+    throw err;
+  }
+  try {
+    const res = await pgClient.query(`SELECT * from ${process.env.DB_SCHEMA}.notify_configuration`);
+    const notificationSets = res.rows;
 
-  /*
-   * Each notificationSet is a specific message to be sent
-   * a specific number of days before the court date
-   */
-  for (let i = 0; i < notificationSets.length; i += 1) {
-    logger.debug(`Do notifications for ${notificationSets[i].days_before} days`);
-    const notificationDays = notificationSets[i].days_before;
-    const msgKey = notificationSets[i].key;
-    // eslint-disable-next-line no-await-in-loop
-    const defendants = await loadDefendants(notificationDays);
-
-    for (let j = 0; j < defendants.length; j += 1) {
-      const defendant = defendants[j];
+    /*
+    * Each notificationSet is a specific message to be sent
+    * a specific number of days before the court date
+    */
+    for (let i = 0; i < notificationSets.length; i += 1) {
+      logger.debug(`Do notifications for ${notificationSets[i].days_before} days`);
+      const notificationDays = notificationSets[i].days_before;
+      const msgKey = notificationSets[i].key;
       // eslint-disable-next-line no-await-in-loop
-      const subscribers = await loadSubscribers(defendant.id);
+      const defendants = await loadDefendants(notificationDays, pgClient);
 
-      // And send out the notifications
-      for (let k = 0; k < subscribers.length; k += 1) {
-        const s = subscribers[k];
-        // Log the notification
+      for (let j = 0; j < defendants.length; j += 1) {
+        const defendant = defendants[j];
         // eslint-disable-next-line no-await-in-loop
-        await logNotification(defendant, notificationSets[i], s.language);
-        // eslint-disable-next-line no-await-in-loop
-        await i18next.changeLanguage(s.language);
-        let message = `${Mustache.render(i18next.t(msgKey), defendant)}\n\n`;
-        if (defendant.adminCount > 0) {
-          message += Mustache.render(i18next.t('notifications.admin-court'), defendant);
-        }
-        if (defendant.districtCount > 0) {
-          message += Mustache.render(i18next.t('notifications.district-court'), defendant);
-          let sep = '';
-          const keys = Object.keys(defendant.districtRooms);
-          keys.forEach((room) => {
-            message += sep + room;
-            sep = ', ';
-          });
-          message += '\n';
-        }
+        const subscribers = await loadSubscribers(defendant.id, pgClient);
 
-        if (defendant.superiorCount > 0) {
-          message += Mustache.render(i18next.t('notifications.superior-court'), defendant);
+        // And send out the notifications
+        for (let k = 0; k < subscribers.length; k += 1) {
+          const s = subscribers[k];
+          // Log the notification
+          // eslint-disable-next-line no-await-in-loop
+          await logNotification(defendant, notificationSets[i], s.language, pgClient);
+          // eslint-disable-next-line no-await-in-loop
+          await i18next.changeLanguage(s.language);
+          let message = `${Mustache.render(i18next.t(msgKey), defendant)}\n\n`;
+          if (defendant.adminCount > 0) {
+            message += Mustache.render(i18next.t('notifications.admin-court'), defendant);
+          }
+          if (defendant.districtCount > 0) {
+            message += Mustache.render(i18next.t('notifications.district-court'), defendant);
+            let sep = '';
+            const keys = Object.keys(defendant.districtRooms);
+            keys.forEach((room) => {
+              message += sep + room;
+              sep = ', ';
+            });
+            message += '\n';
+          }
+
+          if (defendant.superiorCount > 0) {
+            message += Mustache.render(i18next.t('notifications.superior-court'), defendant);
+          }
+          const defendantDetails = {
+            county: 100,
+            urlname: computeUrlName(defendant),
+          };
+          message += `\n\n${Mustache.render(i18next.t('notifications.reminder-final'), defendantDetails)}`;
+          const msgObject = {
+            body: message,
+            from: fromTwilioPhone,
+            to: s.phone,
+          };
+          // eslint-disable-next-line no-await-in-loop
+          await client.messages
+            .create(msgObject)
+            .then((sentMessage) => logger.debug(JSON.stringify(sentMessage.body)));
         }
-        const defendantDetails = {
-          county: 100,
-          urlname: computeUrlName(defendant),
-        };
-        message += `\n\n${Mustache.render(i18next.t('notifications.reminder-final'), defendantDetails)}`;
-        const msgObject = {
-          body: message,
-          from: fromTwilioPhone,
-          to: s.phone,
-        };
-        // eslint-disable-next-line no-await-in-loop
-        await client.messages
-          .create(msgObject)
-          .then((sentMessage) => logger.debug(JSON.stringify(sentMessage.body)));
       }
     }
+  } catch (err) {
+    logger.error('Error sending notifications ', err);
+  } finally {
+    await pgClient.end();
   }
 }
 

@@ -27,12 +27,11 @@ async function logSubscription(defendant, cases, language) {
     ];
     return oneCase;
   });
-  console.log('Cases: ', caseInserts);
   let client;
   try {
     client = getDBClient();
     await client.connect();
-    client.query(`
+    await client.query(`
       INSERT INTO ${process.env.DB_SCHEMA}.log_subscriptions
         (first_name, middle_name, last_name, suffix, birth_date, case_number, language, court, room)
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
