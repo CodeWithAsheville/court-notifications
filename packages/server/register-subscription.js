@@ -31,11 +31,15 @@ async function logSubscription(defendant, cases, language) {
   try {
     client = getDBClient();
     await client.connect();
-    await client.query(`
-      INSERT INTO ${process.env.DB_SCHEMA}.log_subscriptions
-        (first_name, middle_name, last_name, suffix, birth_date, case_number, language, court, room)
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-    `, caseInserts);
+    for (let i = 0; i < caseInserts.length; i += 1) {
+      const oneCase = caseInserts[i];
+      // eslint-disable-next-line no-await-in-loop
+      await client.query(`
+        INSERT INTO ${process.env.DB_SCHEMA}.log_subscriptions
+          (first_name, middle_name, last_name, suffix, birth_date, case_number, language, court, room)
+          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+      `, oneCase);
+    }
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error(err);

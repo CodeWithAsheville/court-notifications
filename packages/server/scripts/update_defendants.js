@@ -1,5 +1,9 @@
-require('dotenv').config({ path: '../../.env' });
-const { knex } = require('../util/db');
+require('dotenv').config({ path: '../.env' });
+
+const db = require('../util/db');
+
+const { getDBClient } = db;
+
 const { searchCourtRecords } = require('../search-court-records');
 const { addCases } = require('../util/subscribe');
 const { logger } = require('../util/logger');

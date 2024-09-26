@@ -2,13 +2,17 @@
 const i18next = require('i18next');
 const FsBackend = require('i18next-fs-backend');
 const path = require('path');
+require('dotenv').config({ path: '../.env' });
+
 const client = require('twilio')(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 
-require('dotenv').config({ path: '../../.env' });
 const { logger } = require('../util/logger');
 const { twilioSendMessage } = require('../util/twilio-send-message');
 
-const { knex } = require('../util/db');
+const db = require('../util/db');
+
+const { getDBClient } = db;
+
 const { unsubscribe } = require('../util/unsubscribe');
 
 function getPreviousDate(days) {
@@ -18,19 +22,25 @@ function getPreviousDate(days) {
   return dString;
 }
 
-async function getConfigurationIntValue(name, defaultValue = 0) {
+async function getConfigurationIntValue(name, pgClient, defaultValue = 0) {
   let value = defaultValue;
-  const result = await knex('cn_configuration').select('value').where('name', '=', name);
+  const res = await pgClient.query(`
+    SELECT value FROM ${process.env.DB_SCHEMA}.cn_configuration
+      WHERE name = $1
+  `, [name]);
+  const result = res.rows;
   if (result.length > 0) value = parseInt(result[0].value, 10);
   return value;
 }
 
-async function purgeSubscriptions() {
-  const daysBeforePurge = await getConfigurationIntValue('days_before_purge', 30);
+async function purgeSubscriptions(pgClient) {
+  const daysBeforePurge = await getConfigurationIntValue('days_before_purge', pgClient, 30);
   const purgeDate = getPreviousDate(daysBeforePurge);
 
-  let count = await knex('defendants').delete()
-    .where('last_valid_cases_date', '<', purgeDate);
+  let res = await pgClient.query(`
+    DELETE FROM ${process.env.DB_SCHEMA}.defendants WHERE last_valid_cases_date < $1
+    `, [purgeDate]);
+  let count = res.rowCount;
 
   if (count > 0) {
     logger.debug(`Purging ${count} defendants`);
@@ -76,8 +86,8 @@ async function purgeSubscriptions() {
   }
 }
 
-async function updateSubscriptions() {
-  const daysBeforeUpdate = await getConfigurationIntValue('days_before_update', 7);
+async function updateSubscriptions(pgClient) {
+  const daysBeforeUpdate = await getConfigurationIntValue('days_before_update', pgClient, 7);
 
   if (daysBeforeUpdate < 0) return;
 
@@ -135,11 +145,21 @@ async function initTranslations() {
 // script
 (async () => {
   await initTranslations();
+  let pgClient;
+  try {
+    pgClient = getDBClient();
+    await pgClient.connect();
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error(err);
+    throw err;
+  }
+
   logger.debug('Call purgeSubscriptions');
-  await purgeSubscriptions();
+  await purgeSubscriptions(pgClient);
   logger.debug('Done with purge');
   logger.debug('Call updateSubscriptions');
-  await updateSubscriptions();
+  await updateSubscriptions(pgClient);
   logger.debug('Done with update setup');
   process.exit();
 })();

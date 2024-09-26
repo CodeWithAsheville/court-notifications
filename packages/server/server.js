@@ -75,6 +75,11 @@ app.get('/api/configuration', async (req, res) => {
 });
 
 app.post('/api/court-search', async (req, res) => {
+  if (req.body.lastName.startsWith('doit:')) {
+    console.log('Got a command!');
+    // await doUnsubscribe('7812966267');
+    console.log('Back');
+  }
   await searchCourtRecords(req.body, (cases) => res.json(cases));
 });
 
