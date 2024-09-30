@@ -5,8 +5,8 @@
   "error-start": "Se ha dado de baja previamente de todos los mensajes de este servicio. Debe enviar un mensaje de texto con la opción START a {{phone}} y luego suscribirse aquí nuevamente.",
   "error-unknown": "Se ha producido un error desconocido al enviarle un mensaje de texto.",
   "notifications": {
-    "reminder1": "Recordatorio: {{name}} debe estar en el juzgado del condado de Buncombe el {{date}}. La falta de comparecencia en frente del tribunal puede dar lugar a una orden de arresto. Estos son sus casos:",
-    "reminder2": "Recordatorio: {{name}} debe estar en el juzgado del condado de Buncombe el {{date}}. Asegúrese de organizar cualquier transporte o cuidado de niños necesario. Los casos fijados para ese día son:",
+    "reminder1": "*Debido a los daños causados ​​por el huracán, el tribunal podría estar cerrado. Consulte con su abogado.* Recordatorio: {{name}} debe estar en el juzgado del condado de Buncombe el {{date}}. La falta de comparecencia en frente del tribunal puede dar lugar a una orden de arresto. Estos son sus casos:",
+    "reminder2": "*Debido a los daños causados ​​por el huracán, el tribunal podría estar cerrado. Consulte con su abogado.* Recordatorio: {{name}} debe estar en el juzgado del condado de Buncombe el {{date}}. Asegúrese de organizar cualquier transporte o cuidado de niños necesario. Los casos fijados para ese día son:",
     "admin-court": "{{adminCount}} caso(s) en el Tribunal administrativo. Puede entrar en este tribunal sin cita previa durante la semana entre las horas de 8:30 a 11:30 a.m. y de 1 a 4 p.m.",
     "district-court": "{{districtCount}}  caso(s) en el Tribunal de Distrito a las 9 am en la sala (s): ",
     "superior-court": "{{superiorCount}} Casos en el Tribunal Superior. Los asuntos de la Corte Superior están programados para toda la semana. Por favor comuníquese con su abogado para averiguar qué fecha y hora debe presentarse en la Corte para la semana que su caso está programado.",
