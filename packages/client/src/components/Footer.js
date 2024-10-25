@@ -16,7 +16,7 @@ export default function Footer() {
           <div className="usa-footer__logo grid-row grid-gap-2">
             <div className="grid-col-auto">
               {!isJailVersion && (
-                <a href="https://www.codeforasheville.org">
+                <a href="https://www.codewithasheville.org">
                   <img
                     src="code-for-asheville-logo.png"
                     alt="Code for Asheville logo"
