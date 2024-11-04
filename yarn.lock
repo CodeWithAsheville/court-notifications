@@ -4226,19 +4226,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios-cookiejar-support@npm:^4.0.7":
-  version: 4.0.7
-  resolution: "axios-cookiejar-support@npm:4.0.7"
-  dependencies:
-    http-cookie-agent: ^5.0.4
-  peerDependencies:
-    axios: ">=0.20.0"
-    tough-cookie: ">=4.0.0"
-  checksum: aeaaa631026edb6d215dcdb042446c34240c2374104ec2708eb643158f0506c6d52fe5eea56882efde7ae3f020e072fc48a5255c515b7297dcc9ac00b8c494d2
-  languageName: node
-  linkType: hard
-
-"axios@npm:^1.6.0, axios@npm:^1.6.5":
+"axios@npm:^1.6.0":
   version: 1.7.2
   resolution: "axios@npm:1.7.2"
   dependencies:
@@ -7936,24 +7924,6 @@ __metadata:
   version: 4.1.1
   resolution: "http-cache-semantics@npm:4.1.1"
   checksum: 83ac0bc60b17a3a36f9953e7be55e5c8f41acc61b22583060e8dedc9dd5e3607c823a88d0926f9150e571f90946835c7fe150732801010845c72cd8bbff1a236
-  languageName: node
-  linkType: hard
-
-"http-cookie-agent@npm:^5.0.4":
-  version: 5.0.4
-  resolution: "http-cookie-agent@npm:5.0.4"
-  dependencies:
-    agent-base: ^7.1.0
-  peerDependencies:
-    deasync: ^0.1.26
-    tough-cookie: ^4.0.0
-    undici: ^5.11.0
-  peerDependenciesMeta:
-    deasync:
-      optional: true
-    undici:
-      optional: true
-  checksum: c136529cc402d0d7b8d3ae644a41f6ebc986951e0add60efbb7faf6cee74bf0895a25f8827fc362e4dc9238f937bb64d0c144e0236fd5af6cbb48849bbf327cc
   languageName: node
   linkType: hard
 
@@ -13731,8 +13701,6 @@ __metadata:
   resolution: "server@workspace:packages/server"
   dependencies:
     "@fortawesome/fontawesome-free": ^6.5.1
-    axios: ^1.6.5
-    axios-cookiejar-support: ^4.0.7
     body-parser: ^1.20.2
     concurrently: ^8.2.2
     copy-to-clipboard: ^3.3.3
@@ -13757,7 +13725,6 @@ __metadata:
     react-i18next: ^14.0.0
     rollbar: ^2.26.2
     supertest: ^6.3.3
-    tough-cookie: ^4.1.3
     twilio: ^4.20.0
     winston: ^3.11.0
     winston-transport: ^4.6.0

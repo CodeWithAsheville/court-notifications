@@ -8,6 +8,7 @@ const database = process.env.DATABASE_NAME;
 const min = parseInt(process.env.DB_POOL_MIN, 10);
 const max = parseInt(process.env.DB_POOL_MAX, 10);
 const tableName = process.env.DB_MIGRATIONS_TABLE;
+const schema = process.env.DB_SCHEMA;
 
 const connection = {
   host,
@@ -23,6 +24,7 @@ if (process.env.DB_HOST !== 'localhost') {
 module.exports = {
   client: 'postgresql',
   connection,
+  searchPath: [schema, 'public'],
   pool: {
     min,
     max,
