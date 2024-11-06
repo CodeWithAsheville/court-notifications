@@ -14,9 +14,6 @@
     "test": "jest --env=node"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^6.5.1",
-    "body-parser": "^1.20.2",
-    "copy-to-clipboard": "^3.3.3",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "i18next": "^23.7.16",
@@ -24,7 +21,6 @@
     "i18next-fs-backend": "^2.3.1",
     "i18next-http-backend": "^2.4.2",
     "i18next-http-middleware": "^3.5.0",
-    "jsdom": "^23.1.0",
     "knex": "^2.5.1",
     "mustache": "^4.2.0",
     "pg": "^8.11.3",
