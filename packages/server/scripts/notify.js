@@ -1,4 +1,4 @@
-require('dotenv').config({ path: '../../.env' });
+require('dotenv').config({ path: '../.env' });
 const i18next = require('i18next');
 const FsBackend = require('i18next-fs-backend');
 const Mustache = require('mustache');
@@ -6,7 +6,6 @@ const path = require('path');
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
-
 const client = require('twilio')(accountSid, authToken);
 
 const { getClient } = require('../util/db');
@@ -42,8 +41,8 @@ async function loadDefendants(notificationDays, pgClient) {
     SELECT c.defendant_id, c.case_number, c.court_date, c.court, c.room, c.session,
            d.first_name, d.middle_name, d.last_name, d.suffix, d.birth_date
       FROM ${process.env.DB_SCHEMA}.cases c LEFT OUTER JOIN ${process.env.DB_SCHEMA}.defendants d
-      WHERE c.defendant_id = d.defendant_id
-      AND ${dateClause}
+      ON c.defendant_id = d.id
+      WHERE ${dateClause}
   `;
   const res = await pgClient.query(sql);
   const results = res.rows;
@@ -107,14 +106,14 @@ async function loadDefendants(notificationDays, pgClient) {
 }
 
 async function loadSubscribers(defendantId, pgClient) {
-  const res = await pgClient.query(
-    `SELECT subscriptions.defendant_id, subscriptions.subscriber_id, subscribers.language,
-            PGP_SYM_DECRYPT("subscribers"."encrypted_phone"::bytea, $1) as phone,
-
+  const sql = `SELECT subscriptions.defendant_id, subscriptions.subscriber_id, subscribers.language,
+            PGP_SYM_DECRYPT("subscribers"."encrypted_phone"::bytea, $1) as phone
       FROM ${process.env.DB_SCHEMA}.subscriptions
       LEFT OUTER JOIN ${process.env.DB_SCHEMA}.subscribers
       ON subscriptions.subscriber_id = subscribers.id
-      WHERE subscriptions.defendant_id = $2`,
+      WHERE subscriptions.defendant_id = $2`;
+  const res = await pgClient.query(
+    sql,
     [process.env.DB_CRYPTO_SECRET, defendantId],
   );
   return res.rows;
@@ -123,6 +122,7 @@ async function loadSubscribers(defendantId, pgClient) {
 async function logNotification(defendant, notification, language, pgClient) {
   for (let i = 0; i < defendant.cases.length; i += 1) {
     const c = defendant.cases[i];
+    // eslint-disable-next-line no-await-in-loop
     await pgClient.query(`
       INSERT INTO ${process.env.DB_SCHEMA}.log_notifications
         (tag, days_before, first_name, middle_name, last_name, suffix,
@@ -131,11 +131,12 @@ async function logNotification(defendant, notification, language, pgClient) {
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
     `,
     [notification.key, notification.days_before, defendant.first_name,
-     defendant.middle_name ? defendant.middle_name : '', defendant.last_name,
-     defendant.suffix ? defendant.suffix : '', defendant.birth_date,
-     defendant.districtCount, defendant.superiorCount, c.case_number, language,
-     c.court, c.room]
-  );
+      defendant.middle_name ? defendant.middle_name : '', defendant.last_name,
+      defendant.suffix ? defendant.suffix : '', defendant.birth_date,
+      defendant.districtCount, defendant.superiorCount, c.case_number, language,
+      c.court, c.room],
+    );
+  }
 }
 
 async function sendNotifications() {
