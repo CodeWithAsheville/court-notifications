@@ -14,6 +14,11 @@ const remindersConfig = {
 
 function getClient(config) {
   if (!config) {
+    if (process.env.DB_HOST !== 'localhost') {
+      remindersConfig.ssl = {
+        rejectUnauthorized: false,
+      };
+    }
     return new Client(remindersConfig);
   }
   return new Client(config);
