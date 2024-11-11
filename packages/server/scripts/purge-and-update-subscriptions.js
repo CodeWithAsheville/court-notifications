@@ -84,6 +84,7 @@ async function purgeSubscriptions(pgClient) {
       console.log(sql);
       res = pgClient.query(sql);
       console.log(`Checking for subscriptions for subscriber ${arr[i]}: ${res.rowCount} items`);
+      console.log(res);
       if (res.rowCount === 0) {
         res = pgClient.query(`DELETE FROM ${process.env.DB_SCHEMA}.subscribers WHERE id = ${arr[i]}`);
         console.log(`Deleted subscriber ${arr[i]}: ${res.rowCount} items`);
