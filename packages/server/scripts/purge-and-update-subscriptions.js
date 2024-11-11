@@ -81,6 +81,7 @@ async function purgeSubscriptions(pgClient) {
     for (let i = 0; i < arr.length; i += 1) {
       sql = `SELECT * FROM ${process.env.DB_SCHEMA}.subscriptions WHERE subscriber_id = ${arr[i]}`;
       console.log('SQL for subscriber lookup ', arr[i]);
+      console.log(sql);
       res = pgClient.query(sql);
       console.log(`Checking for subscriptions for subscriber ${arr[i]}: ${res.rowCount} items`);
       if (res.rowCount === 0) {
