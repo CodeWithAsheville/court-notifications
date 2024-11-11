@@ -41,13 +41,10 @@ async function purgeSubscriptions(pgClient) {
         LEFT JOIN ${process.env.DB_SCHEMA}.defendants d on s.defendant_id = d.id
         WHERE d.last_valid_cases_date < $1
       `;
-    console.log('GET subs of defendants to purge');
-    console.log(sql);
     let res = await pgClient.query(sql, [purgeDate]);
     const subscribers = new Set();
     const defendants = new Set();
 
-    console.log(res.rows);
     for (let i = 0; i < res.rowCount; i += 1) {
       // eslint-disable-next-line camelcase
       const { subscriber_id, defendant_id } = res.rows[i];
@@ -59,21 +56,14 @@ async function purgeSubscriptions(pgClient) {
     sql = `
         DELETE FROM ${process.env.DB_SCHEMA}.subscriptions WHERE defendant_id IN (${[...defendants].join(',')})
     `;
-    console.log('Here is the deletion of the subscriptions');
-    console.log(sql);
     res = await pgClient.query(sql);
-    console.log(`Deleted subscriptions: ${res.rowCount} items`);
 
     // We can also just delete all the defendants and their cases
     let arr = [...defendants];
     for (let i = 0; i < arr.length; i += 1) {
       const defendantId = arr[i];
       res = await pgClient.query(`DELETE FROM ${process.env.DB_SCHEMA}.cases WHERE defendant_id = ${defendantId}`);
-      console.log(`Deleted cases for defendant ${defendantId}: ${res.rowCount} items `);
-      console.log(res.rows);
       res = await pgClient.query(`DELETE FROM ${process.env.DB_SCHEMA}.defendants WHERE id = ${defendantId}`);
-      console.log(`Deleted defendant ${defendantId}: ${res.rowCount} items `, res.rows);
-      console.log(res.rows);
     }
 
     // Now let's look at subscribers, but deleting only if they have no other subscriptions
@@ -81,10 +71,8 @@ async function purgeSubscriptions(pgClient) {
     for (let i = 0; i < arr.length; i += 1) {
       sql = `SELECT * FROM ${process.env.DB_SCHEMA}.subscriptions WHERE subscriber_id = ${arr[i]}`;
       res = await pgClient.query(sql);
-      console.log(`Checking for subscriptions for subscriber ${arr[i]}: ${res.rowCount} items`);
       if (res.rowCount === 0) {
         res = await pgClient.query(`DELETE FROM ${process.env.DB_SCHEMA}.subscribers WHERE id = ${arr[i]}`);
-        console.log(`Deleted subscriber ${arr[i]}: ${res.rowCount} items`);
       } else {
         console.log(`Not deleting subscriber ${arr[i]} because they still have ${res.rowCount} subscriptions`);
       }
@@ -93,53 +81,6 @@ async function purgeSubscriptions(pgClient) {
     logger.error('Error getting the list of defendants to be purged: ', err);
     throw err;
   }
-  /*
-  let count = await knex('defendants').delete()
-    .where('last_valid_cases_date', '<', purgeDate);
-
-  if (count > 0) {
-    logger.debug(`Purging ${count} defendants`);
-    // eslint-disable-next-line func-names
-    count = await knex('subscriptions').delete().whereNotExists(function () {
-      this.select('*').from('defendants').whereRaw('defendants.id = subscriptions.defendant_id');
-    });
-    if (count > 0) logger.debug(`${count} subscriptions purged`);
-
-    const subscribers = await knex('subscribers')
-      .select(
-        'subscribers.id',
-        'subscribers.language',
-        // eslint-disable-next-line comma-dangle
-        knex.raw('PGP_SYM_DECRYPT("subscribers"."encrypted_phone"::bytea, ?) as phone', [process.env.DB_CRYPTO_SECRET])
-      )
-      // eslint-disable-next-line func-names
-      .whereNotExists(function () {
-        this.select('*').from('subscriptions').whereRaw('subscriptions.subscriber_id = subscribers.id');
-      });
-
-    // Attempt to notify them
-    if (subscribers && subscribers.length > 0) {
-      logger.debug(`${subscribers.length} subscribers purged`);
-      for (let i = 0; i < subscribers.length; i += 1) {
-        try {
-          const s = subscribers[i];
-          await i18next.changeLanguage(s.language);
-          const message = i18next.t('unsubscribe.purge');
-          await twilioSendMessage(client, s.phone, message);
-        } catch (err) {
-          logger.error(`Error sending final unsubscribe notification: ${err}`);
-        }
-      }
-    }
-    // Now actually delete them.
-    // eslint-disable-next-line func-names
-    await knex('subscribers').delete().whereNotExists(function () {
-      this.select('*').from('subscriptions').whereRaw('subscriptions.subscriber_id = subscribers.id');
-    });
-  } else {
-    logger.debug('No defendants purged');
-  }
-  */
 }
 
 async function updateSubscriptions(pgClient) {
