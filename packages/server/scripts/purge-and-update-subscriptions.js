@@ -79,7 +79,9 @@ async function purgeSubscriptions(pgClient) {
     // Now let's look at subscribers, but deleting only if they have no other subscriptions
     arr = [...subscribers];
     for (let i = 0; i < arr.length; i += 1) {
-      res = pgClient.query(`SELECT * FROM ${process.env.DB_SCHEMA}.subscriptions WHERE subscriber_id = ${arr[i]}`);
+      sql = `SELECT * FROM ${process.env.DB_SCHEMA}.subscriptions WHERE subscriber_id = ${arr[i]}`;
+      console.log('SQL for subscriber lookup ', arr[i]);
+      res = pgClient.query(sql);
       console.log(`Checking for subscriptions for subscriber ${arr[i]}: ${res.rowCount} items`);
       if (res.rowCount === 0) {
         res = pgClient.query(`DELETE FROM ${process.env.DB_SCHEMA}.subscribers WHERE id = ${arr[i]}`);
