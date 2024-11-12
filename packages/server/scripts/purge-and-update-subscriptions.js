@@ -45,39 +45,38 @@ async function purgeSubscriptions(pgClient) {
     const subscribers = new Set();
     const defendants = new Set();
 
-    for (let i = 0; i < res.rowCount; i += 1) {
-      // eslint-disable-next-line camelcase
-      const { subscriber_id, defendant_id } = res.rows[i];
-      subscribers.add(subscriber_id);
-      defendants.add(defendant_id);
-    }
+    if (res.rowCount > 0) {
+      for (let i = 0; i < res.rowCount; i += 1) {
+        // eslint-disable-next-line camelcase
+        const { subscriber_id, defendant_id } = res.rows[i];
+        subscribers.add(subscriber_id);
+        defendants.add(defendant_id);
+      }
 
-    // We can go ahead and just delete the subscriptions
-    console.log('Defendants: ', defendants);
-    sql = `
-        DELETE FROM ${process.env.DB_SCHEMA}.subscriptions WHERE defendant_id IN (${[...defendants].join(',')})
-    `;
-    console.log('SQL');
-    console.log(sql);
-    res = await pgClient.query(sql);
-
-    // We can also just delete all the defendants and their cases
-    let arr = [...defendants];
-    for (let i = 0; i < arr.length; i += 1) {
-      const defendantId = arr[i];
-      res = await pgClient.query(`DELETE FROM ${process.env.DB_SCHEMA}.cases WHERE defendant_id = ${defendantId}`);
-      res = await pgClient.query(`DELETE FROM ${process.env.DB_SCHEMA}.defendants WHERE id = ${defendantId}`);
-    }
-
-    // Now let's look at subscribers, but deleting only if they have no other subscriptions
-    arr = [...subscribers];
-    for (let i = 0; i < arr.length; i += 1) {
-      sql = `SELECT * FROM ${process.env.DB_SCHEMA}.subscriptions WHERE subscriber_id = ${arr[i]}`;
+      let arr = [...defendants];
+      // We can go ahead and just delete the subscriptions
+      sql = `
+          DELETE FROM ${process.env.DB_SCHEMA}.subscriptions WHERE defendant_id IN (${arr.join(',')})
+      `;
       res = await pgClient.query(sql);
-      if (res.rowCount === 0) {
-        res = await pgClient.query(`DELETE FROM ${process.env.DB_SCHEMA}.subscribers WHERE id = ${arr[i]}`);
-      } else {
-        console.log(`Not deleting subscriber ${arr[i]} because they still have ${res.rowCount} subscriptions`);
+
+      // We can also just delete all the defendants and their cases
+      for (let i = 0; i < arr.length; i += 1) {
+        const defendantId = arr[i];
+        res = await pgClient.query(`DELETE FROM ${process.env.DB_SCHEMA}.cases WHERE defendant_id = ${defendantId}`);
+        res = await pgClient.query(`DELETE FROM ${process.env.DB_SCHEMA}.defendants WHERE id = ${defendantId}`);
+      }
+
+      // Now let's look at subscribers, but deleting only if they have no other subscriptions
+      arr = [...subscribers];
+      for (let i = 0; i < arr.length; i += 1) {
+        sql = `SELECT * FROM ${process.env.DB_SCHEMA}.subscriptions WHERE subscriber_id = ${arr[i]}`;
+        res = await pgClient.query(sql);
+        if (res.rowCount === 0) {
+          res = await pgClient.query(`DELETE FROM ${process.env.DB_SCHEMA}.subscribers WHERE id = ${arr[i]}`);
+        } else {
+          console.log(`Not deleting subscriber ${arr[i]} because they still have ${res.rowCount} subscriptions`);
+        }
       }
     }
   } catch (err) {
