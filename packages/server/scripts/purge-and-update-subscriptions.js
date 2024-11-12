@@ -6,12 +6,12 @@ require('dotenv').config({ path: '../.env' });
 
 const { logger } = require('../util/logger');
 
-const { knex, getClient } = require('../util/db');
+const { getClient } = require('../util/db');
 const { unsubscribe } = require('../util/unsubscribe');
 
 function getPreviousDate(days) {
   const d = new Date();
-  d.setDate(d.getDate() - days);
+  d.setDate(d.getDate() - days + 1);
   const dString = `${d.getFullYear()}-${(d.getMonth() + 1)}-${d.getDate()}`;
   return dString;
 }
@@ -110,7 +110,7 @@ async function updateSubscriptions(pgClient) {
   const updateDate = getPreviousDate(daysBeforeUpdate);
   console.log('Update date is ', updateDate);
   res = await pgClient.query(
-    `SELECT id FROM ${schema}.defendants WHERE updated_at <= $1 AND flag <> 1`,
+    `SELECT id FROM ${schema}.defendants WHERE updated_at < $1 AND flag <> 1`,
     [updateDate],
   );
   console.log('Row count is ', res.rowCount);
