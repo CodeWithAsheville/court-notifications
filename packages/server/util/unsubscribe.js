@@ -1,35 +1,65 @@
 /* eslint-disable no-await-in-loop */
 const { logger } = require('./logger');
-const { knex } = require('./db');
+const { getClient } = require('./db');
 
-async function unsubscribe(phone) {
-  const subscribers = await knex('subscribers').select()
-    .where(
-      // eslint-disable-next-line comma-dangle
-      knex.raw('PGP_SYM_DECRYPT(encrypted_phone::bytea, ?) = ?', [process.env.DB_CRYPTO_SECRET, phone])
-    );
+async function unsubscribe(phone, dbClientIn) {
+  let pgClient = dbClientIn;
+  const schema = process.env.DB_SCHEMA;
+  if (dbClientIn === undefined) { // Get a client if not provided
+    console.log('No client provided - create one');
+    try {
+      pgClient = getClient();
+      await pgClient.connect();
+    } catch (err) {
+      logger.error('Error getting database client in unsubscribe', err);
+      throw err;
+    }
+  } else {
+    console.log('Not creating a client since one is provided');
+  }
 
-  // Delete subscriber and any associated subscriptions
   try {
-    for (let i = 0; i < subscribers.length; i += 1) {
-      const subscriber = subscribers[i];
-      await knex('subscribers').delete().where('id', subscriber.id);
-      const subscriptions = await knex('subscriptions').where('subscriber_id', subscriber.id);
-      await knex('subscriptions').delete().where('subscriber_id', subscriber.id);
-
-      // Now delete any orphaned cases and defendants
-      for (let j = 0; j < subscriptions.length; j += 1) {
-        const subscription = subscriptions[j];
-        await knex('defendants').where('id', subscription.defendant_id);
-        const count = await knex('subscriptions').where('defendant_id', subscription.defendant_id).count('*');
-        if (count[0].count === 0 || count[0].count === '0') {
-          await knex('cases').delete().where('defendant_id', subscription.defendant_id);
-          await knex('defendants').delete().where('id', subscription.defendant_id);
+    console.log('Get subscribers with this phone');
+    let res = await pgClient.query(
+      `SELECT id FROM ${schema}.subscribers WHERE PGP_SYM_DECRYPT(encrypted_phone::bytea, $1) = $2`,
+      [process.env.DB_CRYPTO_SECRET, phone],
+    );
+    console.log('Row count is ', res.rowCount);
+    if (res.rowCount > 0) { // Otherwise there's nothing to do
+      const subscriberId = res.rows[0].id;
+      console.log('Subscriber id is ', subscriberId);
+      res = await pgClient.query(`SELECT defendant_id FROM ${schema}.subscriptions WHERE subscriber_id = $1`, subscriberId);
+      console.log('Got a list of defendants subscribed to: ', res.rows);
+      if (res.rowCount > 0) {
+        const defendants = res.rows.map((obj) => obj.defendant_id);
+        console.log('Here is the list of defendants again: ', defendants);
+        for (let i = 0; i < defendants.length; i += 1) {
+          res = await pgClient.query(
+            `SELECT COUNT (*) FROM ${schema}.subscriptions WHERE defendant_id = $1`,
+            defendants[i],
+          );
+          console.log(`Res.rowCount is ${res.rowCount}. If = 1, then we delete defendant and cases`);
+          if (res.rowCount === 1) { // Delete if this is the only subscriber
+            console.log('Delete the cases');
+            await pgClient.query(`DELETE FROM ${schema}.cases WHERE defendant_id = $1`, defendants[i]);
+            console.log('Delete the defendant');
+            await pgClient.query(`DELETE FROM ${schema}.defendants WHERE id = $1`, defendants[i]);
+            console.log('Done deleting defendant stuff');
+          }
         }
       }
+      console.log('Now delet the subscriptions');
+      await pgClient.query(`DELETE FROM ${schema}.subscriptions WHERE subscriber_id = $1`, subscriberId);
+      console.log('Now delete the subscriber');
+      await pgClient.query(`DELETE FROM ${schema}.subscribers WHERE id = $1`, subscriberId);
+      console.log('Now all done.');
+    } else {
+      logger.info('Attempt to unsubscribe a number with no subscriptions');
     }
   } catch (err) {
     logger.error(`Error in util/unsubscribe: ${err}`);
+  } finally {
+    if (dbClientIn === undefined) await pgClient.end();
   }
 }
 

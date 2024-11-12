@@ -98,6 +98,7 @@ async function updateSubscriptions(pgClient) {
     .where('status', '=', 'failed');
 
   while (failedSubscribers.length > 0) {
+    console.log('Unsubscribe someone');
     const s = failedSubscribers.pop();
     await unsubscribe(s.phone);
   }
@@ -151,11 +152,17 @@ async function initTranslations() {
     logger.error('Error getting database client in purge-and-update-subscriptions', err);
     throw err;
   }
-  logger.debug('Call purgeSubscriptions');
-  await purgeSubscriptions(pgClient);
-  logger.debug('Done with purge');
-  // logger.debug('Call updateSubscriptions');
-  // await updateSubscriptions();
-  // logger.debug('Done with update setup');
+  try {
+    logger.debug('Call purgeSubscriptions');
+    await purgeSubscriptions(pgClient);
+    logger.debug('Done with purge');
+    logger.debug('Call updateSubscriptions');
+    await updateSubscriptions();
+    logger.debug('Done with update setup');
+  } catch (err) {
+    console.log('Error in purge-and-update-subscriptions.js: ', err)
+  } finally {
+    await pgClient.end();
+  }
   process.exit();
 })();
