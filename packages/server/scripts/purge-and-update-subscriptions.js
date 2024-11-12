@@ -18,6 +18,7 @@ function getPreviousDate(days) {
 
 async function getConfigurationIntValue(pgClient, name, defaultValue = 0) {
   let value = defaultValue;
+  console.log()
   try {
     const res = await pgClient.query(`SELECT value from ${process.env.DB_SCHEMA}.cn_configuration WHERE name = $1`, [name]);
     const results = res.rows;
@@ -159,7 +160,7 @@ async function initTranslations() {
     await purgeSubscriptions(pgClient);
     logger.debug('Done with purge');
     logger.debug('Call updateSubscriptions');
-    await updateSubscriptions();
+    await updateSubscriptionspgClient);
     logger.debug('Done with update setup');
   } catch (err) {
     console.log('Error in purge-and-update-subscriptions.js: ', err)
