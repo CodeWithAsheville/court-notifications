@@ -87,41 +87,38 @@ async function purgeSubscriptions(pgClient) {
 }
 
 async function updateSubscriptions(pgClient) {
+  const schema = process.env.DB_SCHEMA;
   const daysBeforeUpdate = await getConfigurationIntValue(pgClient, 'days_before_update', 7);
 
   if (daysBeforeUpdate < 0) return;
 
-  // Delete all the subscribers with status failed
-  const failedSubscribers = await knex('subscribers')
-    .select(
-      'subscribers.id',
-      // eslint-disable-next-line comma-dangle
-      knex.raw('PGP_SYM_DECRYPT("subscribers"."encrypted_phone"::bytea, ?) as phone', [process.env.DB_CRYPTO_SECRET])
-    )
-    .where('status', '=', 'failed');
+  // Delete all the subscribers with status failed. Note there's an edge case where we don't
+  // catch the failure notification on a subscriber and the status stays pending. No need for
+  // special logic. Another attempt will eventually be made which will properly set the status.
 
-  while (failedSubscribers.length > 0) {
-    console.log('Unsubscribe someone');
-    const s = failedSubscribers.pop();
-    await unsubscribe(s.phone);
+  let res = await pgClient.query(`
+    SELECT id, PGP_SYM_DECRYPT(encrypted_phone::bytea, $1) AS phone
+    FROM ${schema}.subscribers WHERE status = 'failed'
+    `, [process.env.DB_CRYPTO_SECRET]);
+
+  for (let i = 0; i < res.rows.length; i += 1) {
+    console.log('Unsubscribe id ', res.rows[i].id);
+    await unsubscribe(res.rows[i].phone);
   }
-
-  // There is an edge case where we don't catch the notification
-  // of failure on a subscriber and the status could stay pending.
-  // I don't think we need special logic for this - there will be an
-  // attempt to notify at some point and whether it succeeds or fails,
-  // the status will be properly set and the record set to either 'failed'
-  // or 'confirmed'.
 
   // Now we need to prepare to update information on remaining subscribers
   const updateDate = getPreviousDate(daysBeforeUpdate);
-  const defendantsToUpdate = await knex('defendants').select('id as defendant_id')
-    .where('updated_at', '<', updateDate)
-    .andWhere('flag', '<>', 1);
+  res = await pgClient.query(
+    `SELECT id FROM ${schema}.defendants WHERE updated_at < $1 AND flag <> 1`,
+    [updateDate],
+  );
+  if (res.rowCount > 0) {
+    const defendantsToUpdate = res.rows.map(({ id }) => id);
 
-  await knex('records_to_update').delete(); // Delete all
-  if (defendantsToUpdate && defendantsToUpdate.length > 0) {
-    await knex('records_to_update').insert(defendantsToUpdate);
+    await pgClient.query(`DELETE from ${schema}.records_to_update`); // Delete all
+    await pgClient.query(
+      `INSERT INTO ${schema}.records_to_update (defendant_id) VALUES (${defendantsToUpdate.join(',')})`,
+    );
   }
 }
 
