@@ -53,6 +53,7 @@ async function purgeSubscriptions(pgClient) {
     }
 
     // We can go ahead and just delete the subscriptions
+    console.log('Defendants: ', defendants);
     sql = `
         DELETE FROM ${process.env.DB_SCHEMA}.subscriptions WHERE defendant_id IN (${[...defendants].join(',')})
     `;
