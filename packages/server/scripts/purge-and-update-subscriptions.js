@@ -160,7 +160,7 @@ async function initTranslations() {
     await purgeSubscriptions(pgClient);
     logger.debug('Done with purge');
     logger.debug('Call updateSubscriptions');
-    await updateSubscriptionspgClient);
+    await updateSubscriptions(pgClient);
     logger.debug('Done with update setup');
   } catch (err) {
     console.log('Error in purge-and-update-subscriptions.js: ', err)
