@@ -28,7 +28,7 @@ async function unsubscribe(phone, dbClientIn) {
     if (res.rowCount > 0) { // Otherwise there's nothing to do
       const subscriberId = res.rows[0].id;
       console.log('Subscriber id is ', subscriberId);
-      res = await pgClient.query(`SELECT defendant_id FROM ${schema}.subscriptions WHERE subscriber_id = $1`, subscriberId);
+      res = await pgClient.query(`SELECT defendant_id FROM ${schema}.subscriptions WHERE subscriber_id = $1`, [subscriberId]);
       console.log('Got a list of defendants subscribed to: ', res.rows);
       if (res.rowCount > 0) {
         const defendants = res.rows.map((obj) => obj.defendant_id);
@@ -36,22 +36,22 @@ async function unsubscribe(phone, dbClientIn) {
         for (let i = 0; i < defendants.length; i += 1) {
           res = await pgClient.query(
             `SELECT COUNT (*) FROM ${schema}.subscriptions WHERE defendant_id = $1`,
-            defendants[i],
+            [defendants[i]],
           );
           console.log(`Res.rowCount is ${res.rowCount}. If = 1, then we delete defendant and cases`);
           if (res.rowCount === 1) { // Delete if this is the only subscriber
             console.log('Delete the cases');
-            await pgClient.query(`DELETE FROM ${schema}.cases WHERE defendant_id = $1`, defendants[i]);
+            await pgClient.query(`DELETE FROM ${schema}.cases WHERE defendant_id = $1`, [defendants[i]]);
             console.log('Delete the defendant');
-            await pgClient.query(`DELETE FROM ${schema}.defendants WHERE id = $1`, defendants[i]);
+            await pgClient.query(`DELETE FROM ${schema}.defendants WHERE id = $1`, [defendants[i]]);
             console.log('Done deleting defendant stuff');
           }
         }
       }
-      console.log('Now delet the subscriptions');
-      await pgClient.query(`DELETE FROM ${schema}.subscriptions WHERE subscriber_id = $1`, subscriberId);
+      console.log('Now delete the subscriptions');
+      await pgClient.query(`DELETE FROM ${schema}.subscriptions WHERE subscriber_id = $1`, [subscriberId]);
       console.log('Now delete the subscriber');
-      await pgClient.query(`DELETE FROM ${schema}.subscribers WHERE id = $1`, subscriberId);
+      await pgClient.query(`DELETE FROM ${schema}.subscribers WHERE id = $1`, [subscriberId]);
       console.log('Now all done.');
     } else {
       logger.info('Attempt to unsubscribe a number with no subscriptions');
