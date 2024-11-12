@@ -11,14 +11,13 @@ const { unsubscribe } = require('../util/unsubscribe');
 
 function getPreviousDate(days) {
   const d = new Date();
-  d.setDate(d.getDate() - days + 1);
+  d.setDate(d.getDate() - days);
   const dString = `${d.getFullYear()}-${(d.getMonth() + 1)}-${d.getDate()}`;
   return dString;
 }
 
 async function getConfigurationIntValue(pgClient, name, defaultValue = 0) {
   let value = defaultValue;
-  console.log()
   try {
     const res = await pgClient.query(`SELECT value from ${process.env.DB_SCHEMA}.cn_configuration WHERE name = $1`, [name]);
     const results = res.rows;
