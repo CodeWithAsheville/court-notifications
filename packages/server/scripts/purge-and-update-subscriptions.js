@@ -112,7 +112,7 @@ async function updateSubscriptions(pgClient) {
     `SELECT id FROM ${schema}.defendants WHERE updated_at < $1 AND flag <> 1`,
     [updateDate],
   );
-  console.log('Row count is ', res.rowCount);
+
   if (res.rowCount > 0) {
     const defendantsToUpdate = res.rows.map(({ id }) => id);
 
