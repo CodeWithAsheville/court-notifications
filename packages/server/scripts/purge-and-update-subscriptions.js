@@ -11,7 +11,7 @@ const { unsubscribe } = require('../util/unsubscribe');
 
 function getPreviousDate(days) {
   const d = new Date();
-  d.setDate(d.getDate() - days);
+  d.setDate(d.getDate() - days + 1);
   const dString = `${d.getFullYear()}-${(d.getMonth() + 1)}-${d.getDate()}`;
   return dString;
 }
