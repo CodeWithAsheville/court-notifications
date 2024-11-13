@@ -1,5 +1,5 @@
 require('dotenv').config({ path: '../../.env' });
-const { knex, getClient } = require('../util/db');
+const { getClient } = require('../util/db');
 const { searchCourtRecords } = require('../search-court-records');
 const { addCases } = require('../util/subscribe');
 const { logger } = require('../util/logger');
@@ -52,9 +52,6 @@ async function updateDefendants() {
       res = await pgClient.query(sql);
       const defendants = res.rows;
 
-      // await knex('records_to_update').delete().where('defendant_id', 'in', defendantIds);
-      // const defendants = await knex('defendants').select('*').where('id', 'in', defendantIds);
-
       const dt = new Date();
 
       for (let i = 0; i < defendants.length; i += 1) {
@@ -72,17 +69,22 @@ async function updateDefendants() {
         let updateObject;
         let nCases = 0;
         if (match.length > 0) nCases = match[0].cases.length;
-        const updateLog = {
-          id: d.id,
-          long_id: d.long_id,
-          last_valid_cases_date: d.last_valid_cases_date,
-          updates: d.updates,
-          original_create_date: d.created_at,
-          new_case_count: nCases,
-        };
+        // const updateLog = {
+        //   id: d.id,
+        //   long_id: d.long_id,
+        //   last_valid_cases_date: d.last_valid_cases_date,
+        //   updates: d.updates,
+        //   original_create_date: d.created_at,
+        //   new_case_count: nCases,
+        // };
         // Need to be transactionalizing all this, but for now we'll log the action before we do it.
         // eslint-disable-next-line no-await-in-loop
-        await knex('log_updates').insert(updateLog);
+        await pgClient.query(
+          `INSERT INTO ${schema}.log_updates
+          (id, long_id, last_valid_cases_date, updates, original_create_date, new_case_count)
+          VALUES ($1, $2, $3, $4, $5, $6)`,
+          [d.id, d.long_id, d.last_valid_cases_date, d.updates, d.created_at, nCases],
+        );
 
         if (match.length > 0) {
           const { cases } = match[0];
