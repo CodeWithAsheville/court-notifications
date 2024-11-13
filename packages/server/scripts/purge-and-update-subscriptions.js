@@ -114,11 +114,11 @@ async function updateSubscriptions(pgClient) {
   );
 
   if (res.rowCount > 0) {
-    const defendantsToUpdate = res.rows.map(({ id }) => id);
+    const defendantsToUpdate = res.rows.map(({ id }) => `(${id})`);
 
     await pgClient.query(`DELETE from ${schema}.records_to_update`); // Delete all
     await pgClient.query(
-      `INSERT INTO ${schema}.records_to_update (defendant_id) VALUES (${defendantsToUpdate.join(',')})`,
+      `INSERT INTO ${schema}.records_to_update (defendant_id) VALUES ${defendantsToUpdate.join(',')}`,
     );
   }
 }
