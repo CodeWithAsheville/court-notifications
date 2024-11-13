@@ -98,7 +98,7 @@ async function updateDefendants() {
           };
         }
 
-        sql = `UPDATE ${schema}.defendants SET updates = $1, last_value_cases_date = $2 WHERE id = ${d.id}`;
+        sql = `UPDATE ${schema}.defendants SET updates = $1, last_valid_cases_date = $2 WHERE id = ${d.id}`;
         console.log('Now do the update: ', sql);
         // eslint-disable-next-line no-await-in-loop
         await pgClient.query(sql, [updateObject.updates, updateObject.last_valid_cases_date]);
