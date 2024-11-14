@@ -184,6 +184,7 @@ async function subscribe(phone, defendantLongId, details, t, language) {
   let defendant;
   let subscriberId;
   let saveError = null;
+  // This really needs to be transactionalized.
   try {
     defendant = initializeDefendant(defendantLongId, details);
     const defendantId = await addDefendant(pgClient, defendant);
