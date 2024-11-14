@@ -135,7 +135,7 @@ async function addSubscriber(pgClient, nextDate, phone, language) {
       res = await pgClient.query(
         `
         INSERT INTO ${schema}.subscribers
-          (encrypted_phone, language next_notify, status)
+          (encrypted_phone, language, next_notify, status)
           VALUES (PGP_SYM_ENCRYPT($1::text, $2), $3, $4, 'pending')
           RETURNING id`,
         [
