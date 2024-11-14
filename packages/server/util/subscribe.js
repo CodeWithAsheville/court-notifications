@@ -84,8 +84,8 @@ async function addCases(pgClient, defendantId, casesIn) {
     // eslint-disable-next-line no-await-in-loop
     await pgClient.query(
       `INSERT INTO ${schema}.cases
-        VALUES (defendant_id, case_number, court_date, court, room, session)
-        ($1, $2, $3, $4, $5, $6)`,
+        (defendant_id, case_number, court_date, court, room, session)
+        VALUES ($1, $2, $3, $4, $5, $6)`,
       [
         defendantId,
         itm.caseNumber,
@@ -162,7 +162,7 @@ async function addSubscription(pgClient, subscriberId, defendantId) {
   );
   if (res.rowCount === 0) {
     await pgClient.query(
-      `INSERT INTO ${schema}.subscriptions VALUES (subscriber_id, defendant_id) ($1, $2)`,
+      `INSERT INTO ${schema}.subscriptions (subscriber_id, defendant_id) VALUES ($1, $2)`,
       [subscriberId, defendantId],
     );
   }
