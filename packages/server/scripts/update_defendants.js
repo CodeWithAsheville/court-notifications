@@ -100,7 +100,7 @@ async function updateDefendants() {
       }
     }
   } catch (err) {
-    console.log('Error in update_defendants.js: ', err)
+    console.log('Error in update_defendants.js: ', err);
   } finally {
     await pgClient.end();
   }
