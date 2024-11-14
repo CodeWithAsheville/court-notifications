@@ -82,7 +82,7 @@ async function updateDefendants() {
         if (match.length > 0) {
           const { cases } = match[0];
           // eslint-disable-next-line no-await-in-loop
-          await addCases(d.id, cases);
+          await addCases(pgClient, d.id, cases);
           updateObject = {
             updates: d.updates + 1,
             last_valid_cases_date: `${dt.getFullYear()}-${(dt.getMonth() + 1)}-${dt.getDate()}`,

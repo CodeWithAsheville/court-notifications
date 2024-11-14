@@ -1,4 +1,4 @@
-const { knex } = require('./db');
+const { getClient } = require('./db');
 const { logger } = require('./logger');
 
 function initializeDefendant(longDefendantId, details) {
@@ -32,71 +32,87 @@ function initializeDefendant(longDefendantId, details) {
   return defendant;
 }
 
-async function addDefendant(defendant) {
-  const defendantId = await knex('defendants')
-    .select()
-    .where('long_id', defendant.long_id)
-    .then(async (rows) => {
-      if (rows.length === 0) {
-        // no matching records found
-        const retVal = await knex('defendants')
-          .insert(defendant)
-          .returning('id');
-        if (retVal && retVal.length > 0) {
-          return retVal[0].id;
-        }
-        throw new Error(`Error inserting defendant ${JSON.stringify(retVal)}`);
-      } else {
-        return rows[0].id;
-      }
-    })
-    .catch((ex) => {
-      // you can find errors here.
-      throw Error(`Error adding or updating defendant ${ex}`);
-    });
+async function addDefendant(pgClient, defendant) {
+  const schema = process.env.DB_SCHEMA;
+  console.log('In addDefendant')
+  let res = await pgClient.query(
+    `SELECT id FROM ${schema}.defendants WHERE long_id = $1`,
+    [defendant.long_id],
+  );
+  if (res.rowCount !== 0) {
+    console.log('Defendant already exists');
+    return res.rows[0].id;
+  }
 
-  return defendantId;
+  // Need to insert
+  res = await pgClient.query(
+    `INSERT INTO ${schema}.defendants (
+      long_id, last_name, first_name, middle_name, suffix, birth_date, sex, race, last_valid_cases_date
+    ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id`,
+    [
+      defendant.long_id,
+      defendant.last_name,
+      defendant.first_name,
+      defendant.middle_name,
+      defendant.suffix,
+      defendant.birth_date,
+      defendant.sex,
+      defendant.race,
+      defendant.last_valid_cases_date,
+    ],
+  );
+
+  if (res.rowCount > 0) {
+    console.log('Successfully added defendant: ', res.rows[0]);
+    return res.rows[0].id;
+  }
+  throw new Error('Error inserting defendant - no rows returned');
 }
 
-async function addCases(defendantId, casesIn) {
+async function addCases(pgClient, defendantId, casesIn) {
+  const schema = process.env.DB_SCHEMA;
   let nextDate = null;
-  const cases = casesIn.map((itm) => {
+
+  // We could compare existing cases in DB to new ones, but ... why?
+  await pgClient.query(`DELETE FROM ${schema}.cases WHERE defendant_id = $1`, [defendantId]);
+
+  // Now insert the new cases
+  for (let i = 0; i < casesIn.length; i += 1) {
+    const itm = casesIn[i];
     const cdate = new Date(itm.courtDate);
     if (nextDate === null || cdate < nextDate) nextDate = cdate;
-    return {
-      defendant_id: defendantId,
-      case_number: itm.caseNumber,
-      court_date: itm.courtDate,
-      court: itm.court,
-      room: itm.courtRoom,
-      session: itm.session,
-    };
-  });
-  try {
-    // We could compare existing cases in DB to new ones, but ... why?
-    await knex('cases')
-      .where('defendant_id', cases[0].defendant_id)
-      .del();
-
-    await knex('cases')
-      .insert(cases)
-      .returning('id');
-  } catch (e) {
-    throw Error('Error adding or updating cases for subscription');
+    // eslint-disable-next-line no-await-in-loop
+    await pgClient.query(
+      `INSERT INTO ${schema}.cases
+        VALUES (defendant_id, case_number, court_date, court, room, session)
+        ($1, $2, $3, $4, $5, $6)`,
+      [
+        defendantId,
+        itm.caseNumber,
+        itm.courtDate,
+        itm.court,
+        itm.courtRoom,
+        itm.session,
+      ],
+    );
   }
   return nextDate;
 }
 
-async function addSubscriber(nextDate, phone, language) {
+async function addSubscriber(pgClient, nextDate, phone, language) {
+  const schema = process.env.DB_SCHEMA;
   const nextNotify = `${nextDate.getMonth() + 1}/${nextDate.getDate()}/${nextDate.getFullYear()}`;
   let subscriberId = null;
   let subscribers = null;
+  let res;
+
   try {
-    subscribers = await knex('subscribers').select()
-      .where(
-        // eslint-disable-next-line comma-dangle
-        knex.raw('PGP_SYM_DECRYPT(encrypted_phone::bytea, ?) = ?', [process.env.DB_CRYPTO_SECRET, phone])
-      );
+    res = await pgClient.query(
+      `SELECT * FROM ${schema}.subscribers WHERE PGP_SYM_DECRYPT(encrypted_phone::bytea, $1) = $2`,
+      [process.env.DB_CRYPTO_SECRET, phone],
+    );
+
+    subscribers = res.rows;
   } catch (e) {
     logger.error(`util/subscribe.addSubscriber lookup: ${e}`);
     throw Error('Error in subscriber lookup');
@@ -106,23 +122,30 @@ async function addSubscriber(nextDate, phone, language) {
     const currentNext = new Date(subscribers[0].next_notify);
     if (nextDate !== currentNext) { // Need to update the date
       try {
-        knex('subscribers').where('id', subscriberId).update({
-          next_notify: nextNotify,
-        });
+        await pgClient.query(
+          `UPDATE ${schema}.subscribers SET next_notify = $1 WHERE id = $2`,
+          [nextNotify, subscriberId],
+        );
       } catch (e) {
         throw Error('Error updating next court date');
       }
     }
   } else { // New subscriber
     try {
-      const retVal = await knex('subscribers').insert({
-        encrypted_phone: knex.raw('PGP_SYM_ENCRYPT(?::text, ?)', [phone, process.env.DB_CRYPTO_SECRET]),
-        language,
-        next_notify: nextNotify,
-        status: 'pending',
-      })
-        .returning('id');
-      subscriberId = retVal[0].id;
+      res = await pgClient.query(
+        `
+        INSERT INTO ${schema}.subscribers
+          (encrypted_phone, language next_notify, status)
+          VALUES (PGP_SYM_ENCRYPT($1::text, $2), $3, $4, 'pending')
+          RETURNING id`,
+        [
+          phone,
+          process.env.DB_CRYPTO_SECRET,
+          language,
+          nextNotify,
+        ],
+      );
+      subscriberId = res.rows[0].id;
     } catch (e) {
       logger.error(`util/subscribe.addSubscriber add: ${e}`);
       throw Error('Error adding subscriber');
@@ -131,33 +154,53 @@ async function addSubscriber(nextDate, phone, language) {
   return subscriberId;
 }
 
-async function addSubscription(subscriberId, defendantId) {
-  try {
-    const retVal = await knex('subscriptions').select().where({
-      subscriber_id: subscriberId,
-      defendant_id: defendantId,
-    });
-    if (retVal.length === 0) {
-      await knex('subscriptions').insert({
-        subscriber_id: subscriberId,
-        defendant_id: defendantId,
-      });
-    }
-  } catch (e) {
-    throw Error('Error adding subscription');
+async function addSubscription(pgClient, subscriberId, defendantId) {
+  const schema = process.env.DB_SCHEMA;
+  const res = await pgClient.query(
+    `SELECT * FROM ${schema}.subscriptions WHERE subscriber_id = $1 AND defendant_id = $2`,
+    [subscriberId, defendantId],
+  );
+  if (res.rowCount === 0) {
+    await pgClient.query(
+      `INSERT INTO ${schema}.subscriptions VALUES (subscriber_id, defendant_id) ($1, $2)`,
+      [subscriberId, defendantId],
+    );
   }
 }
 
 async function subscribe(phone, defendantLongId, details, t, language) {
   const { cases } = details;
   if (cases == null || cases.length === 0) throw t('no-cases');
-  const defendant = initializeDefendant(defendantLongId, details);
-  const defendantId = await addDefendant(defendant);
-  const nextDate = await addCases(defendantId, cases);
-  const subscriberId = await addSubscriber(nextDate, phone, language);
-  await addSubscription(subscriberId, defendantId);
+
+  let pgClient;
+  try {
+    pgClient = getClient();
+    await pgClient.connect();
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    logger.error('Error getting database client in purge-and-update-subscriptions', err);
+    throw err;
+  }
+  let defendant;
+  let subscriberId;
+  let saveError = null;
+  try {
+    defendant = initializeDefendant(defendantLongId, details);
+    const defendantId = await addDefendant(pgClient, defendant);
+    const nextDate = await addCases(pgClient, defendantId, cases);
+    subscriberId = await addSubscriber(pgClient, nextDate, phone, language);
+    await addSubscription(pgClient, subscriberId, defendantId);
+  } catch (err) {
+    console.log('Error in subscribe.js: ', err);
+    saveError = `Error in subscribe.js: ${err}`;
+  } finally {
+    await pgClient.end();
+  }
+  if (saveError) throw saveError;
+
   return { defendant, subscriberId, cases };
 }
+
 
 module.exports = {
   subscribe,

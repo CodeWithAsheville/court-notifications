@@ -1,7 +1,3 @@
-// const knexConfig = require('./cd_knexfile');
-// // eslint-disable-next-line import/order
-// const knex = require('knex')(knexConfig);
-
 const { getClient } = require('./util/db');
 const { logger } = require('./util/logger');
 
