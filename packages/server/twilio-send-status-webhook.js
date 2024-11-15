@@ -1,5 +1,5 @@
 const twilio = require('twilio');
-const { knex } = require('./util/db');
+const { getClient } = require('./util/db');
 const { logger } = require('./util/logger');
 
 const MAX_FAILED_DELIVERIES = 2;
@@ -16,6 +16,7 @@ async function twilioSendStatusWebhook(req, res) {
     url,
     params,
   );
+  console.log('In twilioSendStatusWebhook: ', params);
   if (!isValid) {
     logger.error('twilioSendStatusWebhook: invalid incoming request - not from Twilio');
     return res.status(401).send('Unauthorized');
@@ -26,27 +27,34 @@ async function twilioSendStatusWebhook(req, res) {
     phone = phone.substring(2);
   }
   logger.debug(`sendStatusWebhook: incoming with status ${status}`);
+  let pgClient;
   try {
+    pgClient = getClient();
+    await pgClient.connect();
+  } catch (err) {
+    logger.error(`Error getting database connection in twilioSendStatusWebhook: ${err}`);
+  }
+
+  try {
+    const sql = `SELECT * FROM ${process.env.DB_SCHEMA}.subscribers
+                  WHERE PGP_SYM_DECRYPT("subscribers"."encrypted_phone"::bytea, $1) as phone = $2`;
+    let sres;
+
     if (status === 'delivered') {
-      const subscribers = await knex('subscribers')
-        .where(
-          // eslint-disable-next-line comma-dangle
-          knex.raw('PGP_SYM_DECRYPT(encrypted_phone::bytea, ?) = ?', [process.env.DB_CRYPTO_SECRET, phone])
-        );
+      sres = await pgClient.query(sql, [process.env.DB_CRYPTO_SECRET, phone]);
+      const subscribers = sres.rows;
+
       if (subscribers && subscribers.length > 0) {
-        await knex('subscribers')
-          .where(
-            // eslint-disable-next-line comma-dangle
-            knex.raw('PGP_SYM_DECRYPT(encrypted_phone::bytea, ?) = ?', [process.env.DB_CRYPTO_SECRET, phone])
-          )
-          .update({ status: 'confirmed', failed: 0 }); // Reset status & failed always
+        await pgClient.query(
+          `UPDDATE ${process.env.DB_SCHEMA}.subscribers SET status = 'confirmed', failed = 0
+            WHERE PGP_SYM_DECRYPT("subscribers"."encrypted_phone"::bytea, $1) as phone = $2`,
+          [process.env.DB_CRYPTO_SECRET, phone],
+        );
       }
     } else if (failedStatus.includes(status)) {
-      const subscribers = await knex('subscribers')
-        .where(
-          // eslint-disable-next-line comma-dangle
-          knex.raw('PGP_SYM_DECRYPT(encrypted_phone::bytea, ?) = ?', [process.env.DB_CRYPTO_SECRET, phone])
-        );
+      sres = await pgClient.query(sql, [process.env.DB_CRYPTO_SECRET, phone]);
+      const subscribers = sres.rows;
+
       if (subscribers && subscribers.length > 0) {
         let newStatus = subscribers[0].status;
         if (subscribers[0].status === 'pending') {
@@ -56,16 +64,12 @@ async function twilioSendStatusWebhook(req, res) {
           if (subscribers[0].failed >= MAX_FAILED_DELIVERIES) newStatus = 'failed';
           logger.error(`twilioSendStatusWebhook: Subscriber exceeded max delivery failures - marking failed: ${params.ErrorCode}`);
         }
-        await knex('subscribers')
-          .where(
-            // eslint-disable-next-line comma-dangle
-            knex.raw('PGP_SYM_DECRYPT(encrypted_phone::bytea, ?) = ?', [process.env.DB_CRYPTO_SECRET, phone])
-          )
-          .update({
-            status: newStatus,
-            failed: subscribers[0].failed + 1,
-            errorcode: params.ErrorCode,
-          });
+        await pgClient.query(
+          `UPDDATE ${process.env.DB_SCHEMA}.subscribers SET status = $1, failed = $2, errorCode = $3
+            WHERE PGP_SYM_DECRYPT("subscribers"."encrypted_phone"::bytea, $4) as phone = $5`,
+          [newStatus, subscribers[0].failed + 1, params.ErrorCode,
+            process.env.DB_CRYPTO_SECRET, phone],
+        );
       }
     } else {
       // Nothing - just an interim status
