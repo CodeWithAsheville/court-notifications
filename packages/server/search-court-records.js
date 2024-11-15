@@ -50,8 +50,6 @@ async function doSearch(body) {
     }
 
     const res = await pgClient.query(`SELECT * FROM ${schema}.criminal_dates WHERE LOWER(defendant_name) LIKE $1`, [queryWhere.toLowerCase()]);
-    // courtDateList = await knex('criminal_dates').select('*')
-    //   .whereRaw('LOWER(defendant_name) LIKE ?', queryWhere.toLowerCase());
     const courtDateList = res.rows;
 
     const defendants = {};

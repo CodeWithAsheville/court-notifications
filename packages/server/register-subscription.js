@@ -1,5 +1,5 @@
 const Mustache = require('mustache');
-const { knex } = require('./util/db');
+const { getClient } = require('./util/db');
 const { unsubscribe } = require('./util/unsubscribe');
 const { subscribe } = require('./util/subscribe');
 const { computeUrlName } = require('./util/computeUrlName');
@@ -9,21 +9,35 @@ const { twilioClient } = require('./util/twilio-client');
 const fromTwilioPhone = process.env.TWILIO_PHONE_NUMBER;
 
 async function logSubscription(defendant, cases, language) {
-  const caseInserts = cases.map((c) => {
-    const oneCase = {
-      first_name: defendant.first_name,
-      middle_name: defendant.middle_name ? defendant.middle_name : '',
-      last_name: defendant.last_name,
-      suffix: defendant.suffix ? defendant.suffix : '',
-      birth_date: defendant.birth_date,
-      case_number: c.caseNumber,
-      language,
-      court: c.court,
-      room: c.courtRoom,
-    };
-    return oneCase;
-  });
-  await knex('log_subscriptions').insert(caseInserts);
+  let pgClient;
+  let saveError = null;
+  try {
+    pgClient = getClient();
+    await pgClient.connect();
+  } catch (err) {
+    logger.error('Error getting database client in register-subscription', err);
+    throw err;
+  }
+  try {
+    for (let i = 0; i < cases.length; i += 1) {
+      const c = cases[i];
+      // eslint-disable-next-line no-await-in-loop
+      await pgClient.query(
+        `INSERT INTO ${process.env.DB_SCHEMA}.log_subscriptions
+          (first_name, middle_name, last_name, suffix, birth_date, case_number, language, court, room)
+          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+        [defendant.first_name, defendant.middle_name, defendant.last_name, defendant.suffix ? defendant.suffix : '',
+          defendant.birth_date, c.caseNumber, language, c.court, c.courtRoom],
+      );
+    }
+  } catch (err) {
+    saveError = err;
+  } finally {
+    await pgClient.end();
+  }
+  if (saveError) {
+    logger.error(`Error in register-subscription: ${saveError}`);
+  }
 }
 
 async function registerSubscription(req, callback) {
