@@ -28,7 +28,7 @@ async function checkSubscription(req, callback) {
     callback({ code: 200, status, errormessage });
   }
   try {
-    const res = await pgClient.query(`SELECT ${process.env.DB_SCHEMA}.subscribers WHERE id = $1`, [index]);
+    const res = await pgClient.query(`SELECT * FROM ${process.env.DB_SCHEMA}.subscribers WHERE id = $1`, [index]);
     const subscribers = res.rows;
     if (subscribers.length <= 0) {
       status = 'failed';
