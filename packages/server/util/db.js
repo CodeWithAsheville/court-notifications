@@ -24,15 +24,6 @@ function getClient(config) {
   return new Client(config);
 }
 
-/*
- * Delete this & next 3 lines plus the knex export
- * when knex is no longer needed.
- */
-const knexConfig = require('../knexfile');
-// eslint-disable-next-line import/order
-const knex = require('knex')(knexConfig);
-
 module.exports = {
   getClient,
-  knex,
 };

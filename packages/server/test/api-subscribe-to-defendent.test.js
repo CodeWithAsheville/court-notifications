@@ -3,7 +3,7 @@ const supertest = require('supertest');
 const app = require('../server');
 
 const request = supertest(app);
-const { knex } = require('../util/db');
+const { getClient } = require('../util/db');
 
 const query = {
   selectedDefendant: 'JACKSON,BRIAN,KEITH.11/04',
@@ -61,8 +61,10 @@ it('Successfully subscribes to a defendant', async () => {
   expect(res.body.code).toEqual(200);
   expect(res.body.message).toEqual('Successfully subscribed');
   expect(res.body.index).toBeGreaterThan(0);
-  const subscribers = await knex('subscribers').select().where({
-    id: res.body.index,
-  });
+
+  const pgClient = getClient();
+  await pgClient.connect();
+  const pres = await pgClient.query(`SELECT * FROM ${process.env.DB_SCHEMA}.subscribers WHERE id = $1`, [res.body.index]);
+  const subscribers = pres.rows;
   expect(subscribers.length).toEqual(1);
 });
