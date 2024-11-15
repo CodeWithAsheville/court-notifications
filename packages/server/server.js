@@ -71,7 +71,6 @@ app.get('/api/version', async (req, res) => {
 });
 
 app.get('/api/configuration', async (req, res) => {
-  console.log('I am in /api/configuration');
   await getConfiguration(req.query, (result) => res.json(result));
 });
 

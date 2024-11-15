@@ -10,7 +10,6 @@ async function getConfiguration (query, callback) {
   };
   let pgClient;
   if (query.name) {
-    console.log('Query name is ', query.name);
     try {
       pgClient = getClient();
       await pgClient.connect();
