@@ -1,5 +1,5 @@
 const url = require('url');
-const { knex } = require('./util/db');
+const { getClient } = require('./util/db');
 const { logger } = require('./util/logger');
 
 const twilioErrorCodes = {
@@ -13,13 +13,23 @@ const twilioErrorCodes = {
 async function checkSubscription(req, callback) {
   let status = 'pending';
   let errormessage = '';
+  const queryObject = url.parse(req.url, true).query;
+  logger.debug(`Checking subscription status for index ${JSON.stringify(queryObject)}`);
+  const { index } = queryObject;
+  let pgClient;
+
   try {
-    const queryObject = url.parse(req.url, true).query;
-    logger.debug(`Checking subscription status for index ${JSON.stringify(queryObject)}`);
-    const { index } = queryObject;
-    const subscribers = await knex('subscribers').select().where({
-      id: index,
-    });
+    pgClient = getClient();
+    await pgClient.connect();
+  } catch (err) {
+    logger.error(`Error getting database connection in check-subscription.js: ${err}`);
+    status = 'failed';
+    errormessage = 'Unknown error attempting to connect to database';
+    callback({ code: 200, status, errormessage });
+  }
+  try {
+    const res = await pgClient.query(`SELECT ${process.env.DB_SCHEMA}.subscribers WHERE id = $1`, [index]);
+    const subscribers = res.rows;
     if (subscribers.length <= 0) {
       status = 'failed';
       errormessage = 'Unknown error';
@@ -32,9 +42,12 @@ async function checkSubscription(req, callback) {
         }
       }
     }
-  } catch (e) {
-    logger.error(`Error in check-subscription.js: ${e}`);
+  } catch (err) {
+    logger.error(`Error in check-subscription.js: ${err}`);
+  } finally {
+    await pgClient.end();
   }
+
   callback({ code: 200, status, errormessage });
 }
 module.exports = {
