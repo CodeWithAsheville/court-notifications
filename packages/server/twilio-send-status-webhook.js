@@ -46,7 +46,7 @@ async function twilioSendStatusWebhook(req, res) {
 
       if (subscribers && subscribers.length > 0) {
         await pgClient.query(
-          `UPDDATE ${process.env.DB_SCHEMA}.subscribers SET status = 'confirmed', failed = 0
+          `UPDATE ${process.env.DB_SCHEMA}.subscribers SET status = 'confirmed', failed = 0
             WHERE PGP_SYM_DECRYPT("subscribers"."encrypted_phone"::bytea, $1) = $2`,
           [process.env.DB_CRYPTO_SECRET, phone],
         );
@@ -65,7 +65,7 @@ async function twilioSendStatusWebhook(req, res) {
           logger.error(`twilioSendStatusWebhook: Subscriber exceeded max delivery failures - marking failed: ${params.ErrorCode}`);
         }
         await pgClient.query(
-          `UPDDATE ${process.env.DB_SCHEMA}.subscribers SET status = $1, failed = $2, errorCode = $3
+          `UPDATE ${process.env.DB_SCHEMA}.subscribers SET status = $1, failed = $2, errorCode = $3
             WHERE PGP_SYM_DECRYPT("subscribers"."encrypted_phone"::bytea, $4) = $5`,
           [newStatus, subscribers[0].failed + 1, params.ErrorCode,
             process.env.DB_CRYPTO_SECRET, phone],
