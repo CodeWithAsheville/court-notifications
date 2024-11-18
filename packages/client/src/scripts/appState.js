@@ -165,7 +165,7 @@ export async function subscribeToDefendant(state) {
   const SLEEP_INTERVAL = 500; // How long to sleep between attempts
   const MAX_ATTEMPTS = 6;
 
-  let signupStatus = { message: 'Signup timed out. Please try again later.' };
+  let signupStatus = { message: 'Signup successful, but receipt confirmation timed out. If you did not get a signup text, please try again later.' };
   for (let i = 0; i < MAX_ATTEMPTS; i++) {
     await sleep(SLEEP_INTERVAL);
     response = await fetch(checkUrl, { method: "GET", headers: { "Content-Type": "application/json" }});
