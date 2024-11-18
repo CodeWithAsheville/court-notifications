@@ -176,7 +176,7 @@ export async function subscribeToDefendant(state) {
 
     // Status will be confirmed, pending or failed
     if (result.status === 'confirmed') {
-      signupStatus = { message: 'Signup successful!' };
+      //signupStatus = { message: 'Signup successful!' };
       break;
     }
     if (result.status === 'failed') {
