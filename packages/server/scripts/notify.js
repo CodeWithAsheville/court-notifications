@@ -158,58 +158,70 @@ async function sendNotifications() {
     * a specific number of days before the court date
     */
     for (let i = 0; i < notificationSets.length; i += 1) {
-      logger.debug(`Do notifications for ${notificationSets[i].days_before} days`);
-      const notificationDays = notificationSets[i].days_before;
-      const msgKey = notificationSets[i].key;
-      // eslint-disable-next-line no-await-in-loop
-      const defendants = await loadDefendants(notificationDays, pgClient);
-
-      for (let j = 0; j < defendants.length; j += 1) {
-        const defendant = defendants[j];
+      try {
+        logger.debug(`Do notifications for ${notificationSets[i].days_before} days`);
+        const notificationDays = notificationSets[i].days_before;
+        const msgKey = notificationSets[i].key;
         // eslint-disable-next-line no-await-in-loop
-        const subscribers = await loadSubscribers(defendant.id, pgClient);
+        const defendants = await loadDefendants(notificationDays, pgClient);
 
-        // And send out the notifications
-        for (let k = 0; k < subscribers.length; k += 1) {
-          const s = subscribers[k];
-          // Log the notification
-          // eslint-disable-next-line no-await-in-loop
-          await logNotification(defendant, notificationSets[i], s.language, pgClient);
-          // eslint-disable-next-line no-await-in-loop
-          await i18next.changeLanguage(s.language);
-          let message = `${Mustache.render(i18next.t(msgKey), defendant)}\n\n`;
-          if (defendant.adminCount > 0) {
-            message += Mustache.render(i18next.t('notifications.admin-court'), defendant);
-          }
-          if (defendant.districtCount > 0) {
-            message += Mustache.render(i18next.t('notifications.district-court'), defendant);
-            let sep = '';
-            const keys = Object.keys(defendant.districtRooms);
-            keys.forEach((room) => {
-              message += sep + room;
-              sep = ', ';
-            });
-            message += '\n';
-          }
+        for (let j = 0; j < defendants.length; j += 1) {
+          const defendant = defendants[j];
+          try {
+            // eslint-disable-next-line no-await-in-loop
+            const subscribers = await loadSubscribers(defendant.id, pgClient);
 
-          if (defendant.superiorCount > 0) {
-            message += Mustache.render(i18next.t('notifications.superior-court'), defendant);
+            // And send out the notifications
+            for (let k = 0; k < subscribers.length; k += 1) {
+              const s = subscribers[k];
+              try {
+                // Log the notification
+                // eslint-disable-next-line no-await-in-loop
+                await logNotification(defendant, notificationSets[i], s.language, pgClient);
+                // eslint-disable-next-line no-await-in-loop
+                await i18next.changeLanguage(s.language);
+                let message = `${Mustache.render(i18next.t(msgKey), defendant)}\n\n`;
+                if (defendant.adminCount > 0) {
+                  message += Mustache.render(i18next.t('notifications.admin-court'), defendant);
+                }
+                if (defendant.districtCount > 0) {
+                  message += Mustache.render(i18next.t('notifications.district-court'), defendant);
+                  let sep = '';
+                  const keys = Object.keys(defendant.districtRooms);
+                  keys.forEach((room) => {
+                    message += sep + room;
+                    sep = ', ';
+                  });
+                  message += '\n';
+                }
+
+                if (defendant.superiorCount > 0) {
+                  message += Mustache.render(i18next.t('notifications.superior-court'), defendant);
+                }
+                const defendantDetails = {
+                  county: 100,
+                  urlname: computeUrlName(defendant),
+                };
+                message += `\n\n${Mustache.render(i18next.t('notifications.reminder-final'), defendantDetails)}`;
+                const msgObject = {
+                  body: message,
+                  from: fromTwilioPhone,
+                  to: s.phone,
+                };
+                // eslint-disable-next-line no-await-in-loop
+                await client.messages
+                  .create(msgObject)
+                  .then((sentMessage) => logger.debug(JSON.stringify(sentMessage.body)));
+              } catch (err) {
+                logger.error(`Error processing notifications for subscriber ${s.subscriber_id}`, err);
+              }
+            }
+          } catch (err) {
+            logger.error(`Error processing notifications for defendant ${defendant.id}`, err);
           }
-          const defendantDetails = {
-            county: 100,
-            urlname: computeUrlName(defendant),
-          };
-          message += `\n\n${Mustache.render(i18next.t('notifications.reminder-final'), defendantDetails)}`;
-          const msgObject = {
-            body: message,
-            from: fromTwilioPhone,
-            to: s.phone,
-          };
-          // eslint-disable-next-line no-await-in-loop
-          await client.messages
-            .create(msgObject)
-            .then((sentMessage) => logger.debug(JSON.stringify(sentMessage.body)));
         }
+      } catch (err) {
+        logger.error(`Error sending notification set ${i}`, err);
       }
     }
   } catch (err) {
