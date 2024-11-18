@@ -16,7 +16,7 @@ async function twilioSendStatusWebhook(req, res) {
     url,
     params,
   );
-  console.log('In twilioSendStatusWebhook: ', params);
+
   if (!isValid) {
     logger.error('twilioSendStatusWebhook: invalid incoming request - not from Twilio');
     return res.status(401).send('Unauthorized');
