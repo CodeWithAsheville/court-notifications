@@ -123,18 +123,19 @@ async function logNotification(defendant, notification, language, pgClient) {
   for (let i = 0; i < defendant.cases.length; i += 1) {
     const c = defendant.cases[i];
     // eslint-disable-next-line no-await-in-loop
-    await pgClient.query(`
+    await pgClient.query(
+      `
       INSERT INTO ${process.env.DB_SCHEMA}.log_notifications
         (tag, days_before, first_name, middle_name, last_name, suffix,
         birth_date, district_count, superior_count, case_number, language,
         court, room) 
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
-    `,
-    [notification.key, notification.days_before, defendant.first_name,
-      defendant.middle_name ? defendant.middle_name : '', defendant.last_name,
-      defendant.suffix ? defendant.suffix : '', defendant.birth_date,
-      defendant.districtCount, defendant.superiorCount, c.case_number, language,
-      c.court, c.room],
+      `,
+      [notification.key, notification.days_before, defendant.first_name,
+        defendant.middle_name ? defendant.middle_name : '', defendant.last_name,
+        defendant.suffix ? defendant.suffix : '', defendant.birth_date,
+        defendant.districtCount, defendant.superiorCount, c.case_number, language,
+        c.court, c.room],
     );
   }
 }
@@ -159,7 +160,7 @@ async function sendNotifications() {
     */
     for (let i = 0; i < notificationSets.length; i += 1) {
       try {
-        logger.debug(`Do notifications for ${notificationSets[i].days_before} days`);
+        logger.info(`Send notifications for court dates in ${notificationSets[i].days_before} days`);
         const notificationDays = notificationSets[i].days_before;
         const msgKey = notificationSets[i].key;
         // eslint-disable-next-line no-await-in-loop
@@ -248,9 +249,9 @@ async function initTranslations() {
 
 // Invoke
 (async () => {
+  logger.info('Sending court date notifications');
   await initTranslations();
-  logger.debug('Call notifications');
   await sendNotifications();
-  logger.debug('Done with notifications');
+  logger.info('Done sending court date notifications');
   process.exit();
 })();
