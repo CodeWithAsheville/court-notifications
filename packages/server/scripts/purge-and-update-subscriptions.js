@@ -22,7 +22,6 @@ async function getConfigurationIntValue(pgClient, name, defaultValue = 0) {
     const res = await pgClient.query(`SELECT value from ${process.env.DB_SCHEMA}.cn_configuration WHERE name = $1`, [name]);
     const results = res.rows;
     if (results.length > 0) value = parseInt(results[0].value, 10);
-    console.log(`Got the configuration value ${name}: ${value}`);
   } catch (err) {
     logger.error(`Error getting configuration value ${name} client in purge-and-update-subscriptions`, err);
     throw err;
@@ -33,49 +32,46 @@ async function getConfigurationIntValue(pgClient, name, defaultValue = 0) {
 async function purgeSubscriptions(pgClient) {
   const daysBeforePurge = await getConfigurationIntValue(pgClient, 'days_before_purge', 30);
   const purgeDate = getPreviousDate(daysBeforePurge);
-  // Need to add in logging ... in some detail I think. Think how we really want to do logging.
+
   try {
     // Get a list of defendants who have had no cases for long enough
-    let sql = `
-        SELECT s.defendant_id, s.subscriber_id FROM ${process.env.DB_SCHEMA}.subscriptions s
-        LEFT JOIN ${process.env.DB_SCHEMA}.defendants d on s.defendant_id = d.id
-        WHERE d.last_valid_cases_date < $1
-      `;
+    let sql = `SELECT id FROM ${process.env.DB_SCHEMA}.defendants d WHERE d.last_valid_cases_date < $1`;
     let res = await pgClient.query(sql, [purgeDate]);
-    const subscribers = new Set();
-    const defendants = new Set();
-
     if (res.rowCount > 0) {
-      for (let i = 0; i < res.rowCount; i += 1) {
-        // eslint-disable-next-line camelcase
-        const { subscriber_id, defendant_id } = res.rows[i];
-        subscribers.add(subscriber_id);
-        defendants.add(defendant_id);
-      }
+      const defendants = res.rows;
+      for (let i = 0; i < defendants.length; i += 1) {
+        const defendantId = defendants[i];
+        await pgClient.query('BEGIN');
+        try {
+          // Get the list of subscriber IDs to handle later
+          sql = `SELECT subscriber_id FROM ${process.env.DB_SCHEMA}.subscriptions WHERE defendant_id = ${defendantId}`;
+          res = await pgClient.query(sql);
+          const subscribers = res.rows;
 
-      let arr = [...defendants];
-      // We can go ahead and just delete the subscriptions
-      sql = `
-          DELETE FROM ${process.env.DB_SCHEMA}.subscriptions WHERE defendant_id IN (${arr.join(',')})
-      `;
-      res = await pgClient.query(sql);
+          // Now go ahead and just delete the subscriptions
+          sql = `
+              DELETE FROM ${process.env.DB_SCHEMA}.subscriptions WHERE defendant_id = ${defendantId}
+          `;
+          res = await pgClient.query(sql);
 
-      // We can also just delete all the defendants and their cases
-      for (let i = 0; i < arr.length; i += 1) {
-        const defendantId = arr[i];
-        res = await pgClient.query(`DELETE FROM ${process.env.DB_SCHEMA}.cases WHERE defendant_id = ${defendantId}`);
-        res = await pgClient.query(`DELETE FROM ${process.env.DB_SCHEMA}.defendants WHERE id = ${defendantId}`);
-      }
+          // We can also delete the defendant and their cases
+          res = await pgClient.query(`DELETE FROM ${process.env.DB_SCHEMA}.cases WHERE defendant_id = ${defendantId}`);
+          res = await pgClient.query(`DELETE FROM ${process.env.DB_SCHEMA}.defendants WHERE id = ${defendantId}`);
 
-      // Now let's look at subscribers, but deleting only if they have no other subscriptions
-      arr = [...subscribers];
-      for (let i = 0; i < arr.length; i += 1) {
-        sql = `SELECT * FROM ${process.env.DB_SCHEMA}.subscriptions WHERE subscriber_id = ${arr[i]}`;
-        res = await pgClient.query(sql);
-        if (res.rowCount === 0) {
-          res = await pgClient.query(`DELETE FROM ${process.env.DB_SCHEMA}.subscribers WHERE id = ${arr[i]}`);
-        } else {
-          console.log(`Not deleting subscriber ${arr[i]} because they still have ${res.rowCount} subscriptions`);
+          // Now let's delete any subscribers, but only if they have no other subscriptions
+          for (let j = 0; j < subscribers.length; j += 1) {
+            sql = `SELECT * FROM ${process.env.DB_SCHEMA}.subscriptions WHERE subscriber_id = ${subscribers[j]}`;
+            res = await pgClient.query(sql);
+            if (res.rowCount === 0) {
+              res = await pgClient.query(`DELETE FROM ${process.env.DB_SCHEMA}.subscribers WHERE id = ${subscribers[j]}`);
+            } else {
+              logger.info(`Not deleting subscriber ${subscribers[j]} because they still have ${res.rowCount} other subscriptions`);
+            }
+          }
+          await pgClient('COMMIT');
+        } catch (err) {
+          logger.error(`Error purging defendant ${defendantId} - transaction rolled back: `, err);
+          await pgClient.query('ROLLBACK');
         }
       }
     }
@@ -154,14 +150,13 @@ async function initTranslations() {
     throw err;
   }
   try {
-    logger.debug('Call purgeSubscriptions');
+    logger.info('Purging expired subscriptions');
     await purgeSubscriptions(pgClient);
-    logger.debug('Done with purge');
-    logger.debug('Call updateSubscriptions');
+    logger.info('Identifying subscriptions ready for update');
     await updateSubscriptions(pgClient);
-    logger.debug('Done with update setup');
+    logger.info('Done with purge-and-update-subscriptions');
   } catch (err) {
-    console.log('Error in purge-and-update-subscriptions.js: ', err)
+    logger.error('Error in purge-and-update-subscriptions.js: ', err);
   } finally {
     await pgClient.end();
   }
