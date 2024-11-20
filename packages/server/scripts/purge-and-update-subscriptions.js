@@ -106,7 +106,7 @@ async function updateSubscriptions(pgClient) {
 
   // Now we need to prepare to update information on remaining subscribers
   const updateDate = getPreviousDate(daysBeforeUpdate);
-  logger.info(`Update defendants lasted updated before ${updateDate}`);
+  logger.info(`Update defendants last updated before ${updateDate}`);
   const res = await pgClient.query(
     `SELECT id FROM ${schema}.defendants WHERE updated_at < $1 AND flag <> 1`,
     [updateDate],
