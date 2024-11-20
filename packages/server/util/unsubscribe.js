@@ -2,11 +2,10 @@
 const { logger } = require('./logger');
 const { getClient } = require('./db');
 
-async function unsubscribe(phone, dbClientIn) {
+async function unsubscribe(phone, dbClientIn, reason = "unspecified") {
   let pgClient = dbClientIn;
   const schema = process.env.DB_SCHEMA;
   if (dbClientIn === undefined) { // Get a client if not provided
-    console.log('No client provided - create one');
     try {
       pgClient = getClient();
       await pgClient.connect();
@@ -14,10 +13,8 @@ async function unsubscribe(phone, dbClientIn) {
       logger.error('Error getting database client in unsubscribe', err);
       throw err;
     }
-  } else {
-    console.log('Not creating a client since one is provided');
   }
-
+  logger.info(`Unsubscribing phone ending in ${phone.substring(phone.length - 4)}, reason: ${reason}`);
   try {
     console.log('Get subscribers with this phone');
     let res = await pgClient.query(
