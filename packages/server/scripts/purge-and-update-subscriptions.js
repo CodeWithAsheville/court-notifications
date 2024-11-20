@@ -76,10 +76,13 @@ async function purgeSubscriptions(pgClient) {
               logger.info(`Not deleting subscriber ${subscriberId} because they still have ${res.rowCount} other subscriptions`);
             }
           }
+          console.log('Now commit');
           await pgClient.query('COMMIT');
+          console.log('Did the commit');
         } catch (err) {
-          logger.error(`Error purging defendant ${defendantId} - transaction rolled back: `, err);
+          console.log('Roll it back');
           await pgClient.query('ROLLBACK');
+          logger.error(`Error purging defendant ${defendantId} - transaction rolled back: `, err);
         }
       }
     }
