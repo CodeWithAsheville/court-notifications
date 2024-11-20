@@ -40,32 +40,40 @@ async function purgeSubscriptions(pgClient) {
     if (res.rowCount > 0) {
       const defendants = res.rows;
       for (let i = 0; i < defendants.length; i += 1) {
-        const defendantId = defendants[i];
+        const defendantId = defendants[i].id;
+        console.log('Purge defendant ', defendants[i]);
+        console.log('ID = ', defendantId);
         await pgClient.query('BEGIN');
         try {
           // Get the list of subscriber IDs to handle later
           sql = `SELECT subscriber_id FROM ${process.env.DB_SCHEMA}.subscriptions WHERE defendant_id = ${defendantId}`;
           res = await pgClient.query(sql);
           const subscribers = res.rows;
+          console.log('Subscribers: ', subscribers);
 
           // Now go ahead and just delete the subscriptions
           sql = `
               DELETE FROM ${process.env.DB_SCHEMA}.subscriptions WHERE defendant_id = ${defendantId}
           `;
+          console.log('delete subscriptions');
           res = await pgClient.query(sql);
 
           // We can also delete the defendant and their cases
+          console.log('delete cases');
           res = await pgClient.query(`DELETE FROM ${process.env.DB_SCHEMA}.cases WHERE defendant_id = ${defendantId}`);
+          console.log('delete defendant');
           res = await pgClient.query(`DELETE FROM ${process.env.DB_SCHEMA}.defendants WHERE id = ${defendantId}`);
 
           // Now let's delete any subscribers, but only if they have no other subscriptions
           for (let j = 0; j < subscribers.length; j += 1) {
-            sql = `SELECT * FROM ${process.env.DB_SCHEMA}.subscriptions WHERE subscriber_id = ${subscribers[j]}`;
+            const subscriberId = subscribers[j].id;
+            sql = `SELECT * FROM ${process.env.DB_SCHEMA}.subscriptions WHERE subscriber_id = ${subscriberId}`;
+            console.log('SQL ', sql);
             res = await pgClient.query(sql);
             if (res.rowCount === 0) {
-              res = await pgClient.query(`DELETE FROM ${process.env.DB_SCHEMA}.subscribers WHERE id = ${subscribers[j]}`);
+              res = await pgClient.query(`DELETE FROM ${process.env.DB_SCHEMA}.subscribers WHERE id = ${subscriberId}`);
             } else {
-              logger.info(`Not deleting subscriber ${subscribers[j]} because they still have ${res.rowCount} other subscriptions`);
+              logger.info(`Not deleting subscriber ${subscriberId} because they still have ${res.rowCount} other subscriptions`);
             }
           }
           await pgClient('COMMIT');
