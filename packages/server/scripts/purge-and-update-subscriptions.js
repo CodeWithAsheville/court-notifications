@@ -106,7 +106,7 @@ async function updateSubscriptions(pgClient) {
 
   // Now we need to prepare to update information on remaining subscribers
   const updateDate = getPreviousDate(daysBeforeUpdate);
-  console.log('Update date is ', updateDate);
+  logger.info(`Update defendants lasted updated before ${updateDate}`);
   const res = await pgClient.query(
     `SELECT id FROM ${schema}.defendants WHERE updated_at < $1 AND flag <> 1`,
     [updateDate],
@@ -114,11 +114,17 @@ async function updateSubscriptions(pgClient) {
 
   if (res.rowCount > 0) {
     const defendantsToUpdate = res.rows.map(({ id }) => `(${id})`);
-
-    await pgClient.query(`DELETE from ${schema}.records_to_update`); // Delete all
-    await pgClient.query(
-      `INSERT INTO ${schema}.records_to_update (defendant_id) VALUES ${defendantsToUpdate.join(',')}`,
-    );
+    await pgClient.query('BEGIN');
+    try {
+      await pgClient.query(`DELETE from ${schema}.records_to_update`); // Delete all
+      await pgClient.query(
+        `INSERT INTO ${schema}.records_to_update (defendant_id) VALUES ${defendantsToUpdate.join(',')}`,
+      );
+      await pgClient.query('COMMIT');
+    } catch (err) {
+      await pgClient.query('ROLLBACK');
+      logger.error('Error inserting defendants for update - transaction rolled back: ', err);
+    }
   }
 }
 
