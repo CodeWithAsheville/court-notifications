@@ -41,34 +41,27 @@ async function purgeSubscriptions(pgClient) {
       const defendants = res.rows;
       for (let i = 0; i < defendants.length; i += 1) {
         const defendantId = defendants[i].id;
-        console.log('Purge defendant ', defendants[i]);
-        console.log('ID = ', defendantId);
         await pgClient.query('BEGIN');
         try {
           // Get the list of subscriber IDs to handle later
           sql = `SELECT subscriber_id FROM ${process.env.DB_SCHEMA}.subscriptions WHERE defendant_id = ${defendantId}`;
           res = await pgClient.query(sql);
           const subscribers = res.rows;
-          console.log('Subscribers: ', subscribers);
 
           // Now go ahead and just delete the subscriptions
           sql = `
               DELETE FROM ${process.env.DB_SCHEMA}.subscriptions WHERE defendant_id = ${defendantId}
           `;
-          console.log('delete subscriptions');
           res = await pgClient.query(sql);
 
           // We can also delete the defendant and their cases
-          console.log('delete cases');
           res = await pgClient.query(`DELETE FROM ${process.env.DB_SCHEMA}.cases WHERE defendant_id = ${defendantId}`);
-          console.log('delete defendant');
           res = await pgClient.query(`DELETE FROM ${process.env.DB_SCHEMA}.defendants WHERE id = ${defendantId}`);
 
           // Now let's delete any subscribers, but only if they have no other subscriptions
           for (let j = 0; j < subscribers.length; j += 1) {
             const subscriberId = subscribers[j].subscriber_id;
             sql = `SELECT * FROM ${process.env.DB_SCHEMA}.subscriptions WHERE subscriber_id = ${subscriberId}`;
-            console.log('SQL ', sql);
             res = await pgClient.query(sql);
             if (res.rowCount === 0) {
               res = await pgClient.query(`DELETE FROM ${process.env.DB_SCHEMA}.subscribers WHERE id = ${subscriberId}`);
@@ -76,11 +69,8 @@ async function purgeSubscriptions(pgClient) {
               logger.info(`Not deleting subscriber ${subscriberId} because they still have ${res.rowCount} other subscriptions`);
             }
           }
-          console.log('Now commit');
           await pgClient.query('COMMIT');
-          console.log('Did the commit');
         } catch (err) {
-          console.log('Roll it back');
           await pgClient.query('ROLLBACK');
           logger.error(`Error purging defendant ${defendantId} - transaction rolled back: `, err);
         }
@@ -92,17 +82,12 @@ async function purgeSubscriptions(pgClient) {
   }
 }
 
-async function updateSubscriptions(pgClient) {
-  const schema = process.env.DB_SCHEMA;
-  const daysBeforeUpdate = await getConfigurationIntValue(pgClient, 'days_before_update', 7);
-
-  if (daysBeforeUpdate < 0) return;
-
+async function unsubscribeFailed(pgClient) {
   // Delete all the subscribers with status failed. Note there's an edge case where we don't
   // catch the failure notification on a subscriber and the status stays pending. No need for
   // special logic. Another attempt will eventually be made which will properly set the status.
-
-  let res = await pgClient.query(`
+  const schema = process.env.DB_SCHEMA;
+  const res = await pgClient.query(`
     SELECT id, PGP_SYM_DECRYPT(encrypted_phone::bytea, $1) AS phone
     FROM ${schema}.subscribers WHERE status = 'failed'
     `, [process.env.DB_CRYPTO_SECRET]);
@@ -111,11 +96,18 @@ async function updateSubscriptions(pgClient) {
     console.log('Unsubscribe id ', res.rows[i].id);
     await unsubscribe(res.rows[i].phone);
   }
+}
+
+async function updateSubscriptions(pgClient) {
+  const schema = process.env.DB_SCHEMA;
+  const daysBeforeUpdate = await getConfigurationIntValue(pgClient, 'days_before_update', 7);
+
+  if (daysBeforeUpdate < 0) return;
 
   // Now we need to prepare to update information on remaining subscribers
   const updateDate = getPreviousDate(daysBeforeUpdate);
   console.log('Update date is ', updateDate);
-  res = await pgClient.query(
+  const res = await pgClient.query(
     `SELECT id FROM ${schema}.defendants WHERE updated_at < $1 AND flag <> 1`,
     [updateDate],
   );
@@ -163,6 +155,8 @@ async function initTranslations() {
   try {
     logger.info('Purging expired subscriptions');
     await purgeSubscriptions(pgClient);
+    logger.info('Unsubscribe all failed subscribers');
+    await unsubscribeFailed(pgClient);
     logger.info('Identifying subscriptions ready for update');
     await updateSubscriptions(pgClient);
     logger.info('Done with purge-and-update-subscriptions');
