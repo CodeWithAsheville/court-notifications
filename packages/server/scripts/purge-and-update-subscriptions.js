@@ -94,7 +94,7 @@ async function unsubscribeFailed(pgClient) {
 
   for (let i = 0; i < res.rows.length; i += 1) {
     console.log('Unsubscribe id ', res.rows[i].id);
-    await unsubscribe(res.rows[i].phone);
+    await unsubscribe(res.rows[i].phone, pgClient);
   }
 }
 
