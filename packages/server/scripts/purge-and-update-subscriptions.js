@@ -114,6 +114,7 @@ async function updateSubscriptions(pgClient) {
 
   if (res.rowCount > 0) {
     const defendantsToUpdate = res.rows.map(({ id }) => `(${id})`);
+    logger.info(`Defendants to be updated: ${defendantsToUpdate.length}`);
     await pgClient.query('BEGIN');
     try {
       await pgClient.query(`DELETE from ${schema}.records_to_update`); // Delete all
