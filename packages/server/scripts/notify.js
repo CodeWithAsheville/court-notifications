@@ -12,7 +12,6 @@ const { getClient } = require('../util/db');
 
 const fromTwilioPhone = process.env.TWILIO_PHONE_NUMBER;
 const { logger } = require('../util/logger');
-const { computeUrlName } = require('../util/computeUrlName');
 
 const months = [
   'January',
@@ -199,11 +198,8 @@ async function sendNotifications() {
                 if (defendant.superiorCount > 0) {
                   message += Mustache.render(i18next.t('notifications.superior-court'), defendant);
                 }
-                const defendantDetails = {
-                  county: 100,
-                  urlname: computeUrlName(defendant),
-                };
-                message += `\n\n${Mustache.render(i18next.t('notifications.reminder-final'), defendantDetails)}`;
+
+                message += `\n\n${i18next.t('notifications.reminder-final')}`;
                 const msgObject = {
                   body: message,
                   from: fromTwilioPhone,

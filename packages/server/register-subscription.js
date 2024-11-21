@@ -2,7 +2,6 @@ const Mustache = require('mustache');
 const { getClient } = require('./util/db');
 const { unsubscribe } = require('./util/unsubscribe');
 const { subscribe } = require('./util/subscribe');
-const { computeUrlName } = require('./util/computeUrlName');
 const { logger } = require('./util/logger');
 const { twilioClient } = require('./util/twilio-client');
 
@@ -66,8 +65,6 @@ async function registerSubscription(req, callback) {
       mname: defendant.middle_name ? defendant.middle_name : '',
       lname: defendant.last_name,
       suffix: defendant.suffix ? defendant.suffix : '',
-      county: 100,
-      urlname: computeUrlName(defendant),
     };
     if (
       process.env.NODE_ENV === 'production'
