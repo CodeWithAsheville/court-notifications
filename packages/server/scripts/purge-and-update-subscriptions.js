@@ -8,25 +8,13 @@ const { logger } = require('../util/logger');
 
 const { getClient } = require('../util/db');
 const { unsubscribe } = require('../util/unsubscribe');
+const { getConfigurationIntValue } = require('../util/configurationValues');
 
 function getPreviousDate(days) {
   const d = new Date();
   d.setDate(d.getDate() - days + 1);
   const dString = `${d.getFullYear()}-${(d.getMonth() + 1)}-${d.getDate()}`;
   return dString;
-}
-
-async function getConfigurationIntValue(pgClient, name, defaultValue = 0) {
-  let value = defaultValue;
-  try {
-    const res = await pgClient.query(`SELECT value from ${process.env.DB_SCHEMA}.cn_configuration WHERE name = $1`, [name]);
-    const results = res.rows;
-    if (results.length > 0) value = parseInt(results[0].value, 10);
-  } catch (err) {
-    logger.error(`Error getting configuration value ${name} client in purge-and-update-subscriptions`, err);
-    throw err;
-  }
-  return value;
 }
 
 async function purgeSubscriptions(pgClient) {
