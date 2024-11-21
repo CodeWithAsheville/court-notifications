@@ -63,6 +63,10 @@ async function addDefendant(pgClient, defendant) {
   );
 
   if (res.rowCount > 0) {
+    console.log('res.rowCount = ', res.rowCount);
+    console.log('Rows: ', res.rows);
+    console.log('Rows[0]: ', res.rows[0]);
+    console.log('ID is ', res.rows[0].id);
     logger.info('Added defendant with id ', res.rows[0].id);
     return res.rows[0].id;
   }
