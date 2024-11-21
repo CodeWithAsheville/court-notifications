@@ -40,7 +40,7 @@ async function addDefendant(pgClient, defendant) {
   );
 
   if (res.rowCount !== 0) {
-    logger.info('Defendant already exists: ', defendant.long_id);
+    logger.info(`Defendant already exists: ${defendant.long_id}`);
     return res.rows[0].id;
   }
 
@@ -63,11 +63,7 @@ async function addDefendant(pgClient, defendant) {
   );
 
   if (res.rowCount > 0) {
-    console.log('res.rowCount = ', res.rowCount);
-    console.log('Rows: ', res.rows);
-    console.log('Rows[0]: ', res.rows[0]);
-    console.log('ID is ', res.rows[0].id);
-    logger.info('Added defendant with id ', res.rows[0].id);
+    logger.info(`Added defendant with id ${res.rows[0].id}`);
     return res.rows[0].id;
   }
   throw new Error('Error inserting defendant - no rows returned');
@@ -130,7 +126,7 @@ async function addSubscriber(pgClient, nextDate, phone, language) {
           [nextNotify, subscriberId],
         );
       } catch (e) {
-        logger.error('Error updating next court date for subscriber ', subscriberId);
+        logger.error(`Error updating next court date for subscriber ${subscriberId}`);
         throw Error('Error updating next court date');
       }
     }
@@ -151,7 +147,7 @@ async function addSubscriber(pgClient, nextDate, phone, language) {
       );
       subscriberId = res.rows[0].id;
     } catch (e) {
-      logger.error('Error adding new subscriber: ', e);
+      logger.error(`Error adding new subscriber: ${e}`);
       throw Error('Error adding subscriber');
     }
   }
@@ -182,7 +178,7 @@ async function subscribe(phone, defendantLongId, details, t, language) {
     await pgClient.connect();
   } catch (err) {
     // eslint-disable-next-line no-console
-    logger.error('Error getting database client in purge-and-update-subscriptions', err);
+    logger.error(`Error getting database client in purge-and-update-subscriptions: ${err}`);
     throw err;
   }
   let defendant;
@@ -200,7 +196,7 @@ async function subscribe(phone, defendantLongId, details, t, language) {
   } catch (err) {
     pgClient.query('ROLLBACK');
     saveError = `Error in subscribe.js: ${err}`;
-    logger.error('Error in subscribe.js: ', err);
+    logger.error(`Error in subscribe.js: ${err}`);
   } finally {
     await pgClient.end();
   }
