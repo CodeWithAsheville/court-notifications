@@ -26,6 +26,7 @@ async function updateDefendants() {
     let res = await pgClient.query(sql);
 
     if (res.rowCount > 0) {
+      let currentDefendantName = '-';
       const defendantIds = res.rows.map((itm) => itm.defendant_id).join(',');
       logger.info(`Performing ${res.rowCount} updates: ${defendantIds}`);
 
@@ -39,7 +40,7 @@ async function updateDefendants() {
 
         for (let i = 0; i < defendants.length; i += 1) {
           const d = defendants[i];
-
+          currentDefendantName = `${d.last_name}, ${d.first_name} ${d.middle_name}, ${d.suffix}`;
           const matches = await searchCourtRecords({
             lastName: d.last_name,
             firstName: d.first_name,
@@ -79,7 +80,7 @@ async function updateDefendants() {
         }
         await pgClient.query('COMMIT');
       } catch (err) {
-        logger.error('Error updating defendants - rolling back: ', err);
+        logger.error(`Error updating defendants (${currentDefendantName}) - rolling back: `, err);
         await pgClient.query('ROLLBACK');
         throw err;
       }
