@@ -63,7 +63,7 @@ async function addDefendant(pgClient, defendant) {
   );
 
   if (res.rowCount > 0) {
-    logger.info('Added defendant with id ', res.rows[0]);
+    logger.info('Added defendant with id ', res.rows[0].id);
     return res.rows[0].id;
   }
   throw new Error('Error inserting defendant - no rows returned');
