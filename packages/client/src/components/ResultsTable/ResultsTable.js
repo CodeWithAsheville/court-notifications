@@ -46,9 +46,6 @@ export default function ResultsTable({ state, dispatch }) {
         <tbody>{caseRows}</tbody>
       </table>
     );
-    function computeFullSearchUrl(name) {
-      return `https://www1.aoc.state.nc.us/www/calendars.Criminal.do?county=100&court=BTH+&defendant=${name}&start=0&navindex=0&fromcrimquery=yes&submit=Search`;
-    }
     const df = cases[0].defendant;
     return (
       <div>
@@ -57,7 +54,7 @@ export default function ResultsTable({ state, dispatch }) {
             <>
               <b>{t('casesTable.description')} {df} </b>
               <br/>
-              {t('casesTable.help')} <a href={computeFullSearchUrl(df)} target="_blank" rel="noreferrer">NC Courts</a>.
+              {t('casesTable.help')} <a href="https://portal-nc.tylertech.cloud/Portal/Home/Dashboard/26" target="_blank" rel="noreferrer">NC Courts</a>.
             </>
           )}
         </p>
