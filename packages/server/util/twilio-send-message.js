@@ -10,7 +10,7 @@ async function twilioSendMessage(client, phone, inMessage) {
   return client.messages
     .create(msgObject)
     .then((message) => {
-      logger.debug(`Message sent: ${message.body}`);
+      logger.info(`Message sent: ${message.body}`);
     });
 }
 
