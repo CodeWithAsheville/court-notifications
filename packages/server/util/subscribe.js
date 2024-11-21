@@ -34,13 +34,13 @@ function initializeDefendant(longDefendantId, details) {
 
 async function addDefendant(pgClient, defendant) {
   const schema = process.env.DB_SCHEMA;
-  console.log('In addDefendant')
   let res = await pgClient.query(
     `SELECT id FROM ${schema}.defendants WHERE long_id = $1`,
     [defendant.long_id],
   );
+
   if (res.rowCount !== 0) {
-    console.log('Defendant already exists');
+    logger.info('Defendant already exists: ', defendant.long_id);
     return res.rows[0].id;
   }
 
@@ -63,7 +63,7 @@ async function addDefendant(pgClient, defendant) {
   );
 
   if (res.rowCount > 0) {
-    console.log('Successfully added defendant: ', res.rows[0]);
+    logger.info('Added defendant with id ', res.rows[0]);
     return res.rows[0].id;
   }
   throw new Error('Error inserting defendant - no rows returned');
@@ -73,26 +73,25 @@ async function addCases(pgClient, defendantId, casesIn) {
   const schema = process.env.DB_SCHEMA;
   let nextDate = null;
 
-  // We could compare existing cases in DB to new ones, but ... why?
+  // Delete any existing cases for this defendant
   await pgClient.query(`DELETE FROM ${schema}.cases WHERE defendant_id = $1`, [defendantId]);
 
-  // Now insert the new cases
+  // Insert the new ones
   for (let i = 0; i < casesIn.length; i += 1) {
-    const itm = casesIn[i];
-    const cdate = new Date(itm.courtDate);
+    const oneCase = casesIn[i];
+    const cdate = new Date(oneCase.courtDate);
     if (nextDate === null || cdate < nextDate) nextDate = cdate;
     // eslint-disable-next-line no-await-in-loop
     await pgClient.query(
-      `INSERT INTO ${schema}.cases
-        (defendant_id, case_number, court_date, court, room, session)
+      `INSERT INTO ${schema}.cases (defendant_id, case_number, court_date, court, room, session)
         VALUES ($1, $2, $3, $4, $5, $6)`,
       [
         defendantId,
-        itm.caseNumber,
-        itm.courtDate,
-        itm.court,
-        itm.courtRoom,
-        itm.session,
+        oneCase.caseNumber,
+        oneCase.courtDate,
+        oneCase.court,
+        oneCase.courtRoom,
+        oneCase.session,
       ],
     );
   }
@@ -127,6 +126,7 @@ async function addSubscriber(pgClient, nextDate, phone, language) {
           [nextNotify, subscriberId],
         );
       } catch (e) {
+        logger.error('Error updating next court date for subscriber ', subscriberId);
         throw Error('Error updating next court date');
       }
     }
@@ -147,7 +147,7 @@ async function addSubscriber(pgClient, nextDate, phone, language) {
       );
       subscriberId = res.rows[0].id;
     } catch (e) {
-      logger.error(`util/subscribe.addSubscriber add: ${e}`);
+      logger.error('Error adding new subscriber: ', e);
       throw Error('Error adding subscriber');
     }
   }
@@ -184,16 +184,19 @@ async function subscribe(phone, defendantLongId, details, t, language) {
   let defendant;
   let subscriberId;
   let saveError = null;
-  // This really needs to be transactionalized.
+
   try {
+    pgClient.query('BEGIN');
     defendant = initializeDefendant(defendantLongId, details);
     const defendantId = await addDefendant(pgClient, defendant);
     const nextDate = await addCases(pgClient, defendantId, cases);
     subscriberId = await addSubscriber(pgClient, nextDate, phone, language);
     await addSubscription(pgClient, subscriberId, defendantId);
+    pgClient.query('COMMIT');
   } catch (err) {
-    console.log('Error in subscribe.js: ', err);
+    pgClient.query('ROLLBACK');
     saveError = `Error in subscribe.js: ${err}`;
+    logger.error('Error in subscribe.js: ', err);
   } finally {
     await pgClient.end();
   }
@@ -201,7 +204,6 @@ async function subscribe(phone, defendantLongId, details, t, language) {
 
   return { defendant, subscriberId, cases };
 }
-
 
 module.exports = {
   subscribe,
