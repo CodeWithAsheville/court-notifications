@@ -109,9 +109,9 @@ function twilioIncomingWebhook(req, res) {
     logger.error('parseWebhook: invalid incoming request - not from Twilio');
     return res.status(401).send('Unauthorized');
   }
-
+  console.log(req.body.Body);
   let verb = identifyVerbs(req.body.Body);
-  logger.debug(`Incoming message: ${verb}`);
+  logger.info(`Incoming message from Twilio: ${verb}`);
   if (verb === undefined) {
     logger.error(`parseWebhook: Undefined verb - ${req.body.Body}`);
     verb = 'unknown';
