@@ -14,7 +14,7 @@ async function checkSubscription(req, callback) {
   let status = 'pending';
   let errormessage = '';
   const queryObject = url.parse(req.url, true).query;
-  logger.debug(`Checking subscription status for index ${JSON.stringify(queryObject)}`);
+  logger.info(`Checking subscription status for ${JSON.stringify(queryObject)}`);
   const { index } = queryObject;
   let pgClient;
 
@@ -32,7 +32,7 @@ async function checkSubscription(req, callback) {
     const subscribers = res.rows;
     if (subscribers.length <= 0) {
       status = 'failed';
-      errormessage = 'Unknown error';
+      errormessage = 'Unable to find subscriber index';
     } else {
       status = subscribers[0].status;
       if (status === 'failed') {
