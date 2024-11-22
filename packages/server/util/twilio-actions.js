@@ -7,6 +7,7 @@ const doUnsubscribe = unsubscribeImport.unsubscribe;
 async function unsubscribe(req, res) {
   // Use req.body.From to get the number,
   // look it up the database
+  console.log('in twilio unsubscribe');
   let message = 'Successfully unsubscribed!';
 
   try {
