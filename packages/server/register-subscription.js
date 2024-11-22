@@ -46,9 +46,9 @@ async function registerSubscription(req, callback) {
   let subscriberId = null;
   let defendant = null;
   let cases = [];
-  logger.debug('Adding a new subscription');
   try {
     const phone = body.phone_number.replace(/\D/g, '');
+    logger.info(`Adding a new subscription with phone ending in ${phone.substring(phone.length - 4)}`);
     ({ defendant, subscriberId, cases } = await subscribe(
       phone,
       body.selectedDefendant,
@@ -81,7 +81,7 @@ async function registerSubscription(req, callback) {
             to: phone,
           })
           .then(async (message) => {
-            logger.debug(`Successfully sent subscription confirmation: ${message.body}`);
+            logger.info(`Successfully sent subscription confirmation: ${message.body}`);
             await logSubscription(defendant, cases, req.language);
           });
       } catch (e) {
