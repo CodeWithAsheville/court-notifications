@@ -63,17 +63,11 @@ function matchWords(verb, inWords) {
   const words = [];
   for (let i = 0; i < inWords.length; i += 1) {
     words[i] = inWords[i].replace(regexMetachars, '\\$&');
-    // const tmp = inWords[i].replace(/[^a-zA-Z ]/g, '');
-    // console.log('Replace ', inWords[i], ' with ', tmp);
-    // words[i] = tmp;
   }
-  console.log('matchWords inwords = ', words);
-  const m = `\\b(?:${words.join('|')})\\b`;
-  console.log('m  = ', m);
-  const regex = new RegExp(m, 'gi');
-  const result = verb.toLowerCase().match(regex) || [];
-  console.log('result is ', result);
-  return result;
+
+  const regex = new RegExp(`\\b(?:${words.join('|')})\\b`, 'gi');
+
+  return verb.toLowerCase().match(regex) || [];
 }
 
 /**
@@ -115,9 +109,8 @@ function twilioIncomingWebhook(req, res) {
     logger.error('parseWebhook: invalid incoming request - not from Twilio');
     return res.status(401).send('Unauthorized');
   }
-  console.log(req.body.Body);
-  const body = req.body.Body ? req.body.Body : '';
-  let verb = identifyVerbs(body.toLowerCase());
+
+  let verb = identifyVerbs(req.body.Body);
   logger.info(`Incoming message from Twilio: ${verb}`);
   if (verb === undefined) {
     logger.error(`parseWebhook: Undefined verb - ${req.body.Body}`);
