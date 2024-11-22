@@ -64,10 +64,11 @@ function matchWords(verb, inWords) {
   for (let i = 0; i < words.length; i += 1) {
     words[i] = inWords[i].replace(regexMetachars, '\\$&');
   }
-
+  console.log('matchWords inwords = ', inWords);
   const regex = new RegExp(`\\b(?:${words.join('|')})\\b`, 'gi');
-
-  return verb.toLowerCase().match(regex) || [];
+  const result = verb.toLowerCase().match(regex) || [];
+  console.log('result is ', result);
+  return result;
 }
 
 /**
