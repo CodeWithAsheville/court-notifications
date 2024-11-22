@@ -64,7 +64,7 @@ function matchWords(verb, inWords) {
   for (let i = 0; i < words.length; i += 1) {
     words[i] = inWords[i].replace(regexMetachars, '\\$&');
   }
-  console.log('matchWords inwords = ', inWords);
+  console.log('matchWords inwords = ', words);
   const m = `\\b(?:${words.join('|')})\\b`;
   console.log('m  = ', m);
   const regex = new RegExp(m, 'gi');
