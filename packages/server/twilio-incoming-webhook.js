@@ -65,7 +65,9 @@ function matchWords(verb, inWords) {
     words[i] = inWords[i].replace(regexMetachars, '\\$&');
   }
   console.log('matchWords inwords = ', inWords);
-  const regex = new RegExp(`\\b(?:${words.join('|')})\\b`, 'gi');
+  const m = `\\b(?:${words.join('|')})\\b`;
+  console.log('m  = ', m);
+  const regex = new RegExp(m, 'gi');
   const result = verb.toLowerCase().match(regex) || [];
   console.log('result is ', result);
   return result;
