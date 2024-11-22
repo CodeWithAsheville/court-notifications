@@ -1,6 +1,7 @@
 const { getClient } = require('./util/db');
+const { logger } = require('./util/logger');
 
-async function getConfiguration (query, callback) {
+async function getConfiguration(query, callback) {
   const returnValue = {
     name: query.name,
     type: null,
@@ -26,6 +27,7 @@ async function getConfiguration (query, callback) {
       }
       returnValue.error_message = '';
     } catch (err) {
+      logger.error(`Error in API getConfiguration: ${err}`);
       returnValue.error_message = (typeof err === 'string') ? err : err.message;
     } finally {
       await pgClient.end();
