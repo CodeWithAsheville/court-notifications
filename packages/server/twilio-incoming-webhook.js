@@ -116,6 +116,7 @@ function twilioIncomingWebhook(req, res) {
     logger.error(`parseWebhook: Undefined verb - ${req.body.Body}`);
     verb = 'unknown';
   }
+
   return twilioActions[verb](req, res);
 }
 
