@@ -28,8 +28,7 @@ async function doSearch(body) {
     pgClient = getClient(courtCasesConfig);
     await pgClient.connect();
   } catch (err) {
-    // eslint-disable-next-line no-console
-    logger.error('Error getting database client in search-court-records', err);
+    logger.error(`Error getting database client in search-court-records ${err}`);
     throw err;
   }
 
@@ -91,7 +90,7 @@ async function doSearch(body) {
       cases.push(d);
     });
   } catch (err) {
-    console.log('Error in search-court-records.js: ', err)
+    logger.error(`Error in search-court-records.js: ${err}`);
   } finally {
     await pgClient.end();
   }

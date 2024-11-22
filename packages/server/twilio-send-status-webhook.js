@@ -26,7 +26,7 @@ async function twilioSendStatusWebhook(req, res) {
   if (phone.startsWith('+1')) {
     phone = phone.substring(2);
   }
-  logger.debug(`sendStatusWebhook: incoming with status ${status}`);
+  logger.info(`sendStatusWebhook: incoming with status ${status}`);
   let pgClient;
   try {
     pgClient = getClient();
