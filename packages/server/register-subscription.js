@@ -85,7 +85,7 @@ async function registerSubscription(req, callback) {
             await logSubscription(defendant, cases, req.language);
           });
       } catch (e) {
-        await unsubscribe(phone);
+        await unsubscribe(phone, 'Failed register-subscription');
         if (e.code === 21610) {
           msg = Mustache.render(req.t('error-start'), { phone: process.env.TWILIO_PHONE_NUMBER });
           throw msg;

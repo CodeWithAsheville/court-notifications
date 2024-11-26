@@ -14,7 +14,7 @@ async function unsubscribe(req, res) {
     if (phone.startsWith('+1')) {
       phone = phone.substring(2);
     }
-    doUnsubscribe(phone);
+    doUnsubscribe(phone, 'Subscriber request');
   } catch (e) {
     logger.error(`twilio-actions.unsubscribe: ${e}`);
     message = 'An error occurred. Unsubscribe unsuccessful';

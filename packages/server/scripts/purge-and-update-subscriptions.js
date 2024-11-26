@@ -4,11 +4,14 @@ const FsBackend = require('i18next-fs-backend');
 const path = require('path');
 require('dotenv').config({ path: '../.env' });
 
+const twilioClient = require('twilio')(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
+
 const { logger } = require('../util/logger');
 
 const { getClient } = require('../util/db');
 const { unsubscribe } = require('../util/unsubscribe');
 const { getConfigurationIntValue } = require('../util/configurationValues');
+const { twilioSendMessage } = require('../util/twilio-send-message');
 
 function getPreviousDate(days) {
   const d = new Date();
@@ -20,6 +23,11 @@ function getPreviousDate(days) {
 async function purgeSubscriptions(pgClient) {
   const daysBeforePurge = await getConfigurationIntValue(pgClient, 'days_before_purge', 30);
   const purgeDate = getPreviousDate(daysBeforePurge);
+
+  // Note that we're not using the 'unsubscribe' routine here since that's focused on a
+  // particular phone, not a defendant. While we could redo to specify a defendant (or default
+  // to all), we also have a need to notify people here that we don't in any of the other
+  // unsubscribe scenarios. Seems cleaner to just build this one to purpose.
 
   try {
     // Get a list of defendants who have had no cases for long enough
@@ -45,6 +53,21 @@ async function purgeSubscriptions(pgClient) {
           // We can also delete the defendant and their cases
           res = await pgClient.query(`DELETE FROM ${process.env.DB_SCHEMA}.cases WHERE defendant_id = ${defendantId}`);
           res = await pgClient.query(`DELETE FROM ${process.env.DB_SCHEMA}.defendants WHERE id = ${defendantId}`);
+
+          // Attempt to notify them
+          if (subscribers && subscribers.length > 0) {
+            logger.debug(`${subscribers.length} subscribers purged`);
+            for (let j = 0; j < subscribers.length; j += 1) {
+              try {
+                const s = subscribers[j];
+                await i18next.changeLanguage(s.language);
+                const message = i18next.t('unsubscribe.purge');
+                await twilioSendMessage(twilioClient, s.phone, message);
+              } catch (err) {
+                logger.error(`Error sending final unsubscribe notification: ${err}`);
+              }
+            }
+          }
 
           // Now let's delete any subscribers, but only if they have no other subscriptions
           for (let j = 0; j < subscribers.length; j += 1) {
