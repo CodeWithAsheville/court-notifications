@@ -44,7 +44,7 @@ async function purgeSubscriptions(pgClient) {
                   FROM ${process.env.DB_SCHEMA}.subscriptions ss
                   LEFT JOIN ${process.env.DB_SCHEMA}.subscribers s on s.id = ss.subscriber_id
                   WHERE ss.defendant_id = ${defendantId}`;
-          res = await pgClient.query(sql);
+          res = await pgClient.query(sql, [process.env.DB_CRYPTO_SECRET]);
           const subscribers = res.rows;
 
           // Now go ahead and just delete the subscriptions

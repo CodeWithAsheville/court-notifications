@@ -31,6 +31,6 @@ module.exports = {
   },
   migrations: {
     tableName,
-    schemaName: 'public',
+    schemaName: schema,
   },
 };
