@@ -9,6 +9,7 @@ const authToken = process.env.TWILIO_AUTH_TOKEN;
 const client = require('twilio')(accountSid, authToken);
 
 const { getClient } = require('../util/db');
+const { formatName } = require('../util/formatName');
 
 const fromTwilioPhone = process.env.TWILIO_PHONE_NUMBER;
 const { logger } = require('../util/logger');
@@ -47,21 +48,14 @@ async function loadDefendants(notificationDays, pgClient) {
   const results = res.rows;
 
   const defendantHash = {};
-  const nameTemplate = '{{fname}} {{mname}} {{lname}} {{suffix}}';
   results.forEach((d) => {
-    const name = {
-      fname: d.first_name,
-      mname: d.middle_name ? d.middle_name : '',
-      lname: d.last_name,
-      suffix: d.suffix ? d.suffix : '',
-    };
     // First time for this defendant - initialize in the hash
     const id = d.defendant_id;
     if (!(d.defendant_id in defendantHash)) {
       const courtDate = new Date(d.court_date);
       defendantHash[id] = {
         id,
-        name: Mustache.render(nameTemplate, name),
+        name: formatName(d.first_name, d.middle_name, d.last_name, d.suffix),
         first_name: d.first_name,
         middle_name: d.middle_name,
         last_name: d.last_name,
