@@ -12,6 +12,7 @@ const { getClient } = require('../util/db');
 const { unsubscribe } = require('../util/unsubscribe');
 const { getConfigurationIntValue } = require('../util/configurationValues');
 const { twilioSendMessage } = require('../util/twilio-send-message');
+const { formatName } = require('../util/formatName');
 
 function getPreviousDate(days) {
   const d = new Date();
@@ -23,6 +24,7 @@ function getPreviousDate(days) {
 async function purgeSubscriptions(pgClient) {
   const daysBeforePurge = await getConfigurationIntValue(pgClient, 'days_before_purge', 30);
   const purgeDate = getPreviousDate(daysBeforePurge);
+  const schema = process.env.DB_SCHEMA;
 
   // Note that we're not using the 'unsubscribe' routine here since that's focused on a
   // particular phone, not a defendant. While we could redo to specify a defendant (or default
@@ -31,44 +33,44 @@ async function purgeSubscriptions(pgClient) {
 
   try {
     // Get a list of defendants who have had no cases for long enough
-    let sql = `SELECT id FROM ${process.env.DB_SCHEMA}.defendants d WHERE d.last_valid_cases_date < $1`;
+    let sql = `SELECT * FROM ${schema}.defendants d WHERE d.last_valid_cases_date < $1`;
     let res = await pgClient.query(sql, [purgeDate]);
     if (res.rowCount > 0) {
       const defendants = res.rows;
       for (let i = 0; i < defendants.length; i += 1) {
-        const defendantId = defendants[i].id;
+        const d = defendants[i];
+        const defendantId = d.id;
         await pgClient.query('BEGIN');
         try {
           // Get the list of subscriber IDs to handle later
           sql = `SELECT ss.subscriber_id, PGP_SYM_DECRYPT(encrypted_phone::bytea, $1) AS phone
-                  FROM ${process.env.DB_SCHEMA}.subscriptions ss
-                  LEFT JOIN ${process.env.DB_SCHEMA}.subscribers s on s.id = ss.subscriber_id
+                  FROM ${schema}.subscriptions ss
+                  LEFT JOIN ${schema}.subscribers s on s.id = ss.subscriber_id
                   WHERE ss.defendant_id = ${defendantId}`;
           res = await pgClient.query(sql, [process.env.DB_CRYPTO_SECRET]);
           const subscribers = res.rows;
 
           // Now go ahead and just delete the subscriptions
           sql = `
-              DELETE FROM ${process.env.DB_SCHEMA}.subscriptions WHERE defendant_id = ${defendantId}
+              DELETE FROM ${schema}.subscriptions WHERE defendant_id = ${defendantId}
           `;
           res = await pgClient.query(sql);
 
           // We can also delete the defendant and their cases
-          res = await pgClient.query(`DELETE FROM ${process.env.DB_SCHEMA}.cases WHERE defendant_id = ${defendantId}`);
-          res = await pgClient.query(`DELETE FROM ${process.env.DB_SCHEMA}.defendants WHERE id = ${defendantId}`);
+          res = await pgClient.query(`DELETE FROM ${schema}.cases WHERE defendant_id = ${defendantId}`);
+          res = await pgClient.query(`DELETE FROM ${schema}.defendants WHERE id = ${defendantId}`);
 
           // Attempt to notify them
           if (subscribers && subscribers.length > 0) {
             logger.debug(`${subscribers.length} subscribers purged`);
             for (let j = 0; j < subscribers.length; j += 1) {
+              const s = subscribers[j];
               try {
-                const s = subscribers[j];
-                console.log(s);
                 await i18next.changeLanguage(s.language);
                 const message = i18next.t('unsubscribe.purge');
                 await twilioSendMessage(twilioClient, s.phone, message);
               } catch (err) {
-                logger.error(`Error sending final unsubscribe notification: ${err}`);
+                logger.error(`Error sending final unsubscribe notification for phone ending in ${s.phone.substring(s.phone.length - 4)}: ${err}`);
               }
             }
           }
@@ -76,10 +78,23 @@ async function purgeSubscriptions(pgClient) {
           // Now let's delete any subscribers, but only if they have no other subscriptions
           for (let j = 0; j < subscribers.length; j += 1) {
             const subscriberId = subscribers[j].subscriber_id;
-            sql = `SELECT * FROM ${process.env.DB_SCHEMA}.subscriptions WHERE subscriber_id = ${subscriberId}`;
+            const phone4 = subscribers[j].phone.substring(subscribers[j].phone.length - 4);
+            // Log it
+            sql = `
+              INSERT INTO ${schema}.log_unsubscribes
+               (phone4, long_id, original_subscribe_date, last_valid_cases_date)
+               VALUES ($1, $2, $3, $4)
+            `;
+            res = await pgClient.query(
+              sql,
+              [phone4, d.long_id, subscribers[j].created_at, d.last_valid_cases_date]
+            );
+
+            // Do it
+            sql = `SELECT * FROM ${schema}.subscriptions WHERE subscriber_id = ${subscriberId}`;
             res = await pgClient.query(sql);
             if (res.rowCount === 0) {
-              res = await pgClient.query(`DELETE FROM ${process.env.DB_SCHEMA}.subscribers WHERE id = ${subscriberId}`);
+              res = await pgClient.query(`DELETE FROM ${schema}.subscribers WHERE id = ${subscriberId}`);
             } else {
               logger.info(`Not deleting subscriber ${subscriberId} because they still have ${res.rowCount} other subscriptions`);
             }
