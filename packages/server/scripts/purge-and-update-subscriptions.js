@@ -80,17 +80,20 @@ async function purgeSubscriptions(pgClient) {
             const subscriberId = subscribers[j].subscriber_id;
             const phone4 = subscribers[j].phone.substring(subscribers[j].phone.length - 4);
             // Log it
+            console.log(`Unsubscribe ${phone4} for ${d.long_id}`);
             sql = `
               INSERT INTO ${schema}.log_unsubscribes
                (phone4, long_id, original_subscribe_date, last_valid_cases_date)
-               VALUES ($1, $2, $3, $4)
+               VALUES ($1, $2, $3, $4) RETURNING {$5}
             `;
+            console.log(sql);
             res = await pgClient.query(
               sql,
-              [phone4, d.long_id, subscribers[j].created_at, d.last_valid_cases_date]
+              [phone4, d.long_id, subscribers[j].created_at, d.last_valid_cases_date],
             );
-
+            console.log('did it ', res.rows);
             // Do it
+            console.log('Now do it');
             sql = `SELECT * FROM ${schema}.subscriptions WHERE subscriber_id = ${subscriberId}`;
             res = await pgClient.query(sql);
             if (res.rowCount === 0) {
