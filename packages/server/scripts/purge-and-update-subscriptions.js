@@ -43,7 +43,7 @@ async function purgeSubscriptions(pgClient) {
         await pgClient.query('BEGIN');
         try {
           // Get the list of subscriber IDs to handle later
-          sql = `SELECT ss.subscriber_id, PGP_SYM_DECRYPT(encrypted_phone::bytea, $1) AS phone
+          sql = `SELECT ss.subscriber_id, created_at, PGP_SYM_DECRYPT(encrypted_phone::bytea, $1) AS phone
                   FROM ${schema}.subscriptions ss
                   LEFT JOIN ${schema}.subscribers s on s.id = ss.subscriber_id
                   WHERE ss.defendant_id = ${defendantId}`;
@@ -67,6 +67,7 @@ async function purgeSubscriptions(pgClient) {
               const s = subscribers[j];
               try {
                 await i18next.changeLanguage(s.language);
+                // add name to this!
                 const message = i18next.t('unsubscribe.purge');
                 await twilioSendMessage(twilioClient, s.phone, message);
               } catch (err) {
