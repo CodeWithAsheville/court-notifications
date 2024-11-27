@@ -1,7 +1,7 @@
 {
   "signup-success": "Регистрация одобрена",
   "no-cases": "Информация по судебным делам отсутствует",
-  "name-template": "Регистрация  одобрена на получение извещений для {{fname}} {{mname}} {{lname}} {{suffix}}. С деталями вынесенных обвинений вы можете ознакомиться на сайте NC Judicial Branch eCourts Portal: https://portal-nc.tylertech.cloud/Portal/Home/Dashboard/26",
+  "name-template": "Регистрация  одобрена на получение извещений для {{name}}. С деталями вынесенных обвинений вы можете ознакомиться на сайте NC Judicial Branch eCourts Portal: https://portal-nc.tylertech.cloud/Portal/Home/Dashboard/26",
   "error-start": "Ранее, вы отписались от получения сообщений с данного сайта. Для оформления подписки отправьте сообщение со словом START на {{phone}} и, затем, снова оформите подписку на сайте.",
   "error-unknown": "При отправке сообщения произошла ошибка.",
   "notifications": {

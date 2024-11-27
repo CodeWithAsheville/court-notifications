@@ -3,6 +3,7 @@ const { getClient } = require('./util/db');
 const { unsubscribe } = require('./util/unsubscribe');
 const { subscribe } = require('./util/subscribe');
 const { logger } = require('./util/logger');
+const { formatName } = require('./util/formatName');
 const { twilioClient } = require('./util/twilio-client');
 
 const fromTwilioPhone = process.env.TWILIO_PHONE_NUMBER;
@@ -59,18 +60,18 @@ async function registerSubscription(req, callback) {
     // Now send a verification message to the user
     const nameTemplate = req.t('name-template');
     const unsubInfo = req.t('unsubscribe.signup');
+    const name = formatName(
+      defendant.first_name,
+      defendant.middle_name,
+      defendant.last_name,
+      defendant.suffix,
+    );
 
-    const defendantDetails = {
-      fname: defendant.first_name,
-      mname: defendant.middle_name ? defendant.middle_name : '',
-      lname: defendant.last_name,
-      suffix: defendant.suffix ? defendant.suffix : '',
-    };
     if (
       process.env.NODE_ENV === 'production'
       || process.env.DISABLE_SMS !== 'true'
     ) {
-      const defMessage = Mustache.render(nameTemplate, defendantDetails);
+      const defMessage = Mustache.render(nameTemplate, { name });
       let msg = `${defMessage}\n\n ${unsubInfo}`;
       try {
         await twilioClient.messages
