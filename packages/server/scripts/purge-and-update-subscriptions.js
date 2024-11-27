@@ -2,6 +2,7 @@
 const i18next = require('i18next');
 const FsBackend = require('i18next-fs-backend');
 const path = require('path');
+const Mustache = require('mustache');
 require('dotenv').config({ path: '../.env' });
 
 const twilioClient = require('twilio')(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
@@ -43,7 +44,7 @@ async function purgeSubscriptions(pgClient) {
         await pgClient.query('BEGIN');
         try {
           // Get the list of subscriber IDs to handle later
-          sql = `SELECT ss.subscriber_id, created_at, PGP_SYM_DECRYPT(encrypted_phone::bytea, $1) AS phone
+          sql = `SELECT ss.subscriber_id, ss.created_at as created_at, PGP_SYM_DECRYPT(encrypted_phone::bytea, $1) AS phone
                   FROM ${schema}.subscriptions ss
                   LEFT JOIN ${schema}.subscribers s on s.id = ss.subscriber_id
                   WHERE ss.defendant_id = ${defendantId}`;
@@ -67,8 +68,10 @@ async function purgeSubscriptions(pgClient) {
               const s = subscribers[j];
               try {
                 await i18next.changeLanguage(s.language);
-                // add name to this!
-                const message = i18next.t('unsubscribe.purge');
+                const message = Mustache.render(
+                  i18next.t('unsubscribe.purge'),
+                  { name: formatName(d.first_name, d.middle_name, d.last_name, d.suffix) },
+                );
                 await twilioSendMessage(twilioClient, s.phone, message);
               } catch (err) {
                 logger.error(`Error sending final unsubscribe notification for phone ending in ${s.phone.substring(s.phone.length - 4)}: ${err}`);
