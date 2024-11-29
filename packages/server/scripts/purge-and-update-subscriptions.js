@@ -44,7 +44,8 @@ async function purgeSubscriptions(pgClient) {
         await pgClient.query('BEGIN');
         try {
           // Get the list of subscriber IDs to handle later
-          sql = `SELECT ss.subscriber_id, ss.created_at as created_at, PGP_SYM_DECRYPT(encrypted_phone::bytea, $1) AS phone
+          sql = `SELECT ss.subscriber_id, ss.created_at as created_at, s.language,
+                  PGP_SYM_DECRYPT(encrypted_phone::bytea, $1) AS phone
                   FROM ${schema}.subscriptions ss
                   LEFT JOIN ${schema}.subscribers s on s.id = ss.subscriber_id
                   WHERE ss.defendant_id = ${defendantId}`;
@@ -66,9 +67,7 @@ async function purgeSubscriptions(pgClient) {
             for (let j = 0; j < subscribers.length; j += 1) {
               const s = subscribers[j];
               try {
-                console.log('Change language to ', s.language);
                 await i18next.changeLanguage(s.language);
-                console.log('So the message template is ', i18next.t('unsubscribe.purge'));
                 const message = Mustache.render(
                   i18next.t('unsubscribe.purge'),
                   { name: formatName(d.first_name, d.middle_name, d.last_name, d.suffix) },
