@@ -66,7 +66,9 @@ async function purgeSubscriptions(pgClient) {
             for (let j = 0; j < subscribers.length; j += 1) {
               const s = subscribers[j];
               try {
+                console.log('Change language to ', s.language);
                 await i18next.changeLanguage(s.language);
+                console.log('So the message template is ', i18next.t('unsubscribe.purge'));
                 const message = Mustache.render(
                   i18next.t('unsubscribe.purge'),
                   { name: formatName(d.first_name, d.middle_name, d.last_name, d.suffix) },

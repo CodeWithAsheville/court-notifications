@@ -204,7 +204,7 @@ async function sendNotifications() {
                   .create(msgObject)
                   .then((sentMessage) => logger.debug(JSON.stringify(sentMessage.body)));
               } catch (err) {
-                logger.error(`Error processing notifications for subscriber ${s.subscriber_id}`, err);
+                logger.error(`Error processing notifications for subscriber ${s.subscriber_id}, defendant ${defendant.id}`, err);
               }
             }
           } catch (err) {
