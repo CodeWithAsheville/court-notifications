@@ -41,8 +41,8 @@ async function unsubscribe(phone, reason, dbClientIn) {
             `SELECT COUNT(*) FROM ${schema}.subscriptions WHERE defendant_id = $1`,
             [d.defendant_id],
           );
-          console.log('Here is count of subscribers: ', res.rows);
-          if (res.rows[0] === 1) { // Delete if this is the only subscriber
+
+          if (res.rows[0].count === 1) { // Delete if this is the only subscriber
             await pgClient.query(`DELETE FROM ${schema}.cases WHERE defendant_id = $1`, [defendants[i]]);
             await pgClient.query(`DELETE FROM ${schema}.defendants WHERE id = $1`, [defendants[i]]);
           }
