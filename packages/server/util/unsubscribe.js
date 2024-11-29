@@ -28,7 +28,7 @@ async function unsubscribe(phone, reason, dbClientIn) {
       try {
         res = await pgClient.query(
           `
-            SELECT s.defendant_id, s.created_at as original_subscribe_date, d.long_id, d.last_valid_cases_date
+            SELECT s.defendant_id as id, s.created_at as original_subscribe_date, d.long_id, d.last_valid_cases_date
              FROM ${schema}.subscriptions s LEFT JOIN ${schema}.defendants d on s.defendant_id = d.id
              WHERE s.subscriber_id = $1
           `,
@@ -41,12 +41,12 @@ async function unsubscribe(phone, reason, dbClientIn) {
           console.log('D: ', d);
           res = await pgClient.query(
             `SELECT * FROM ${schema}.subscriptions WHERE defendant_id = $1`,
-            [d.defendant_id],
+            [d.id],
           );
           console.log('Got the result of all subs for this defendant: ', res);
           if (res.rowCount === 1) { // Delete if this is the only subscriber
-            await pgClient.query(`DELETE FROM ${schema}.cases WHERE defendant_id = $1`, [defendants[i]]);
-            await pgClient.query(`DELETE FROM ${schema}.defendants WHERE id = $1`, [defendants[i]]);
+            await pgClient.query(`DELETE FROM ${schema}.cases WHERE defendant_id = $1`, [d.id]);
+            await pgClient.query(`DELETE FROM ${schema}.defendants WHERE id = $1`, [d.id]);
           }
           console.log('Now log it');
           // Log it
