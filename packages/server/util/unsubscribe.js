@@ -29,7 +29,7 @@ async function unsubscribe(phone, reason, dbClientIn) {
         res = await pgClient.query(
           `
             SELECT s.defendant_id, s.created_at as original_subscribe_date, d.long_id, d.last_valid_cases_date
-             FROM ${schema}.subscriptions s LEFT JOIN ${schema}.defendants on s.defendant_id = d.id
+             FROM ${schema}.subscriptions s LEFT JOIN ${schema}.defendants d on s.defendant_id = d.id
              WHERE s.subscriber_id = $1
           `,
           [id],
