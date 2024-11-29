@@ -4,6 +4,7 @@ exports.up = async function (knex) {
   await knex.schema.createTable('log_unsubscribes', (table) => {
     table.string('phone4');
     table.string('long_id');
+    table.string('reason');
     table.date('last_valid_cases_date');
     table.timestamp('original_subscribe_date');
     table.timestamps(false, true);

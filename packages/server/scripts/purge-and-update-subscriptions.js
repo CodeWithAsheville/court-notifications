@@ -86,8 +86,8 @@ async function purgeSubscriptions(pgClient) {
             // Log it
             sql = `
               INSERT INTO ${schema}.log_unsubscribes
-               (phone4, long_id, original_subscribe_date, last_valid_cases_date)
-               VALUES ($1, $2, $3, $4) RETURNING phone4
+               (phone4, long_id, reason, original_subscribe_date, last_valid_cases_date)
+               VALUES ($1, $2, 'No more cases', $3, $4)
             `;
             res = await pgClient.query(
               sql,
