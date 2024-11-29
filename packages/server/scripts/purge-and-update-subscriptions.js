@@ -127,7 +127,7 @@ async function unsubscribeFailed(pgClient) {
     `, [process.env.DB_CRYPTO_SECRET]);
 
   for (let i = 0; i < res.rows.length; i += 1) {
-    await unsubscribe(res.rows[i].phone, pgClient, 'Status is failed');
+    await unsubscribe(res.rows[i].phone, 'Status is failed', pgClient);
   }
 }
 

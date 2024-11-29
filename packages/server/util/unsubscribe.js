@@ -2,7 +2,7 @@
 const { logger } = require('./logger');
 const { getClient } = require('./db');
 
-async function unsubscribe(phone, dbClientIn, reason = 'unspecified') {
+async function unsubscribe(phone, reason, dbClientIn) {
   let pgClient = dbClientIn;
   const schema = process.env.DB_SCHEMA;
   if (dbClientIn === undefined) { // Get a client if not provided
