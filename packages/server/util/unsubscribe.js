@@ -23,7 +23,7 @@ async function unsubscribe(phone, reason, dbClientIn) {
     if (res.rowCount > 0) { // Otherwise there's nothing to do
       const { id } = res.rows[0];
       const phone4 = phone.substring(phone.length - 4);
-
+      console.log('Start the transaction');
       pgClient.query('BEGIN');
       try {
         res = await pgClient.query(
@@ -35,16 +35,20 @@ async function unsubscribe(phone, reason, dbClientIn) {
           [id],
         );
         const defendants = res.rows;
+        console.log('Defendants: ', defendants);
         for (let i = 0; i < defendants.length; i += 1) {
           const d = defendants[i];
+          console.log('D: ', d);
           res = await pgClient.query(
             `SELECT * FROM ${schema}.subscriptions WHERE defendant_id = $1`,
             [d.defendant_id],
           );
+          console.log('Got the result of all subs for this defendant: ', res);
           if (res.rowCount === 1) { // Delete if this is the only subscriber
             await pgClient.query(`DELETE FROM ${schema}.cases WHERE defendant_id = $1`, [defendants[i]]);
             await pgClient.query(`DELETE FROM ${schema}.defendants WHERE id = $1`, [defendants[i]]);
           }
+          console.log('Now log it');
           // Log it
           res = await pgClient.query(
             `
@@ -54,9 +58,12 @@ async function unsubscribe(phone, reason, dbClientIn) {
             `,
             [phone4, d.long_id, reason, d.original_subscribe_date, d.last_valid_cases_date],
           );
+          console.log('It is now logged');
         }
+        console.log('Delete the final stuff');
         await pgClient.query(`DELETE FROM ${schema}.subscriptions WHERE subscriber_id = $1`, [id]);
         await pgClient.query(`DELETE FROM ${schema}.subscribers WHERE id = $1`, [id]);
+        console.log('Now commit');
         pgClient.query('COMMIT');
       } catch (err) {
         logger.error(`Error unsubscribing phone ending in ${phone.substring(phone.length - 4)} - rolling back: ${err}`);
