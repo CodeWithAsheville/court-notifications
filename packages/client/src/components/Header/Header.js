@@ -13,7 +13,7 @@ function StatusHeader() {
       setConfiguration(config)
     });
   }, [])
-  console.log('configuration is ', configuration);
+
   if (configuration && configuration.value !== "0") {
     return (
       <div className="usa-alert usa-alert--warning margin-0">
