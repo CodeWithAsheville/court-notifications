@@ -13,8 +13,8 @@ function StatusHeader() {
       setConfiguration(config)
     });
   }, [])
-
-  if (configuration?.value !== "0") {
+  const mMode = configuration?.value;
+  if (mMode !== "0") {
     return (
       <div className="usa-alert usa-alert--warning margin-0">
       <div className="usa-alert__body padding-205 cn-maintenance-alert">
