@@ -2,7 +2,6 @@ const { getClient } = require('./util/db');
 const { logger } = require('./util/logger');
 
 async function getConfiguration(query, callback) {
-  console.log('Getting configuration: ', query);
   const returnValue = {
     name: query.name,
     type: null,
@@ -21,7 +20,6 @@ async function getConfiguration(query, callback) {
     try {
       const res = await pgClient.query(`SELECT * FROM ${process.env.DB_SCHEMA}.cn_configuration WHERE name = $1`, [query.name]);
       const config = res.rows;
-      console.log('Result: ', config);
       if (config.length > 0) {
         returnValue.type = config[0].type;
         returnValue.value = config[0].value;
@@ -35,7 +33,6 @@ async function getConfiguration(query, callback) {
       await pgClient.end();
     }
   }
-  console.log('returnValue = ', returnValue);
   callback(returnValue);
 }
 

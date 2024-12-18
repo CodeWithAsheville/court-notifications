@@ -57,7 +57,7 @@ export default function SearchForm({ state, dispatch }) {
   }
   let searchButton = (
     <div>
-      <button disabled = {state.searchInProgress || configuration?.value === "2"} type="submit" className="usa-button">
+      <button disabled = {state.searchInProgress || configuration?.value === "1"} type="submit" className="usa-button">
         {t('search.submitButton')}
       </button>
       {searchInProgressText}
