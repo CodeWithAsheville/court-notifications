@@ -9,12 +9,14 @@ function StatusHeader() {
 
   useEffect(() => {
     checkMaintenanceMode().then(config => {
+      console.log('Here is the maintenance mode');
       console.log(config)
       setConfiguration(config)
     });
   }, [])
 
   if (configuration?.value !== "0") {
+    console.log('try configuration: ', configuration);
     return (
       <div className="usa-alert usa-alert--warning margin-0">
       <div className="usa-alert__body padding-205 cn-maintenance-alert">
