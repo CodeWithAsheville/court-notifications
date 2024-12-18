@@ -14,7 +14,7 @@ function StatusHeader() {
     });
   }, [])
 
-  if (configuration?.value === "1") {
+  if (configuration?.value !== "0") {
     return (
       <div className="usa-alert usa-alert--warning margin-0">
       <div className="usa-alert__body padding-205 cn-maintenance-alert">
