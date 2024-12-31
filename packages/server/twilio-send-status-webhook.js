@@ -27,12 +27,13 @@ async function twilioSendStatusWebhook(req, res) {
     phone = phone.substring(2);
   }
   logger.info(`sendStatusWebhook: incoming with status ${status}`);
-  let pgClient;
+  let pgClient = null;
   try {
     pgClient = getClient();
     await pgClient.connect();
   } catch (err) {
     logger.error(`Error getting database connection in twilioSendStatusWebhook: ${err}`);
+    return res.status(500).send('Internal server error');
   }
 
   try {
@@ -76,6 +77,8 @@ async function twilioSendStatusWebhook(req, res) {
     }
   } catch (e) {
     logger.error(`Error updating status in twilioSendStatusWebhook: ${e}`);
+  } finally {
+    await pgClient.end();
   }
   return res.status(200).send('OK');
 }
