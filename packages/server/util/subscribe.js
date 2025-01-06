@@ -186,15 +186,15 @@ async function subscribe(phone, defendantLongId, details, t, language) {
   let saveError = null;
 
   try {
-    pgClient.query('BEGIN');
+    await pgClient.query('BEGIN');
     defendant = initializeDefendant(defendantLongId, details);
     const defendantId = await addDefendant(pgClient, defendant);
     const nextDate = await addCases(pgClient, defendantId, cases);
     subscriberId = await addSubscriber(pgClient, nextDate, phone, language);
     await addSubscription(pgClient, subscriberId, defendantId);
-    pgClient.query('COMMIT');
+    await pgClient.query('COMMIT');
   } catch (err) {
-    pgClient.query('ROLLBACK');
+    await pgClient.query('ROLLBACK');
     saveError = `Error in subscribe.js: ${err}`;
     logger.error(`Error in subscribe.js: ${err}`);
   } finally {

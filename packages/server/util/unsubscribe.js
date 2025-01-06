@@ -24,7 +24,7 @@ async function unsubscribe(phone, reason, dbClientIn) {
       const { id } = res.rows[0];
       const phone4 = phone.substring(phone.length - 4);
 
-      pgClient.query('BEGIN');
+      await pgClient.query('BEGIN');
       try {
         res = await pgClient.query(
           `
@@ -59,10 +59,10 @@ async function unsubscribe(phone, reason, dbClientIn) {
         }
         await pgClient.query(`DELETE FROM ${schema}.subscriptions WHERE subscriber_id = $1`, [id]);
         await pgClient.query(`DELETE FROM ${schema}.subscribers WHERE id = $1`, [id]);
-        pgClient.query('COMMIT');
+        await pgClient.query('COMMIT');
       } catch (err) {
         logger.error(`Error unsubscribing phone ending in ${phone.substring(phone.length - 4)} - rolling back: ${err}`);
-        pgClient.query('ROLLBACK');
+        await pgClient.query('ROLLBACK');
         throw err;
       }
     } else {
