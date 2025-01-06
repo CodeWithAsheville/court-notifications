@@ -165,11 +165,14 @@ async function addSubscription(pgClient, subscriberId, defendantId) {
       `INSERT INTO ${schema}.subscriptions (subscriber_id, defendant_id) VALUES ($1, $2)`,
       [subscriberId, defendantId],
     );
+    return false; // False = subscription didn't already exist
   }
+  return true; // True = subscription already existed
 }
 
 async function subscribe(phone, defendantLongId, details, t, language) {
   const { cases } = details;
+  let preexistingSubscription = false;
   if (cases == null || cases.length === 0) throw t('no-cases');
 
   let pgClient;
@@ -191,7 +194,7 @@ async function subscribe(phone, defendantLongId, details, t, language) {
     const defendantId = await addDefendant(pgClient, defendant);
     const nextDate = await addCases(pgClient, defendantId, cases);
     subscriberId = await addSubscriber(pgClient, nextDate, phone, language);
-    await addSubscription(pgClient, subscriberId, defendantId);
+    preexistingSubscription = await addSubscription(pgClient, subscriberId, defendantId);
     await pgClient.query('COMMIT');
   } catch (err) {
     await pgClient.query('ROLLBACK');
@@ -202,7 +205,9 @@ async function subscribe(phone, defendantLongId, details, t, language) {
   }
   if (saveError) throw saveError;
 
-  return { defendant, subscriberId, cases };
+  return {
+    defendant, subscriberId, cases, preexistingSubscription,
+  };
 }
 
 module.exports = {

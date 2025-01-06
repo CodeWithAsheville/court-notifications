@@ -47,16 +47,22 @@ async function registerSubscription(req, callback) {
   let subscriberId = null;
   let defendant = null;
   let cases = [];
+  let preexistingSubscription = false;
   try {
     const phone = body.phone_number.replace(/\D/g, '');
     logger.info(`Adding a new subscription with phone ending in ${phone.substring(phone.length - 4)}`);
-    ({ defendant, subscriberId, cases } = await subscribe(
-      phone,
-      body.selectedDefendant,
-      body.details,
-      req.t,
-      req.language,
-    ));
+    (
+      {
+        defendant, subscriberId, cases, preexistingSubscription,
+      } = await subscribe(
+        phone,
+        body.selectedDefendant,
+        body.details,
+        req.t,
+        req.language,
+      )
+    );
+    if (preexistingSubscription) returnMessage = req.t('signup-preexists');
     // Now send a verification message to the user
     const nameTemplate = req.t('name-template');
     const unsubInfo = req.t('unsubscribe.signup');

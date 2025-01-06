@@ -1,5 +1,6 @@
 {
   "signup-success": "Se ha suscrito en forma exitosa.",
+  "signup-preexists": "La suscripción ya existe",
   "no-cases": "No se encontraron casos judiciales",
   "name-template": "Te has suscrito a las notificaciones de {{name}}. Puede ver detalles sobre los cargos en el sitio web del NC Judicial Branch eCourts Portal: https://portal-nc.tylertech.cloud/Portal/Home/Dashboard/26",
   "error-start": "Se ha dado de baja previamente de todos los mensajes de este servicio. Debe enviar un mensaje de texto con la opción START a {{phone}} y luego suscribirse aquí nuevamente.",

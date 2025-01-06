@@ -1,5 +1,6 @@
 {
   "signup-success": "Successfully subscribed",
+  "signup-preexists": "Subscription already exists",
   "no-cases": "No cases found",
   "name-template": "You have subscribed to notifications for {{name}}. You may find details of charges on the NC Judicial Branch eCourts Portal: https://portal-nc.tylertech.cloud/Portal/Home/Dashboard/26",
   "error-start": "You have previously unsubscribed from all messages from this service. You must text START to {{phone}} and then subscribe here again.",
