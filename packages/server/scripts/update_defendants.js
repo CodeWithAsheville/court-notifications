@@ -37,6 +37,7 @@ async function updateDefendants() {
         const defendants = res.rows;
 
         const dt = new Date();
+        const currentDate = `${dt.getFullYear()}-${(dt.getMonth() + 1)}-${dt.getDate()}`;
 
         for (let i = 0; i < defendants.length; i += 1) {
           const d = defendants[i];
@@ -58,11 +59,12 @@ async function updateDefendants() {
             await addCases(pgClient, d.id, cases);
             updateObject = {
               updates: d.updates + 1,
-              last_valid_cases_date: `${dt.getFullYear()}-${(dt.getMonth() + 1)}-${dt.getDate()}`,
+              last_valid_cases_date: currentDate,
             };
           } else {
             updateObject = {
               updates: d.updates + 1,
+              last_valid_cases_date: d.last_valid_cases_date,
             };
           }
 
