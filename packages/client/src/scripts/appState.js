@@ -155,6 +155,7 @@ export async function subscribeToDefendant(state) {
     })
   });
   let result = await response.json();
+  console.log('Got the result: ', result);
   if (result.code !== 200) { // Immediate error
     console.log(result)
     console.log('Immediate error in subscription: ' + JSON.stringify(result));
