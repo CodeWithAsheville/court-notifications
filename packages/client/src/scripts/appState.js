@@ -138,6 +138,7 @@ function sleep(ms) {
 }
 
 export async function subscribeToDefendant(state) {
+  let resultMessage = null;
   const filteredCases = state.cases.filter(item => {
     return (item.defendant+'.'+item.sex+'.'+item.race === state.selectedDefendant);
   });
@@ -155,6 +156,7 @@ export async function subscribeToDefendant(state) {
     })
   });
   let result = await response.json();
+  resultMessage = result.message;
   console.log('Got the result: ', result);
   if (result.code !== 200) { // Immediate error
     console.log(result)
@@ -166,7 +168,7 @@ export async function subscribeToDefendant(state) {
   const SLEEP_INTERVAL = 500; // How long to sleep between attempts
   const MAX_ATTEMPTS = 6;
 
-  let signupStatus = { message: 'Signup successful, but receipt confirmation timed out. If you did not get a signup text, please try again later.' };
+  let signupStatus = { message: `${resultMessage}, but confirmation timed out. If you did not get a signup text, please try again later.` };
   for (let i = 0; i < MAX_ATTEMPTS; i++) {
     await sleep(SLEEP_INTERVAL);
     response = await fetch(checkUrl, { method: "GET", headers: { "Content-Type": "application/json" }});
@@ -177,7 +179,7 @@ export async function subscribeToDefendant(state) {
 
     // Status will be confirmed, pending or failed
     if (result.status === 'confirmed') {
-      signupStatus = { message: 'Signup successful!' };
+      signupStatus = { message: resultMessage };
       break;
     }
     if (result.status === 'failed') {
