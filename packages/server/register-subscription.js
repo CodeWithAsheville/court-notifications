@@ -63,7 +63,6 @@ async function registerSubscription(req, callback) {
       )
     );
     if (preexistingSubscription) {
-      console.log('We have a preexisting subscription');
       returnMessage = req.t('signup-preexists');
     }
     // Now send a verification message to the user
@@ -109,7 +108,6 @@ async function registerSubscription(req, callback) {
     returnMessage = (typeof e === 'string') ? e : e.message;
     returnCode = 500;
   }
-  console.log('Return message is: ', returnMessage);
   callback({ message: returnMessage, code: returnCode, index: subscriberId });
 }
 module.exports = {

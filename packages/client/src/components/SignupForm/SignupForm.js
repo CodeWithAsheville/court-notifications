@@ -41,7 +41,6 @@ export default function SignupForm({ state, dispatch }) {
 
     if (doit) {
       const result = await subscribeToDefendant(state);
-      console.log('Now in the signup form');
       console.log(result);
       dispatch({
         type: "phone-message",

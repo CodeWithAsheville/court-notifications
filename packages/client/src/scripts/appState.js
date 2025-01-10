@@ -143,7 +143,7 @@ export async function subscribeToDefendant(state) {
     return (item.defendant+'.'+item.sex+'.'+item.race === state.selectedDefendant);
   });
   const url = "/api/subscribe-to-defendant?lng="+i18next.language;
-  console.log('URL to subscribe ' + url);
+
   let response = await fetch(url, {
     method: "POST",
     headers: {
@@ -157,9 +157,7 @@ export async function subscribeToDefendant(state) {
   });
   let result = await response.json();
   resultMessage = result.message;
-  console.log('Got the result: ', result);
   if (result.code !== 200) { // Immediate error
-    console.log(result)
     console.log('Immediate error in subscription: ' + JSON.stringify(result));
     return result;
   }
