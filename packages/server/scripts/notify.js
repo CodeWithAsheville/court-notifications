@@ -204,7 +204,11 @@ async function sendNotifications() {
                   .create(msgObject)
                   .then((sentMessage) => logger.debug(JSON.stringify(sentMessage.body)));
               } catch (err) {
-                logger.error(`Error processing notifications for subscriber ${s.subscriber_id}, defendant ${defendant.id}`, JSON.stringify(err));
+                if (err === 'Attempt to send to unsubscribed recipient') {
+                  logger.error(`Subscriber ${s.subscriber_id} to defendant ${defendant.id} has opted out`);
+                } else {
+                  logger.error(`Error processing notifications for subscriber ${s.subscriber_id}, defendant ${defendant.id}`, err);
+                }
               }
             }
           } catch (err) {
