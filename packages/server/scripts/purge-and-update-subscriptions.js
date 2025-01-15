@@ -124,7 +124,7 @@ async function unsubscribeFailed(pgClient) {
   const schema = process.env.DB_SCHEMA;
   const res = await pgClient.query(`
     SELECT id, PGP_SYM_DECRYPT(encrypted_phone::bytea, $1) AS phone
-    FROM ${schema}.subscribers WHERE status = 'failed'
+    FROM ${schema}.subscribers WHERE status = 'failed' OR status = 'optout'
     `, [process.env.DB_CRYPTO_SECRET]);
 
   for (let i = 0; i < res.rows.length; i += 1) {

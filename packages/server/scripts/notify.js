@@ -219,6 +219,8 @@ async function sendNotifications() {
               // If we got an error because opted out, delete here.
               if (optedOut === 1) {
                 console.log('Need to mark the subscriber as opted out and delete');
+                // eslint-disable-next-line no-await-in-loop
+                await pgClient.query(`UPDATE ${process.env.DB_SCHEMA}.subscribers SET status = 'optout' WHERE id = ${s.subscriber_id}`);
               }
             }
           } catch (err) {
