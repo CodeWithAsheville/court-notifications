@@ -208,7 +208,7 @@ async function sendNotifications() {
                 console.log('Error is ', err);
                 console.log('Now error is ', JSON.stringify(err));
 
-                if (err === 'Attempt to send to unsubscribed recipient') {
+                if (err.code === '21610') {
                   logger.error(`Subscriber ${s.subscriber_id} to defendant ${defendant.id} has opted out`);
                 } else {
                   logger.error(`Error processing notifications for subscriber ${s.subscriber_id}, defendant ${defendant.id}`, err);
