@@ -208,12 +208,13 @@ async function sendNotifications() {
                 console.log('Error is ', err);
                 console.log('Now error is ', JSON.stringify(err));
 
-                if (err.code === '21610') {
+                if (err.code === 21610) {
                   logger.error(`Subscriber ${s.subscriber_id} to defendant ${defendant.id} has opted out`);
                 } else {
                   logger.error(`Error processing notifications for subscriber ${s.subscriber_id}, defendant ${defendant.id}`, err);
                 }
               }
+              // If we got an error because opted out, delete here.
             }
           } catch (err) {
             logger.error(`Error processing notifications for defendant ${defendant.id}`, err);
