@@ -168,6 +168,7 @@ async function sendNotifications() {
             // And send out the notifications
             for (let k = 0; k < subscribers.length; k += 1) {
               const s = subscribers[k];
+              let optedOut = 0;
               try {
                 // Log the notification
                 // eslint-disable-next-line no-await-in-loop
@@ -210,11 +211,15 @@ async function sendNotifications() {
 
                 if (err.code === 21610) {
                   logger.error(`Subscriber ${s.subscriber_id} to defendant ${defendant.id} has opted out`);
+                  optedOut = 1;
                 } else {
                   logger.error(`Error processing notifications for subscriber ${s.subscriber_id}, defendant ${defendant.id}`, err);
                 }
               }
               // If we got an error because opted out, delete here.
+              if (optedOut === 1) {
+                console.log('Need to mark the subscriber as opted out and delete');
+              }
             }
           } catch (err) {
             logger.error(`Error processing notifications for defendant ${defendant.id}`, err);
