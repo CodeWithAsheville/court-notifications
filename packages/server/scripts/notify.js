@@ -204,6 +204,10 @@ async function sendNotifications() {
                   .create(msgObject)
                   .then((sentMessage) => logger.debug(JSON.stringify(sentMessage.body)));
               } catch (err) {
+                console.log('Got an error trying to send a notification');
+                console.log('Error is ', err);
+                console.log('Now error is ', JSON.stringify(err));
+
                 if (err === 'Attempt to send to unsubscribed recipient') {
                   logger.error(`Subscriber ${s.subscriber_id} to defendant ${defendant.id} has opted out`);
                 } else {
