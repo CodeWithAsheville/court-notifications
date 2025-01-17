@@ -55,7 +55,7 @@ async function doSearch(body) {
     courtDateList.forEach((item) => {
       const race = (item.defendant_race && item.defendant_race.length > 0) ? item.defendant_race : '-';
       const sex = (item.defendant_sex && item.defendant_sex.length > 0) ? item.defendant_sex : '-';
-      const defendantID = `${item.defendant_name}.${sex}.${race}`;
+      const defendantID = `${item.defendant_name.toLowerCase()}.${sex}.${race}`;
       if (!(defendantID in defendants)) {
         defendants[defendantID] = [];
       }
