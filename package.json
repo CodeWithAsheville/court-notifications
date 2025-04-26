@@ -22,7 +22,7 @@
   },
   "packageManager": "yarn@3.2.3",
   "devDependencies": {
-    "concurrently": "^8.2.2",
-    "nodemon": "^3.0.2"
+    "concurrently": "^9.1.2",
+    "nodemon": "^3.1.10"
   }
 }
