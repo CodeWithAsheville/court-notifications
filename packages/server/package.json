@@ -3,7 +3,7 @@
   "version": "1.1.0",
   "license": "GPL-3.0-only",
   "engines": {
-    "node": "20.9.x"
+    "node": "22.15.x"
   },
   "scripts": {
     "client": "cd client && yarn start",
@@ -14,17 +14,17 @@
     "test": "jest --env=node"
   },
   "dependencies": {
-    "dotenv": "^16.3.1",
-    "express": "^4.18.2",
-    "i18next": "^23.7.16",
-    "i18next-browser-languagedetector": "^7.2.0",
-    "i18next-fs-backend": "^2.3.1",
-    "i18next-http-backend": "^2.4.2",
-    "i18next-http-middleware": "^3.5.0",
+    "dotenv": "^16.5.0",
+    "express": "^4.21.2",
+    "i18next": "^23.16.5",
+    "i18next-browser-languagedetector": "^7.2.1",
+    "i18next-fs-backend": "^2.3.2",
+    "i18next-http-backend": "^2.6.2",
+    "i18next-http-middleware": "^3.6.0",
     "mustache": "^4.2.0",
     "pg": "^8.11.3",
     "react-i18next": "^14.0.0",
-    "rollbar": "^2.26.2",
+    "rollbar": "^2.26.4",
     "twilio": "^4.20.0",
     "winston": "^3.11.0",
     "winston-transport": "^4.6.0"
