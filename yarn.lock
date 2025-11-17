@@ -4286,14 +4286,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^1.7.8":
-  version: 1.9.0
-  resolution: "axios@npm:1.9.0"
+"axios@npm:^1.12.0":
+  version: 1.13.2
+  resolution: "axios@npm:1.13.2"
   dependencies:
     follow-redirects: "npm:^1.15.6"
-    form-data: "npm:^4.0.0"
+    form-data: "npm:^4.0.4"
     proxy-from-env: "npm:^1.1.0"
-  checksum: 10/a2f90bba56820883879f32a237e2b9ff25c250365dcafd41cec41b3406a3df334a148f90010182dfdadb4b41dc59f6f0b3e8898ff41b666d1157b5f3f4523497
+  checksum: 10/ae4e06dcd18289f2fd18179256d550d27f9a53ecb2f9c59f2ccc4efd1d7151839ba8c3e0fb533dac793e4a59a576ca8689a19244dce5c396680837674a47a867
   languageName: node
   linkType: hard
 
@@ -5769,15 +5769,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"decache@npm:^3.0.5":
-  version: 3.1.0
-  resolution: "decache@npm:3.1.0"
-  dependencies:
-    find: "npm:^0.2.4"
-  checksum: 10/8e5508a0238e9e7da66f17fe9b8429e7c6c92f5d40b23dedb1dce15219d899f9e5385553d2a143f44a5145a28ff8aab6008cc850ddedafcdd672505a14208c36
-  languageName: node
-  linkType: hard
-
 "decimal.js@npm:^10.2.1":
   version: 10.5.0
   resolution: "decimal.js@npm:10.5.0"
@@ -7238,15 +7229,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"find@npm:^0.2.4":
-  version: 0.2.9
-  resolution: "find@npm:0.2.9"
-  dependencies:
-    traverse-chain: "npm:~0.1.0"
-  checksum: 10/0a2f32c5de4fac348569e58dd29cc0903466cf4c66f973f0c5cc73392ab200bee32cd3e2f88d1420b12921762bd96ccbc5d665fd3622d4fd85cb3b3b7a5c332e
-  languageName: node
-  linkType: hard
-
 "flat-cache@npm:^3.0.4":
   version: 3.2.0
   resolution: "flat-cache@npm:3.2.0"
@@ -7353,6 +7335,19 @@ __metadata:
     es-set-tostringtag: "npm:^2.1.0"
     mime-types: "npm:^2.1.12"
   checksum: 10/82c65b426af4a40090e517a1bc9057f76970b4c6043e37aa49859c447d88553e77d4cc5626395079a53d2b0889ba5f2a49f3900db3ad3f3f1bf76613532572fb
+  languageName: node
+  linkType: hard
+
+"form-data@npm:^4.0.4":
+  version: 4.0.5
+  resolution: "form-data@npm:4.0.5"
+  dependencies:
+    asynckit: "npm:^0.4.0"
+    combined-stream: "npm:^1.0.8"
+    es-set-tostringtag: "npm:^2.1.0"
+    hasown: "npm:^2.0.2"
+    mime-types: "npm:^2.1.12"
+  checksum: 10/52ecd6e927c8c4e215e68a7ad5e0f7c1031397439672fd9741654b4a94722c4182e74cc815b225dcb5be3f4180f36428f67c6dd39eaa98af0dcfdd26c00c19cd
   languageName: node
   linkType: hard
 
@@ -13343,22 +13338,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rollbar@npm:^2.26.4":
-  version: 2.26.4
-  resolution: "rollbar@npm:2.26.4"
+"rollbar@npm:^2.26.5":
+  version: 2.26.5
+  resolution: "rollbar@npm:2.26.5"
   dependencies:
     async: "npm:~3.2.3"
     console-polyfill: "npm:0.3.0"
-    decache: "npm:^3.0.5"
     error-stack-parser: "npm:^2.0.4"
     json-stringify-safe: "npm:~5.0.0"
     lru-cache: "npm:~2.2.1"
     request-ip: "npm:~3.3.0"
     source-map: "npm:^0.5.7"
-  dependenciesMeta:
-    decache:
-      optional: true
-  checksum: 10/1f18204b3a0eadb0b4ba36bc05f7418f58c40787d2bfe4d5df86bae4627f68c17446a92a746d833a7f4ceba2e614e6825f3f63c0b023615f1420b138daba0530
+  checksum: 10/c91e78f395d09974298388ef3714f38c11e15e72f34901a5dd193463e9d13a4fae5b87a1ab0eff3176418f0875f073340eb11baac97d989723ee3132614183da
   languageName: node
   linkType: hard
 
@@ -13721,9 +13712,9 @@ __metadata:
     mustache: "npm:^4.2.0"
     pg: "npm:^8.16.3"
     react-i18next: "npm:^14.0.0"
-    rollbar: "npm:^2.26.4"
+    rollbar: "npm:^2.26.5"
     supertest: "npm:^6.3.3"
-    twilio: "npm:^5.5.2"
+    twilio: "npm:^5.10.5"
     winston: "npm:^3.11.0"
     winston-transport: "npm:^4.6.0"
   languageName: unknown
@@ -14812,13 +14803,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"traverse-chain@npm:~0.1.0":
-  version: 0.1.0
-  resolution: "traverse-chain@npm:0.1.0"
-  checksum: 10/dea79231a429a3dd80a829ff83e8914b6d0032d55dd0971f69d5273e95155869fca400dd9e22f0d91c3b0dda9668aaeeb694f525d7e5a55ca7f695cc149088a2
-  languageName: node
-  linkType: hard
-
 "tree-kill@npm:^1.2.2":
   version: 1.2.2
   resolution: "tree-kill@npm:1.2.2"
@@ -14886,18 +14870,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"twilio@npm:^5.5.2":
-  version: 5.5.2
-  resolution: "twilio@npm:5.5.2"
+"twilio@npm:^5.10.5":
+  version: 5.10.5
+  resolution: "twilio@npm:5.10.5"
   dependencies:
-    axios: "npm:^1.7.8"
+    axios: "npm:^1.12.0"
     dayjs: "npm:^1.11.9"
     https-proxy-agent: "npm:^5.0.0"
     jsonwebtoken: "npm:^9.0.2"
     qs: "npm:^6.9.4"
     scmp: "npm:^2.1.0"
     xmlbuilder: "npm:^13.0.2"
-  checksum: 10/1b2b85b6f0bc7c73851b22937403584c56b6f0d226cf513511562da6c8fc9138b912f4f3ad6a3768a14d340ae69a12c3fe9d3e9508c76766d02b4165703af2c2
+  checksum: 10/8e047caa0fda0d4d7faa5707782ceb62b335b3f9aa5c609ee2ea17f69f2e093fd66808e9c8a481aba88fb6661589907cc19fb60681f8c77ff5646cd634b2d07d
   languageName: node
   linkType: hard
 
