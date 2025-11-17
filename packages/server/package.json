@@ -14,7 +14,7 @@
     "test": "jest --env=node"
   },
   "dependencies": {
-    "dotenv": "^16.5.0",
+    "dotenv": "^17.2.3",
     "express": "^4.21.2",
     "i18next": "^23.16.5",
     "i18next-browser-languagedetector": "^7.2.1",
@@ -22,7 +22,7 @@
     "i18next-http-backend": "^2.6.2",
     "i18next-http-middleware": "^3.6.0",
     "mustache": "^4.2.0",
-    "pg": "^8.13.3",
+    "pg": "^8.16.3",
     "react-i18next": "^14.0.0",
     "rollbar": "^2.26.4",
     "twilio": "^5.5.2",

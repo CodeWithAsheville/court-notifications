@@ -6115,10 +6115,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv@npm:^16.5.0":
-  version: 16.5.0
-  resolution: "dotenv@npm:16.5.0"
-  checksum: 10/e68a16834f1a41cc2dfb01563bc150668ad675e6cd09191211467b5c0806b6ecd6ec438e021aa8e01cd0e72d2b70ef4302bec7cc0fe15b6955f85230b62dc8a9
+"dotenv@npm:^17.2.3":
+  version: 17.2.3
+  resolution: "dotenv@npm:17.2.3"
+  checksum: 10/f8b78626ebfff6e44420f634773375c9651808b3e1a33df6d4cc19120968eea53e100f59f04ec35f2a20b2beb334b6aba4f24040b2f8ad61773f158ac042a636
   languageName: node
   linkType: hard
 
@@ -11425,10 +11425,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pg-cloudflare@npm:^1.2.5":
-  version: 1.2.5
-  resolution: "pg-cloudflare@npm:1.2.5"
-  checksum: 10/13181a5d8243758bc6651426368097c89a2ff226d2ed8119f2777b15eea5e22953b5605b3d4861e68cd2109e1b08d3eea143e495bcefccaf7a0c8f70b69a0b51
+"pg-cloudflare@npm:^1.2.7":
+  version: 1.2.7
+  resolution: "pg-cloudflare@npm:1.2.7"
+  checksum: 10/3d171407cbce36436c461200666ba6bd884bfe98016972760a797cec850199b8024a40055d80322c5fc02909e1533a144e9b108a99f7d7e21d0c42612f9821fb
   languageName: node
   linkType: hard
 
@@ -11439,10 +11439,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pg-connection-string@npm:^2.8.5":
-  version: 2.8.5
-  resolution: "pg-connection-string@npm:2.8.5"
-  checksum: 10/2a4e08ce9c86d67943870292745c939f981cb0105cc02f8459e2e2bbd265560060ac1cdf99126ef86371902ffe2624ae0171ce307e28ca4b7aec00725f1c80e1
+"pg-connection-string@npm:^2.9.1":
+  version: 2.9.1
+  resolution: "pg-connection-string@npm:2.9.1"
+  checksum: 10/40e9e9cd752121e72bff18d83e6c7ecda9056426815a84294de018569a319293c924704c8b7f0604fdc588835c7927647dea4f3c87a014e715bcbb17d794e9f0
   languageName: node
   linkType: hard
 
@@ -11453,23 +11453,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pg-pool@npm:^3.9.6":
-  version: 3.9.6
-  resolution: "pg-pool@npm:3.9.6"
+"pg-pool@npm:^3.10.1":
+  version: 3.10.1
+  resolution: "pg-pool@npm:3.10.1"
   peerDependencies:
     pg: ">=8.0"
-  checksum: 10/245c04fa8e29fb2737cfe8ca6d8526b4b996932801aa9f5c2d95fc67a646a8ab770a5368fb2ed3513fc615c3e2843a5ab7670d2f8bb4dd33d8d122c0f98e64ed
+  checksum: 10/b389a714be59ebe53ec412cbff513191cc0b7a203faa5d26416b6a038cafdfe30fbf1a5936b77bb76109c49bd7c4a116870a5a46a45796b1b34c96f016d7fbe2
   languageName: node
   linkType: hard
 
-"pg-protocol@npm:^1.9.5":
-  version: 1.9.5
-  resolution: "pg-protocol@npm:1.9.5"
-  checksum: 10/690b18d421fda1a004dcc07fe5aa06d3511775aae6ea424586e039c7954c463bc358bb00a93d064ccee16d378a7a9c27102fef348eee30f3d5d4105ff3d4151c
+"pg-protocol@npm:^1.10.3":
+  version: 1.10.3
+  resolution: "pg-protocol@npm:1.10.3"
+  checksum: 10/31da85319084c03f403efee7accce9786964df82a7feb60e6bd77b71f1e622c74a2a644a2bc434389d0ab92e5abdeedea69ebdb53b1897d9f01d2a1f51a8a2fe
   languageName: node
   linkType: hard
 
-"pg-types@npm:^2.1.0":
+"pg-types@npm:2.2.0":
   version: 2.2.0
   resolution: "pg-types@npm:2.2.0"
   dependencies:
@@ -11482,16 +11482,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pg@npm:^8.13.3":
-  version: 8.15.6
-  resolution: "pg@npm:8.15.6"
+"pg@npm:^8.16.3":
+  version: 8.16.3
+  resolution: "pg@npm:8.16.3"
   dependencies:
-    pg-cloudflare: "npm:^1.2.5"
-    pg-connection-string: "npm:^2.8.5"
-    pg-pool: "npm:^3.9.6"
-    pg-protocol: "npm:^1.9.5"
-    pg-types: "npm:^2.1.0"
-    pgpass: "npm:1.x"
+    pg-cloudflare: "npm:^1.2.7"
+    pg-connection-string: "npm:^2.9.1"
+    pg-pool: "npm:^3.10.1"
+    pg-protocol: "npm:^1.10.3"
+    pg-types: "npm:2.2.0"
+    pgpass: "npm:1.0.5"
   peerDependencies:
     pg-native: ">=3.0.1"
   dependenciesMeta:
@@ -11500,11 +11500,11 @@ __metadata:
   peerDependenciesMeta:
     pg-native:
       optional: true
-  checksum: 10/f465bc7cfbaee64f97e3a51be6a9c883d6ff29b0a825d4f8c3e0b24d1530a51c80f0a736d189c8db051cf18e9e60f20ddde4227adea8ca55700ab154c1abe21d
+  checksum: 10/6a2885a3f581d6c6dddddf5a4bb2790ee84f402ed7d73ece8b6bc102c58c17e4c5f17894c241633aa2f1d4fedd8f2401a80a9a02ef18bb57d05cbbfd8a53ca4d
   languageName: node
   linkType: hard
 
-"pgpass@npm:1.x":
+"pgpass@npm:1.0.5":
   version: 1.0.5
   resolution: "pgpass@npm:1.0.5"
   dependencies:
@@ -13703,7 +13703,7 @@ __metadata:
   resolution: "server@workspace:packages/server"
   dependencies:
     concurrently: "npm:^9.1.2"
-    dotenv: "npm:^16.5.0"
+    dotenv: "npm:^17.2.3"
     eslint: "npm:^7.32.0 || ^8.56.0"
     eslint-config-airbnb: "npm:latest"
     eslint-plugin-import: "npm:^2.29.1"
@@ -13719,7 +13719,7 @@ __metadata:
     jest: "npm:29.7.0"
     knex: "npm:^3.1.0"
     mustache: "npm:^4.2.0"
-    pg: "npm:^8.13.3"
+    pg: "npm:^8.16.3"
     react-i18next: "npm:^14.0.0"
     rollbar: "npm:^2.26.4"
     supertest: "npm:^6.3.3"
