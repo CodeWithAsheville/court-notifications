@@ -14312,8 +14312,8 @@ __metadata:
     rollbar: "npm:^2.26.5"
     supertest: "npm:^6.3.3"
     twilio: "npm:^5.10.5"
-    winston: "npm:^3.18.3"
-    winston-transport: "npm:^4.9.0"
+    winston: "npm:^3.11.0"
+    winston-transport: "npm:^4.6.0"
   languageName: unknown
   linkType: soft
 
@@ -16271,7 +16271,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"winston-transport@npm:^4.9.0":
+"winston-transport@npm:^4.6.0, winston-transport@npm:^4.9.0":
   version: 4.9.0
   resolution: "winston-transport@npm:4.9.0"
   dependencies:
@@ -16282,7 +16282,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"winston@npm:^3.18.3":
+"winston@npm:^3.11.0":
   version: 3.18.3
   resolution: "winston@npm:3.18.3"
   dependencies:
