@@ -22,10 +22,10 @@
     "i18next-http-backend": "^2.6.2",
     "i18next-http-middleware": "^3.6.0",
     "mustache": "^4.2.0",
-    "pg": "^8.11.3",
+    "pg": "^8.16.3",
     "react-i18next": "^14.0.0",
     "rollbar": "^2.26.4",
-    "twilio": "^5.5.2",
+    "twilio": "^5.10.7",
     "winston": "^3.11.0",
     "winston-transport": "^4.6.0"
   },
