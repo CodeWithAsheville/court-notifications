@@ -8906,12 +8906,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next-http-backend@npm:^2.7.3":
-  version: 2.7.3
-  resolution: "i18next-http-backend@npm:2.7.3"
+"i18next-http-backend@npm:^3.0.2":
+  version: 3.0.2
+  resolution: "i18next-http-backend@npm:3.0.2"
   dependencies:
     cross-fetch: "npm:4.0.0"
-  checksum: 10/2242ef138d5ffad4fdc8d5c2056af5fcce5827c04e9f57b0c9ed92f7e97f2c745434466ffa1250932e28df7d93d4ff2d4cf563a49aa105e0ce421ba9efb49818
+  checksum: 10/fd78b755e4050b33cb0367a8542e80fa70b47eef02d856cce6730bde6faa1c77e304a5dc116b31dbe70695a62347332b873215b25f498ffb15d4ddb716f4ccd2
   languageName: node
   linkType: hard
 
@@ -14744,7 +14744,7 @@ __metadata:
     i18next: "npm:^25.2.1"
     i18next-browser-languagedetector: "npm:^8.2.0"
     i18next-fs-backend: "npm:^2.6.0"
-    i18next-http-backend: "npm:^2.7.3"
+    i18next-http-backend: "npm:^3.0.2"
     i18next-http-middleware: "npm:^3.7.4"
     jest: "npm:30.0.0"
     knex: "npm:^3.1.0"
