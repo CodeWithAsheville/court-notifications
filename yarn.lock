@@ -7827,7 +7827,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"express@npm:^5.1.0":
+"express@npm:^5.2.1":
   version: 5.2.1
   resolution: "express@npm:5.2.1"
   dependencies:
@@ -8930,14 +8930,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next-http-middleware@npm:^3.8.2":
+"i18next-http-middleware@npm:^3.9.1":
   version: 3.9.1
   resolution: "i18next-http-middleware@npm:3.9.1"
   checksum: 10/823dc8c926c35ad0f997a237593ff36008f37be4fbbb9c004c9e7305098faa0cfd69267234528a63dacfc1c14351bcb2a9122275486f7720939f9b6f8933adb7
   languageName: node
   linkType: hard
 
-"i18next@npm:^25.7.0":
+"i18next@npm:^25.7.3":
   version: 25.7.3
   resolution: "i18next@npm:25.7.3"
   dependencies:
@@ -13781,7 +13781,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-i18next@npm:^16.3.5":
+"react-i18next@npm:^16.5.0":
   version: 16.5.0
   resolution: "react-i18next@npm:16.5.0"
   dependencies:
@@ -14756,21 +14756,21 @@ __metadata:
     eslint-plugin-jsx-a11y: "npm:^6.10.2"
     eslint-plugin-react: "npm:^7.37.5"
     eslint-plugin-react-hooks: "npm:^4.6.2"
-    express: "npm:^5.1.0"
-    i18next: "npm:^25.7.0"
+    express: "npm:^5.2.1"
+    i18next: "npm:^25.7.3"
     i18next-browser-languagedetector: "npm:^8.2.0"
     i18next-fs-backend: "npm:^2.6.1"
     i18next-http-backend: "npm:^3.0.2"
-    i18next-http-middleware: "npm:^3.8.2"
+    i18next-http-middleware: "npm:^3.9.1"
     jest: "npm:30.2.0"
     knex: "npm:^3.1.0"
     mustache: "npm:^4.2.0"
     pg: "npm:^8.16.3"
-    react-i18next: "npm:^16.3.5"
+    react-i18next: "npm:^16.5.0"
     rollbar: "npm:^2.26.5"
     supertest: "npm:^7.1.4"
     twilio: "npm:^5.10.7"
-    winston: "npm:^3.18.3"
+    winston: "npm:^3.19.0"
     winston-transport: "npm:^4.9.0"
   languageName: unknown
   linkType: soft
@@ -16822,7 +16822,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"winston@npm:^3.18.3":
+"winston@npm:^3.19.0":
   version: 3.19.0
   resolution: "winston@npm:3.19.0"
   dependencies:
