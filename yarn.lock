@@ -14769,7 +14769,7 @@ __metadata:
     react-i18next: "npm:^16.5.0"
     rollbar: "npm:^2.26.5"
     supertest: "npm:^7.1.4"
-    twilio: "npm:^5.10.7"
+    twilio: "npm:^5.11.0"
     winston: "npm:^3.19.0"
     winston-transport: "npm:^4.9.0"
   languageName: unknown
@@ -15948,9 +15948,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"twilio@npm:^5.10.7":
-  version: 5.10.7
-  resolution: "twilio@npm:5.10.7"
+"twilio@npm:^5.11.0":
+  version: 5.11.0
+  resolution: "twilio@npm:5.11.0"
   dependencies:
     axios: "npm:^1.12.0"
     dayjs: "npm:^1.11.9"
@@ -15959,7 +15959,7 @@ __metadata:
     qs: "npm:^6.9.4"
     scmp: "npm:^2.1.0"
     xmlbuilder: "npm:^13.0.2"
-  checksum: 10/5a17fe9cb80165d8effb087d65ef8d9c8550a71c89b051e0728a2cd672ad221332431f80e96ff7b23df53109bec8ea7eb15a4e2d3cd18649ed31835d158ed6c8
+  checksum: 10/68185ad066a521a3a9bc78f2b49f7d8f7db8ae0b6606d727926911e90176286d1b11548a0f4f62fe054f515f55e1d51ce08503a1af2c51d15f7941a7c390cf46
   languageName: node
   linkType: hard
 
