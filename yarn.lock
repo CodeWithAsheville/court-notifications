@@ -6903,7 +6903,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-config-airbnb@npm:latest":
+"eslint-config-airbnb@npm:^19.0.4":
   version: 19.0.4
   resolution: "eslint-config-airbnb@npm:19.0.4"
   dependencies:
@@ -14198,7 +14198,7 @@ __metadata:
     concurrently: "npm:^9.1.2"
     dotenv: "npm:^16.5.0"
     eslint: "npm:^8.56.0"
-    eslint-config-airbnb: "npm:latest"
+    eslint-config-airbnb: "npm:^19.0.4"
     eslint-plugin-import: "npm:^2.29.1"
     eslint-plugin-jsx-a11y: "npm:^6.8.0"
     eslint-plugin-react: "npm:^7.33.2"
