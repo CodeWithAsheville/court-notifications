@@ -34,16 +34,17 @@ function initializeDefendant(longDefendantId, details) {
 
 async function addDefendant(pgClient, defendant) {
   const schema = process.env.DB_SCHEMA;
+
   let res = await pgClient.query(
     `SELECT id FROM ${schema}.defendants WHERE long_id = $1`,
     [defendant.long_id],
   );
-
+  logger.info(`Looked up defendant using long id with ${res.rowCount} results: `, res.rows);
   if (res.rowCount !== 0) {
     logger.info(`Defendant already exists: ${defendant.long_id}`);
     return res.rows[0].id;
   }
-
+  logger.info(`Do insert of defendant with long_id = ${defendant.long_id}`);
   // Need to insert
   res = await pgClient.query(
     `INSERT INTO ${schema}.defendants (
@@ -189,6 +190,7 @@ async function subscribe(phone, defendantLongId, details, t, language) {
   let saveError = null;
 
   try {
+    logger.info('Adding subscription to defendant ', defendantLongId);
     await pgClient.query('BEGIN');
     defendant = initializeDefendant(defendantLongId, details);
     const defendantId = await addDefendant(pgClient, defendant);
