@@ -8517,12 +8517,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next-browser-languagedetector@npm:^7.2.1":
-  version: 7.2.2
-  resolution: "i18next-browser-languagedetector@npm:7.2.2"
+"i18next-browser-languagedetector@npm:^8.0.0":
+  version: 8.2.0
+  resolution: "i18next-browser-languagedetector@npm:8.2.0"
   dependencies:
     "@babel/runtime": "npm:^7.23.2"
-  checksum: 10/6f6dd5db3e83c2ed3b24d7fb754d0c41fd2056a0f06fb3d2a4604541c6ee0031d3f2cbbcfad726bbfc9741bcbbd6cde3acf94d339d600b6d9f49f0bbe51179d9
+  checksum: 10/b2e78feb256e92b219cd378b38af00404b8f667473f886d64c53588df0592bce145ad29ad7d8238c75f78a9c79f02c84d400569dd5c0ab94c751ac62a4e1f8dd
   languageName: node
   linkType: hard
 
@@ -14207,7 +14207,7 @@ __metadata:
     eslint-plugin-react-hooks: "npm:^4.6.2"
     express: "npm:^4.21.2"
     i18next: "npm:^23.16.5"
-    i18next-browser-languagedetector: "npm:^7.2.1"
+    i18next-browser-languagedetector: "npm:^8.0.0"
     i18next-fs-backend: "npm:^2.3.2"
     i18next-http-backend: "npm:^2.6.2"
     i18next-http-middleware: "npm:^3.6.0"
