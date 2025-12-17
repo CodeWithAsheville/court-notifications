@@ -23,7 +23,7 @@
     "i18next-http-middleware": "^3.6.0",
     "mustache": "^4.2.0",
     "pg": "^8.16.3",
-    "react-i18next": "^14.1.0",
+    "react-i18next": "^14.1.1",
     "rollbar": "^2.26.4",
     "twilio": "^5.10.7",
     "winston": "^3.13.0",
@@ -39,6 +39,6 @@
     "eslint-plugin-react-hooks": "^4.6.2",
     "jest": "29.7.0",
     "knex": "^3.1.0",
-    "supertest": "^6.3.4"
+    "supertest": "^7.0.0"
   }
 }
