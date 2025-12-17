@@ -13322,7 +13322,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-i18next@npm:^15.0.1":
+"react-i18next@npm:^15.0.2":
   version: 15.7.4
   resolution: "react-i18next@npm:15.7.4"
   dependencies:
@@ -14304,12 +14304,12 @@ __metadata:
     knex: "npm:^3.1.0"
     mustache: "npm:^4.2.0"
     pg: "npm:^8.16.3"
-    react-i18next: "npm:^15.0.1"
+    react-i18next: "npm:^15.0.2"
     rollbar: "npm:^2.26.4"
     supertest: "npm:^7.0.0"
     twilio: "npm:^5.10.7"
     winston: "npm:^3.14.2"
-    winston-transport: "npm:^4.7.1"
+    winston-transport: "npm:^4.8.0"
   languageName: unknown
   linkType: soft
 
@@ -16257,7 +16257,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"winston-transport@npm:^4.7.1, winston-transport@npm:^4.9.0":
+"winston-transport@npm:^4.8.0, winston-transport@npm:^4.9.0":
   version: 4.9.0
   resolution: "winston-transport@npm:4.9.0"
   dependencies:

@@ -23,11 +23,11 @@
     "i18next-http-middleware": "^3.6.0",
     "mustache": "^4.2.0",
     "pg": "^8.16.3",
-    "react-i18next": "^15.0.1",
+    "react-i18next": "^15.0.2",
     "rollbar": "^2.26.4",
     "twilio": "^5.10.7",
     "winston": "^3.14.2",
-    "winston-transport": "^4.7.1"
+    "winston-transport": "^4.8.0"
   },
   "devDependencies": {
     "concurrently": "^9.1.2",
