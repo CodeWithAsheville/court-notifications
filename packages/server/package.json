@@ -23,7 +23,7 @@
     "i18next-http-middleware": "^3.6.0",
     "mustache": "^4.2.0",
     "pg": "^8.16.3",
-    "react-i18next": "^14.0.5",
+    "react-i18next": "^14.1.0",
     "rollbar": "^2.26.4",
     "twilio": "^5.10.7",
     "winston": "^3.12.0",
