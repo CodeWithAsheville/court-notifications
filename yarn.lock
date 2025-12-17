@@ -1692,7 +1692,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.27.6":
+"@babel/runtime@npm:^7.26.10, @babel/runtime@npm:^7.27.6":
   version: 7.28.4
   resolution: "@babel/runtime@npm:7.28.4"
   checksum: 10/6c9a70452322ea80b3c9b2a412bcf60771819213a67576c8cec41e88a95bb7bf01fc983754cda35dc19603eef52df22203ccbf7777b9d6316932f9fb77c25163
@@ -8543,7 +8543,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next-fs-backend@npm:^2.3.2":
+"i18next-fs-backend@npm:^2.6.0":
   version: 2.6.1
   resolution: "i18next-fs-backend@npm:2.6.1"
   checksum: 10/2c93cab111cee0472a2ff462cdaa3cac32a1d464fb7d8cb7a6c7171ac2fdaf39a6ba9e82a2700334389519cb228f2aef29dc44871635320140da65b5dfaadcbe
@@ -8559,28 +8559,33 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next-http-backend@npm:^2.6.2":
-  version: 2.7.3
-  resolution: "i18next-http-backend@npm:2.7.3"
+"i18next-http-backend@npm:^3.0.1":
+  version: 3.0.2
+  resolution: "i18next-http-backend@npm:3.0.2"
   dependencies:
     cross-fetch: "npm:4.0.0"
-  checksum: 10/2242ef138d5ffad4fdc8d5c2056af5fcce5827c04e9f57b0c9ed92f7e97f2c745434466ffa1250932e28df7d93d4ff2d4cf563a49aa105e0ce421ba9efb49818
+  checksum: 10/fd78b755e4050b33cb0367a8542e80fa70b47eef02d856cce6730bde6faa1c77e304a5dc116b31dbe70695a62347332b873215b25f498ffb15d4ddb716f4ccd2
   languageName: node
   linkType: hard
 
-"i18next-http-middleware@npm:^3.6.0":
-  version: 3.8.2
-  resolution: "i18next-http-middleware@npm:3.8.2"
-  checksum: 10/3ac40911ab49d1e06a464343ba6378378d88c0e16c970020ddfedad7062ee976bd2d0080528a5206e9ec9370baff36e1af285669bfe8dd112f12a7e5cc5c5d77
+"i18next-http-middleware@npm:^3.7.0":
+  version: 3.9.1
+  resolution: "i18next-http-middleware@npm:3.9.1"
+  checksum: 10/823dc8c926c35ad0f997a237593ff36008f37be4fbbb9c004c9e7305098faa0cfd69267234528a63dacfc1c14351bcb2a9122275486f7720939f9b6f8933adb7
   languageName: node
   linkType: hard
 
-"i18next@npm:^23.16.5":
-  version: 23.16.8
-  resolution: "i18next@npm:23.16.8"
+"i18next@npm:^24.0.2":
+  version: 24.2.3
+  resolution: "i18next@npm:24.2.3"
   dependencies:
-    "@babel/runtime": "npm:^7.23.2"
-  checksum: 10/d5c38011de4d3b4aa466fac6773520eb28007b9d6138e03432bfbfc0d041c04df45e15c67d96f22cd660088cc9b24d3eda32cddc9fb4c6508c5afada6c2e6290
+    "@babel/runtime": "npm:^7.26.10"
+  peerDependencies:
+    typescript: ^5
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: 10/6c73d964f2a98b1aa2c2717fe6da66fc265bcbbc5fcd52b2bfff51ff013d30d4f7d7449c4eb7f464d27af43e2e73f2e7f1d46a144d731bd3bdb1385d4c199e4c
   languageName: node
   linkType: hard
 
@@ -13322,7 +13327,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-i18next@npm:^15.1.1":
+"react-i18next@npm:^15.1.3":
   version: 15.7.4
   resolution: "react-i18next@npm:15.7.4"
   dependencies:
@@ -14295,16 +14300,16 @@ __metadata:
     eslint-plugin-react: "npm:^7.37.5"
     eslint-plugin-react-hooks: "npm:^4.6.2"
     express: "npm:^5.0.1"
-    i18next: "npm:^23.16.5"
+    i18next: "npm:^24.0.2"
     i18next-browser-languagedetector: "npm:^8.0.0"
-    i18next-fs-backend: "npm:^2.3.2"
-    i18next-http-backend: "npm:^2.6.2"
-    i18next-http-middleware: "npm:^3.6.0"
+    i18next-fs-backend: "npm:^2.6.0"
+    i18next-http-backend: "npm:^3.0.1"
+    i18next-http-middleware: "npm:^3.7.0"
     jest: "npm:29.7.0"
     knex: "npm:^3.1.0"
     mustache: "npm:^4.2.0"
     pg: "npm:^8.16.3"
-    react-i18next: "npm:^15.1.1"
+    react-i18next: "npm:^15.1.3"
     rollbar: "npm:^2.26.4"
     supertest: "npm:^7.0.0"
     twilio: "npm:^5.10.7"
