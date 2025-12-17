@@ -14,7 +14,7 @@
     "test": "jest --env=node"
   },
   "dependencies": {
-    "dotenv": "^16.5.0",
+    "dotenv": "^17.0.1",
     "express": "^5.1.0",
     "i18next": "^25.2.1",
     "i18next-browser-languagedetector": "^8.2.0",
@@ -30,14 +30,14 @@
     "winston-transport": "^4.9.0"
   },
   "devDependencies": {
-    "concurrently": "^9.1.2",
+    "concurrently": "^9.2.0",
     "eslint": "^8.57.1",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^4.6.2",
-    "jest": "30.0.0",
+    "jest": "30.0.3",
     "knex": "^3.1.0",
     "supertest": "^7.1.1"
   }
