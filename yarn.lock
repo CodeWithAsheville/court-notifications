@@ -7102,7 +7102,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-react@npm:^7.27.1, eslint-plugin-react@npm:^7.34.0":
+"eslint-plugin-react@npm:^7.27.1, eslint-plugin-react@npm:^7.34.1":
   version: 7.37.5
   resolution: "eslint-plugin-react@npm:7.37.5"
   dependencies:
@@ -14201,7 +14201,7 @@ __metadata:
     eslint-config-airbnb: "npm:^19.0.4"
     eslint-plugin-import: "npm:^2.29.1"
     eslint-plugin-jsx-a11y: "npm:^6.8.0"
-    eslint-plugin-react: "npm:^7.34.0"
+    eslint-plugin-react: "npm:^7.34.1"
     eslint-plugin-react-hooks: "npm:^4.6.0"
     express: "npm:^4.21.2"
     i18next: "npm:^23.16.5"
@@ -14217,7 +14217,7 @@ __metadata:
     rollbar: "npm:^2.26.4"
     supertest: "npm:^6.3.4"
     twilio: "npm:^5.10.7"
-    winston: "npm:^3.12.0"
+    winston: "npm:^3.13.0"
     winston-transport: "npm:^4.7.0"
   languageName: unknown
   linkType: soft
@@ -16167,7 +16167,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"winston@npm:^3.12.0":
+"winston@npm:^3.13.0":
   version: 3.19.0
   resolution: "winston@npm:3.19.0"
   dependencies:
