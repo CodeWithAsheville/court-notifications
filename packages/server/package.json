@@ -14,31 +14,31 @@
     "test": "jest --env=node"
   },
   "dependencies": {
-    "dotenv": "^17.2.0",
+    "dotenv": "^17.2.1",
     "express": "^5.1.0",
-    "i18next": "^25.3.2",
+    "i18next": "^25.4.2",
     "i18next-browser-languagedetector": "^8.2.0",
     "i18next-fs-backend": "^2.6.0",
     "i18next-http-backend": "^3.0.2",
-    "i18next-http-middleware": "^3.7.4",
+    "i18next-http-middleware": "^3.8.0",
     "mustache": "^4.2.0",
     "pg": "^8.16.3",
-    "react-i18next": "^15.6.0",
+    "react-i18next": "^15.7.2",
     "rollbar": "^2.26.4",
     "twilio": "^5.10.7",
     "winston": "^3.17.0",
     "winston-transport": "^4.9.0"
   },
   "devDependencies": {
-    "concurrently": "^9.2.0",
+    "concurrently": "^9.2.1",
     "eslint": "^8.57.1",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^4.6.2",
-    "jest": "30.0.4",
+    "jest": "30.1.1",
     "knex": "^3.1.0",
-    "supertest": "^7.1.3"
+    "supertest": "^7.1.4"
   }
 }
