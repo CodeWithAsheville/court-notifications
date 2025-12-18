@@ -41,7 +41,7 @@ async function addDefendant(pgClient, defendant) {
   );
   logger.info(`Looked up defendant using long id with ${res.rowCount} results: `, res.rows);
   if (res.rowCount !== 0) {
-    logger.info(`Defendant already exists: ${defendant.long_id}`);
+    logger.info(`Defendant already exists: ${defendant.long_id}, id = ${res.rows[0].id}`);
     return res.rows[0].id;
   }
   logger.info(`Do insert of defendant with long_id = ${defendant.long_id}`);
