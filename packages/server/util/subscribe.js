@@ -49,7 +49,7 @@ async function addDefendant(pgClient, defendant) {
   res = await pgClient.query(
     `INSERT INTO ${schema}.defendants (
       long_id, last_name, first_name, middle_name, suffix, birth_date, sex, race, last_valid_cases_date
-    ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) ON CONFLICT (long_id) DO NOTHING RETURNING id`,
+    ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) ON CONFLICT (long_id) DO UPDATE SET long_id = $1 RETURNING id`,
     [
       defendant.long_id,
       defendant.last_name,
