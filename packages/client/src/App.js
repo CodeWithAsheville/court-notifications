@@ -103,7 +103,7 @@ function App() {
       <div className="App">
         <Header state={state} dispatch={dispatch} />
         <Routes>
-          <Route path="/" element={<Home />} state={state} dispatch={dispatch} />
+          <Route path="/" element={<Home state={state} dispatch={dispatch} />} />
           <Route path="/tips" element = {<Tips />} />
 {/*          
           <Route exact={true} path="/">
