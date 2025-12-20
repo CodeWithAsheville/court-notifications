@@ -1,12 +1,12 @@
 import React, { Suspense } from 'react';
-import ReactDOM from 'react-dom';
+import {createRoot} from 'react-dom/client';
 import './index.scss';
 import App from './App';
 import './i18n';
 import reportWebVitals from './reportWebVitals';
 
 const container = document.getElementById('root');
-const root = ReactDOM.createRoot(container);
+const root = createRoot(container);
 root.render(
   <Suspense fallback="loading">
     <React.StrictMode>
