@@ -3353,7 +3353,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/jest-dom@npm:^5.11.6":
+"@testing-library/jest-dom@npm:^5.11.9":
   version: 5.17.0
   resolution: "@testing-library/jest-dom@npm:5.17.0"
   dependencies:
@@ -3370,7 +3370,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/react@npm:^11.2.2":
+"@testing-library/react@npm:^11.2.5":
   version: 11.2.7
   resolution: "@testing-library/react@npm:11.2.7"
   dependencies:
@@ -3383,14 +3383,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/user-event@npm:^12.6.0":
-  version: 12.8.3
-  resolution: "@testing-library/user-event@npm:12.8.3"
+"@testing-library/user-event@npm:^13.0.7":
+  version: 13.5.0
+  resolution: "@testing-library/user-event@npm:13.5.0"
   dependencies:
     "@babel/runtime": "npm:^7.12.5"
   peerDependencies:
     "@testing-library/dom": ">=7.21.4"
-  checksum: 10/d6e6067b8319f74d84fa53cf33dfa6803c317f65276a19365be5aed8fbf26353ee455687d716be244ebe467c74a7808a4cbdd98ae0e7c76aaac0d0f48001a673
+  checksum: 10/e2bdf2b2375d1399a4fd45195705ab0be05f5e3e8220ecbfc26cba98985e45cb505e4e11ed4d909a7052ce90d1e83751cfe21bb1b70fa82d2a2c268370432d8b
   languageName: node
   linkType: hard
 
@@ -5567,9 +5567,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "client@workspace:packages/client"
   dependencies:
-    "@testing-library/jest-dom": "npm:^5.11.6"
-    "@testing-library/react": "npm:^11.2.2"
-    "@testing-library/user-event": "npm:^12.6.0"
+    "@testing-library/jest-dom": "npm:^5.11.9"
+    "@testing-library/react": "npm:^11.2.5"
+    "@testing-library/user-event": "npm:^13.0.7"
     i18next-browser-languagedetector: "npm:^6.1.2"
     i18next-http-backend: "npm:^1.3.1"
     react: "npm:^17.0.1"
@@ -5578,7 +5578,7 @@ __metadata:
     react-scripts: "npm:^5.0.0"
     sass: "npm:^1.49.0"
     uswds: "npm:^2.12.0"
-    web-vitals: "npm:^1.0.1"
+    web-vitals: "npm:^1.1.1"
   languageName: unknown
   linkType: soft
 
@@ -16471,7 +16471,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"web-vitals@npm:^1.0.1":
+"web-vitals@npm:^1.1.1":
   version: 1.1.2
   resolution: "web-vitals@npm:1.1.2"
   checksum: 10/eece8382065416797756e01cc21ddf03bc3bdc37c1e43eea2704090fc0f3ce261d2b2df53b926c2f33e286d60f11369e827ca8533556d706ed8ee1925fb1d7a0
