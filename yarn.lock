@@ -3321,9 +3321,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/dom@npm:^8.5.0":
-  version: 8.20.1
-  resolution: "@testing-library/dom@npm:8.20.1"
+"@testing-library/dom@npm:^9.0.0":
+  version: 9.3.4
+  resolution: "@testing-library/dom@npm:9.3.4"
   dependencies:
     "@babel/code-frame": "npm:^7.10.4"
     "@babel/runtime": "npm:^7.12.5"
@@ -3333,7 +3333,7 @@ __metadata:
     dom-accessibility-api: "npm:^0.5.9"
     lz-string: "npm:^1.5.0"
     pretty-format: "npm:^27.0.2"
-  checksum: 10/6c7a92fcc89931ef62a9a92dacec09b3e5ee5c3aba2171aa8de6c7504927b7c9364d73d2ed87b72447d6783108c1c92c207d16f788de64c69bc97059d7105e3c
+  checksum: 10/510da752ea76f4a10a0a4e3a77917b0302cf03effe576cd3534cab7e796533ee2b0e9fb6fb11b911a1ebd7c70a0bb6f235bf4f816c9b82b95b8fe0cddfd10975
   languageName: node
   linkType: hard
 
@@ -3354,17 +3354,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/react@npm:^13.4.0":
-  version: 13.4.0
-  resolution: "@testing-library/react@npm:13.4.0"
+"@testing-library/react@npm:^14.0.0":
+  version: 14.3.1
+  resolution: "@testing-library/react@npm:14.3.1"
   dependencies:
     "@babel/runtime": "npm:^7.12.5"
-    "@testing-library/dom": "npm:^8.5.0"
+    "@testing-library/dom": "npm:^9.0.0"
     "@types/react-dom": "npm:^18.0.0"
   peerDependencies:
     react: ^18.0.0
     react-dom: ^18.0.0
-  checksum: 10/788249aad25a0161b197b7d387011e2578701ab18451b69a987eb073b2d24eb1041f242581c3dd4800f5abcf4f11811f5f6b1e682a45f1840a08fdde3ce559b7
+  checksum: 10/83359dcdf9eaf067839f34604e1a181cbc14fc09f3a07672403700fcc6a900c4b8054ad1114fc24b4b9f89d84e2a09e1b7c9afce2306b1d4b4c9e30eb1cb12de
   languageName: node
   linkType: hard
 
@@ -5557,17 +5557,17 @@ __metadata:
   resolution: "client@workspace:packages/client"
   dependencies:
     "@testing-library/jest-dom": "npm:^5.16.5"
-    "@testing-library/react": "npm:^13.4.0"
+    "@testing-library/react": "npm:^14.0.0"
     "@testing-library/user-event": "npm:^14.4.3"
-    i18next-browser-languagedetector: "npm:^7.0.1"
-    i18next-http-backend: "npm:^2.1.1"
+    i18next-browser-languagedetector: "npm:^7.1.0"
+    i18next-http-backend: "npm:^2.2.1"
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"
-    react-router-dom: "npm:^6.4.5"
+    react-router-dom: "npm:^6.14.2"
     react-scripts: "npm:^5.0.1"
-    sass: "npm:^1.57.1"
-    uswds: "npm:^2.13.3"
-    web-vitals: "npm:^3.1.0"
+    sass: "npm:^1.63.4"
+    uswds: "npm:^2.14.0"
+    web-vitals: "npm:^3.4.0"
   languageName: unknown
   linkType: soft
 
@@ -8915,7 +8915,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next-browser-languagedetector@npm:^7.0.1":
+"i18next-browser-languagedetector@npm:^7.1.0":
   version: 7.2.2
   resolution: "i18next-browser-languagedetector@npm:7.2.2"
   dependencies:
@@ -8940,7 +8940,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next-http-backend@npm:^2.1.1":
+"i18next-http-backend@npm:^2.2.1":
   version: 2.7.3
   resolution: "i18next-http-backend@npm:2.7.3"
   dependencies:
@@ -13836,7 +13836,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-router-dom@npm:^6.4.5":
+"react-router-dom@npm:^6.14.2":
   version: 6.30.2
   resolution: "react-router-dom@npm:6.30.2"
   dependencies:
@@ -14493,7 +14493,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sass@npm:^1.57.1":
+"sass@npm:^1.63.4":
   version: 1.97.1
   resolution: "sass@npm:1.97.1"
   dependencies:
@@ -16297,7 +16297,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"uswds@npm:^2.13.3":
+"uswds@npm:^2.14.0":
   version: 2.14.0
   resolution: "uswds@npm:2.14.0"
   dependencies:
@@ -16434,7 +16434,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"web-vitals@npm:^3.1.0":
+"web-vitals@npm:^3.4.0":
   version: 3.5.2
   resolution: "web-vitals@npm:3.5.2"
   checksum: 10/59c5d7775c32977eb9156d186113f4de66c235cfea7a113d2f430ef25db25a5efe1980d2ba466f7ceefc7b1a3847764933dc1567b6d9b8f340d12e75209e3f79
