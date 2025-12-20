@@ -5,6 +5,7 @@ function Stepper() {
 
   const scrollToStep = (index) => {
     console.log('Index is ', index);
+    console.log('That means ', steps[index-1]);
     steps[index - 1].current.scrollIntoView({
       behavior: "smooth",
     })
