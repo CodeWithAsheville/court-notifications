@@ -13,7 +13,7 @@ import Tips from "./components/Tips/Tips";
 import stepper from "./scripts/stepper";
 import {
   BrowserRouter as Router,
-  Switch,
+  Routes,
   Route
 } from "react-router-dom";
 
@@ -102,14 +102,15 @@ function App() {
     <Router>
       <div className="App">
         <Header state={state} dispatch={dispatch} />
-        <Switch>
-          <Route path="/tips">
-            <Tips />
-          </Route>
+        <Routes>
+          <Route path="/tips" element = {<Tips />} />
+          <Route path="/" element = {<Home />} state={state} dispatch={dispatch} />
+{/*          
           <Route exact={true} path="/">
             <Home state={state} dispatch={dispatch} />
           </Route>
-        </Switch>
+*/}
+        </Routes>
       </div>
     </Router>
   );
