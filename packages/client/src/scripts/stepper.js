@@ -3,10 +3,12 @@ function Stepper() {
 
   const setSteps = (newSteps) => (steps = newSteps);
 
-  const scrollToStep = (index) =>
+  const scrollToStep = (index) => {
+    console.log('Index is ', index);
     steps[index - 1].current.scrollIntoView({
       behavior: "smooth",
-    });
+    })
+  };
 
   return {
     setSteps,
