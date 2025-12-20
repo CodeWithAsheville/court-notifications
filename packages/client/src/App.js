@@ -105,11 +105,6 @@ function App() {
         <Routes>
           <Route path="/" element={<Home state={state} dispatch={dispatch} />} />
           <Route path="/tips" element = {<Tips />} />
-{/*          
-          <Route exact={true} path="/">
-            <Home state={state} dispatch={dispatch} />
-          </Route>
-*/}
         </Routes>
       </div>
     </Router>
