@@ -9,6 +9,10 @@ const courtCasesConfig = {
   database: process.env.CD_DB_NAME,
   max: 10,
   idleTimeoutMillis: 10000,
+  ssl: {
+    require: true,
+    rejectUnauthorized: true,
+  },
 };
 
 function sortByDefendant(a, b) {
