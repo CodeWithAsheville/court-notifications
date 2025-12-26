@@ -11,7 +11,7 @@ const courtCasesConfig = {
   idleTimeoutMillis: 10000,
   ssl: {
     require: true,
-    rejectUnauthorized: true,
+    rejectUnauthorized: false,
   },
 };
 
