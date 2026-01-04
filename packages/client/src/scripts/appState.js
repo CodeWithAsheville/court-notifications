@@ -1,7 +1,9 @@
 import i18next from 'i18next';
+// const baseURL = 'https://8crskya3m8.execute-api.us-east-1.amazonaws.com';
+const baseURL = '';
 
 export async function checkMaintenanceMode() {
-  return fetch("/api/configuration?name=maintenance_mode")
+  return fetch(`${baseURL}/api/configuration?name=maintenance_mode`)
     .then(response => response.json());
 }
 
@@ -115,7 +117,7 @@ export async function getCaseData(state) {
   const fullName = getCSVFullName(state);
   const storedCases = getPersonFromStorage(fullName);
 
-  const url = "https://8crskya3m8.execute-api.us-east-1.amazonaws.com/api/court-search?lng="+i18next.language;
+  const url = `${baseURL}/api/court-search?lng=${i18next.language}`;
   const response = await fetch(url, {
     method: "POST",
     headers: {
@@ -142,7 +144,7 @@ export async function subscribeToDefendant(state) {
   const filteredCases = state.cases.filter(item => {
     return (item.defendant+'.'+item.sex+'.'+item.race === state.selectedDefendant);
   });
-  const url = "/api/subscribe-to-defendant?lng="+i18next.language;
+  const url = `${baseURL}/api/subscribe-to-defendant?lng=${i18next.language}`;
 
   let response = await fetch(url, {
     method: "POST",
@@ -162,7 +164,7 @@ export async function subscribeToDefendant(state) {
     return result;
   }
   const index = result.index;
-  const checkUrl = "/api/check-subscription?index="+index+"&lng="+i18next.language;
+  const checkUrl = `${baseURL}/api/check-subscription?index=${index}&lng=${i18next.language}`;
   const SLEEP_INTERVAL = 500; // How long to sleep between attempts
   const MAX_ATTEMPTS = 6;
 
