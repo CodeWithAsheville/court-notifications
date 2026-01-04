@@ -115,7 +115,7 @@ export async function getCaseData(state) {
   const fullName = getCSVFullName(state);
   const storedCases = getPersonFromStorage(fullName);
 
-  const url = "/api/court-search?lng="+i18next.language;
+  const url = "https://8crskya3m8.execute-api.us-east-1.amazonaws.com/api/court-search?lng="+i18next.language;
   const response = await fetch(url, {
     method: "POST",
     headers: {
