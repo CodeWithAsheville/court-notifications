@@ -1,5 +1,5 @@
 import i18next from 'i18next';
-const baseURL = 'https://8crskya3m8.execute-api.us-east-1.amazonaws.com';
+const baseURL = 'https://fm8bmgrh2h.execute-api.us-east-1.amazonaws.com/';
 // const baseURL = '';
 
 export async function checkMaintenanceMode() {
