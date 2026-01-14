@@ -158,6 +158,7 @@ export async function subscribeToDefendant(state) {
     })
   });
   let result = await response.json();
+  
   resultMessage = result.message;
   if (result.code !== 200) { // Immediate error
     console.log('Immediate error in subscription: ' + JSON.stringify(result));
@@ -176,8 +177,6 @@ export async function subscribeToDefendant(state) {
     // as all headers have arrived. Calling .json() gets you another promise
     // for the body of the http response that is yet to be loaded.
     result = await response.json();
-    console.log('Here is the response:');
-    console.log(result);
     // Status will be confirmed, pending or failed
     if (result.status === 'confirmed') {
       signupStatus = { message: resultMessage };
